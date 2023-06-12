@@ -9,7 +9,7 @@ export const createRoutes = (args: createRoute) => {
                 <args.element />
             </RouteWrapper>
         ,
-    errorElement: <div>Something Went Wrong </div>,
+        errorElement: <div>Something Went Wrong </div>,
     };
 };
 

@@ -1,7 +1,7 @@
-import { RouteWrapper } from "../Providers/RouteProvider";
+import RouteWrapper from "../Providers/RouteProvider";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createRoutes = (args: any) => {
+
+export const createRoutes = (args: createRoute) => {
     return {
         ...args,
         element:
@@ -9,8 +9,7 @@ const createRoutes = (args: any) => {
                 <args.element />
             </RouteWrapper>
         ,
-        errorElement: <div>Something Went Wrong </div>,
+    errorElement: <div>Something Went Wrong </div>,
     };
 };
 
-export default createRoutes;

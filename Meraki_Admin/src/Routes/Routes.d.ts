@@ -6,6 +6,9 @@ interface createRoute {
 interface PrivateRoutes {
   createRoutes: () => createRoute;
 }
+interface PublicRoutes {
+  createRoutes: () => createRoute;
+}
 
 interface IprivateRoutesPath {
   home: string;
@@ -13,6 +16,6 @@ interface IprivateRoutesPath {
 }
 
 interface IpublicRoutesPath {
-  login: string;
-  register: string;
+  Home: string;
+  // register: string;
 }

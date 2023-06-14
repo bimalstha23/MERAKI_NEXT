@@ -1,7 +1,8 @@
 import RouteWrapper from "../Providers/RouteProvider";
 
 
-export const createRoutes = (args: createRoute) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const createRoutes = (args: any) => {
     return {
         ...args,
         element:

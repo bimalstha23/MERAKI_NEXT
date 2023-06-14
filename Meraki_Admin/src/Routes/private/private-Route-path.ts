@@ -1,4 +1,10 @@
+import { IprivateRoutesPath } from "../routetypes";
+
 export const privateRoutePath: IprivateRoutesPath = {
-  home: "/home",
-  profile: "/profile",
+  Home: "/",
+  Products: "/products",
+  Order: "/order",
+  Shipping: "shipping",
+  Payments: "payments",
+  Settings: "settings",
 };

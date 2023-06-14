@@ -1,11 +1,12 @@
 import "./App.css";
 import { RouterProvider } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
-import { publicRoutes } from "./Routes/public/PublicRoutes";
+// import { publicRoutes } from "./Routes/public/PublicRoutes";
+import { privateRoutes } from "./Routes/private/PrivateRoutes";
 
 
 function App() {
-  const router = createBrowserRouter(publicRoutes);
+  const router = createBrowserRouter(privateRoutes);
   return (
     <div>
       <RouterProvider router={router} />

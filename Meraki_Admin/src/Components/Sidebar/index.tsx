@@ -4,13 +4,13 @@ import { NavLink } from 'react-router-dom'
 export const Sidebar = () => {
 
     return (
-        <div className='w-64 h-screen bg-background text-SecondaryText py-44' >
-            <div className=" overflow-y-auto flex flex-col justify-between py-4  h-full bg-gray-50 rounded dark:bg-gray-800">
+        <div className='w-64 h-screen bg-background text-SecondaryText ' >
+            <div className=" flex flex-col justify-between py-4  h-full bg-gray-50 rounded dark:bg-gray-800">
                 <h1 className=" text-center text-5xl font-extrabold text-primary">
                     Meraki
                 </h1>
 
-                <div className=" flex flex-col justify-between items-start   h-full py-5 ">
+                <div className=" flex flex-col justify-center items-start   h-full gap-10">
                     {
                         SideBarItems.map((item: ISidebarItems, index: number) => (
                             <NavLink

@@ -78,20 +78,16 @@ const rows: Array<IProduct> = [
         price: 100,
         image: DummyProduct
     },
-
 ]
 
 export const ProductsTable: FC = () => {
-
     const [maxHeight, setMaxHeight] = useState<number>(0);
-
     useEffect(() => {
         const updateMaxHeight = () => {
             const windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
             const offset = 200; // You can adjust this offset value if needed
             setMaxHeight(windowHeight - offset);
         };
-
         updateMaxHeight();
         window.addEventListener('resize', updateMaxHeight);
 
@@ -99,7 +95,6 @@ export const ProductsTable: FC = () => {
             window.removeEventListener('resize', updateMaxHeight);
         };
     }, []);
-
 
     return (
         <TableContainer component={Paper} sx={{
@@ -119,10 +114,8 @@ export const ProductsTable: FC = () => {
                         <StyledTableCell align="center">Price </StyledTableCell>
                         <StyledTableCell align="center">ID </StyledTableCell>
                         <StyledTableCell align="center">Edit </StyledTableCell>
-
                     </TableRow>
                 </TableHead>
-
                 <TableBody>
                     {rows.map((row) => (
                         <TableRow key={row.id}>

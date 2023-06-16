@@ -1,38 +1,11 @@
 import { BiSearchAlt } from 'react-icons/bi'
 import Select from 'react-select'
+import { customStyles } from '../../Utils/custom'
 
 export const FilterComp = () => {
 
 
-    const customStyles = {
-        control: (provided: any, state: any) => ({
-            ...provided,
-            background: '#FFFFFF',
-            boxShadow: 'inset 0px 0px 5.83291px rgba(0, 0, 0, 0.1)',
-            borderRadius: '7.29114px',
-            borderColor: state.isFocused ? '#FB2448' : provided.borderColor,
-            '&:hover': {
-                borderColor: state.isFocused ? '#FB2448' : provided.borderColor,
-            },
-            minWidth: '200px', // Set the desired fixed width
 
-
-
-        }),
-        option: (provided: any, state: any) => ({
-            ...provided,
-            background: state.isSelected ? '#FB2448' : '#FFFFFF',
-            color: state.isSelected ? '#FFFFFF' : '#000000',
-            borderColor: state.isFocused ? '#FB2448' : provided.borderColor,
-            '&:hover': {
-                borderColor: state.isFocused ? '#FB2448' : provided.borderColor,
-            },
-        }),
-        singleValue: (provided: any) => ({
-            ...provided,
-            color: '#000000',
-        }),
-    };
 
     const options = [
         { value: 'Ring  ', label: 'Ring' },
@@ -51,7 +24,7 @@ export const FilterComp = () => {
     ]
 
     return (
-        <div className='flex flex-row w-full justify-center items-center'>
+        <div className='flex flex-row w-full justify-center items-center py-5'>
             <form action="" className='flex flex-row justify-center items-center w-full gap-5'>
                 <div className='flex flex-col justify-center items-start w-1/3'>
                     <label className='font-bold' htmlFor="">Search by ID/ Name</label>

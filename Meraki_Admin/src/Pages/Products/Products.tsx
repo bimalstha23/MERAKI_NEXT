@@ -1,30 +1,47 @@
 import { Box, Tabs, Tab } from "@mui/material"
 import { TabPanel, TabContext } from "@mui/lab"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { FilterComp } from "../../Components/Products/FilterComp";
 import { ProductsTable } from "../../Components/Products/ProductsTable";
 import { AddProducts } from "../../Components/Products/AddProducts";
+import { useSearchParams } from "react-router-dom";
 
 export const Products = () => {
-    const [value, setValue] = useState('0');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [value, setValue] = useState<string>(searchParams.get('tab') || 'drafts');
+
+    useEffect(() => {
+        if (searchParams.get('tab')) {
+            setValue(searchParams.get('tab') || 'drafts');
+        }
+    }, [searchParams, value]);
 
     const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
+        setSearchParams({
+            tab: newValue,
+        });
     };
 
     const TabItems = [
         {
             title: "Drafts",
+            params: "drafts"
         },
         {
             title: "On Stocks",
+            params: "onstocks"
+
         }, {
             title: "Add Product",
+            params: 'addproduct'
         }, {
             title: "Out of Stocks",
+            params: 'outofstocks'
         }, {
             title: "Archived",
-        },
+            params: 'archived'
+        }
     ]
 
     return (
@@ -57,28 +74,33 @@ export const Products = () => {
                         }}
                         centered>
                         {TabItems.map((item, index) => (
-                            <Tab key={index} label={item.title} value={`${index}`} />
+                            <Tab key={index} label={item.title} value={item.params} />
                         ))}
                     </Tabs>
                 </Box>
 
                 <div className="w-full">
-                    <TabPanel value={'0'}>
+                    <TabPanel value={'drafts'}>
                         <div className="w-full">
                             <FilterComp />
                             <ProductsTable />
                         </div>
                     </TabPanel>
-                    <TabPanel value={'1'}>
+                    <TabPanel value={'onstocks'}>
                         <div className="w-full">
                             <FilterComp />
                             <ProductsTable />
                         </div>
                     </TabPanel>
-                    <TabPanel value={'2'}>
+                    <TabPanel value={'addproduct'}>
                         <AddProducts />
                     </TabPanel>
-                    <TabPanel value={'1'}>
+                    <TabPanel value={'outofstocks'}>
+                        <FilterComp />
+                        <ProductsTable />
+                    </TabPanel>
+                    <TabPanel value={'archived'}>
+                        <FilterComp />
                         <ProductsTable />
                     </TabPanel>
                 </div>

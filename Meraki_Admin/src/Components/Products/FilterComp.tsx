@@ -37,13 +37,13 @@ export const FilterComp = () => {
                     <label className='font-bold' htmlFor="filter">
                         Category
                     </label>
-                    <Select options={options} styles={customStyles} />
+                    <Select options={options} styles={customStyles} className='z-50' />
                 </div>
                 <div className='flex flex-col justify-center items-start'>
                     <label className='font-bold' htmlFor="filter">
                         Time
                     </label>
-                    <Select options={timeOptions} styles={customStyles} />
+                    <Select options={timeOptions} styles={customStyles} className='z-50' />
                 </div>
             </form>
         </div>

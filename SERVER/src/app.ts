@@ -1,12 +1,12 @@
-import express from "express";
-import { NextFunction, Request, Response, Router } from "express";
+import express, { Application } from "express";
+import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import morgan from "morgan";
-import productRouter from "./routes/ProductRoutes/index.route";
+import startuproutes from "./startup/RoutesStartup";
 
 require("dotenv").config();
 
-const app = express();
+const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
@@ -22,10 +22,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  res.send({ message: "Awesome it works 🐻" });
+  res.send({ message: "You're in right place folk 🐻" });
 });
 
-app.use("/api/products", productRouter);
+startuproutes(app);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   next(createError.NotFound());

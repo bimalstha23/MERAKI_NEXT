@@ -11,6 +11,14 @@ export const productRoutesPath = {
   deleteProduct: "/deleteproduct",
 };
 
+export const categoryRoutesPath = {
+  createCategory: "/createcategory",
+  getCategories: "/getcategories",
+  getCategory: "/getcategory",
+  updateCategory: "/updatecategory",
+  deleteCategory: "/deletecategory",
+};
+
 export const basePath = {
   version: "/v1",
   baseuri: "/api/meraki",

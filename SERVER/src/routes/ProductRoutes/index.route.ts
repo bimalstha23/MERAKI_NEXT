@@ -1,16 +1,16 @@
 import { Request, Response, Router } from "express";
 import AppRouter from "../../utils/AppRouter";
-import { requireAuth } from "../../middlewares/authMiddlewares";
+import { isAdmin, requireAuth } from "../../middlewares/authMiddlewares";
 import { productRoutesPath } from "../../constants/Api";
+import { addProduct } from "../../Controllers/productController";
 
 const productRouter = AppRouter.getInstance();
 
-productRouter.get(
-  productRoutesPath.getProducts,
+productRouter.post(
+  productRoutesPath.createProduct,
   requireAuth,
-  (req: Request, res: Response) => {
-    res.send({ message: "Ok productapi is working 🚀" });
-  }
+  isAdmin,
+  addProduct
 );
 
 export default productRouter;

@@ -11,7 +11,6 @@ export const productRoutesPath = {
   deleteProduct: "/deleteproduct",
 };
 
-
 export const basePath = {
   version: "/v1",
   baseuri: "/api/meraki",

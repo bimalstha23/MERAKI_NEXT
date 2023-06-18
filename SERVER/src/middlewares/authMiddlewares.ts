@@ -12,6 +12,7 @@ export const isAdmin = async (
   next: NextFunction
 ) => {
   try {
+    console.log(req.body.userId, "userId");
     const user = await prismaClient.user.findUnique({
       where: {
         id: req.body.userId,

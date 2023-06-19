@@ -6,6 +6,12 @@ enum Role {
   USER
 }
 
+enum ProductStatus {
+  ACTIVE
+  DRAFT
+  ARCHIVED
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -16,19 +22,20 @@ datasource db {
 }
 
 model Product {
-  id            Int       @id @default(autoincrement())
+  id            Int           @id @default(autoincrement())
   name          String
   description   String?
   selling_price Float
   cost_price    Float
   quantity      Int
   discount      Float?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
   deletedAt     DateTime?
   orders        Order[]
   categoryId    Int
-  category      Category  @relation(fields: [categoryId], references: [id])
+  status        ProductStatus @default(ACTIVE)
+  category      Category      @relation(fields: [categoryId], references: [id])
   images        Image[]
 }
 
@@ -76,12 +83,3 @@ model Category {
   deletedAt DateTime?
   Product   Product[]
 }
-
-// model Session {
-//   id        Int      @id @default(autoincrement())
-//   token     String   @unique
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   deletedAt DateTime?  
-//   userId    Int
-// }

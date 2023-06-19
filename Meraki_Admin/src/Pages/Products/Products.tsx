@@ -47,7 +47,6 @@ export const Products = () => {
     return (
         <div className="flex flex-col items-center w-full  px-10">
             <h1 className="text-xl font-bold">Product Management</h1>
-
             <TabContext value={value}>
                 <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
                     <Tabs value={value} onChange={handleChange} sx={{

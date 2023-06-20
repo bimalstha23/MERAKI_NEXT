@@ -6,6 +6,9 @@ import { privateRoutes } from "./Routes/private/PrivateRoutes";
 
 
 function App() {
+  
+
+
   const router = createBrowserRouter(privateRoutes);
   return (
     <div>

@@ -1,4 +1,6 @@
+import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const hashPassword = async (password: string) => {
   try {
@@ -15,4 +17,14 @@ export const comparePassword = async (
   hashedPassword: string
 ): Promise<boolean> => {
   return bcrypt.compare(password, hashedPassword);
+};
+
+export const generateAccessToken = (user: User) => {
+  return jwt.sign({ id: user.id, role: user.role }, "mySecretKey", {
+    expiresIn: "5s",
+  });
+};
+
+export const generateRefreshToken = (user: User) => {
+  return jwt.sign({ id: user.id, role: user.role }, "myRefreshSecretKey");
 };

@@ -1,6 +1,8 @@
 export const userRoutesPath = {
   createUser: "/createuser",
   loginUser: "/login",
+  refresh: "/refreshToken",
+  getme: "/getme",
 };
 
 export const productRoutesPath = {

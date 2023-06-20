@@ -45,7 +45,7 @@ export const AddProducts: FC = () => {
                     <label className='font-bold' htmlFor="">Product Name</label>
                     <input {...register('name')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='name' type="text" placeholder='Product Name' />
                 </div>
-                <div className='flex flex-col justify-center items-start gap-3 '>
+                <div className='flex flex-col justify-center items-start gap-3'>
                     <label className='font-bold' htmlFor="filter">
                         Category
                     </label>

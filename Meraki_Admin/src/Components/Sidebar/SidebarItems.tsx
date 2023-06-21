@@ -1,32 +1,32 @@
 import { FaShoppingBag, FaShoppingCart } from 'react-icons/fa';
 import { MdSpaceDashboard, MdOutlinePayment, MdLocalShipping } from 'react-icons/md';
 import { IoSettingsSharp } from 'react-icons/io5'
-import { privateRoutePath } from '../../Routes/private/private-Route-path';
+import { publicRoutePath } from '../../Routes/public/public-Route-path';
 
 export const SideBarItems: Array<ISidebarItems> = [
     {
         title: "DashBoard",
-        path: privateRoutePath.Home,
+        path: publicRoutePath.Home,
         icon: <MdSpaceDashboard size={30} />,
     }, {
         title: "Products",
-        path: privateRoutePath.Products,
+        path: publicRoutePath.Products,
         icon: <FaShoppingBag size={30} />,
     }, {
         title: "Orders",
-        path: privateRoutePath.Order,
+        path: publicRoutePath.Order,
         icon: <FaShoppingCart size={30} />,
     }, {
         title: "Shiping",
-        path: privateRoutePath.Shipping,
+        path: publicRoutePath.Shipping,
         icon: <MdLocalShipping size={30} />,
     }, {
         title: "Payments",
-        path: privateRoutePath.Payments,
+        path: publicRoutePath.Payments,
         icon: <MdOutlinePayment size={30} />,
     }, {
         title: "Settings",
-        path: privateRoutePath.Settings,
+        path: publicRoutePath.Settings,
         icon: <IoSettingsSharp size={30} />,
     }
 

@@ -29,7 +29,6 @@ export const Login = () => {
                             <button className='font-medium text-base text-violet-500'>Forgot password? </button>
                             <span className="text-slate-500 text-xs ">Contact The IT team for new password. </span>
                         </div>
-
                     </div>
                 </div>
             </div>

@@ -36,19 +36,15 @@ export const requireAuth = async (
   next: NextFunction
 ) => {
   try {
-    if (!req.headers.authorization) {
+    const user = res.locals.user;
+    if (!user) {
       return res.status(403).send({
         success: false,
         message: "You are not authorized to access this route",
       });
     }
-
-    if (!process.env.JWT_SECRET) throw new Error("JWT_SECRET is not defined");
-    const decode = verify(req.headers.authorization, process.env.JWT_SECRET);
-    req.user = decode;
     next();
-    //handle token error
-  } catch (error: any) {
-    res.status(500).json({ error: error?.message });
+  } catch (err: any) {
+    next(err);
   }
 };

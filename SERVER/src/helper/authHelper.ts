@@ -20,11 +20,14 @@ export const comparePassword = async (
 };
 
 export const generateAccessToken = (user: User) => {
-  return jwt.sign({ id: user.id, role: user.role }, "mySecretKey", {
-    expiresIn: "5s",
+  return jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET!, {
+    expiresIn: "60s",
   });
 };
 
 export const generateRefreshToken = (user: User) => {
-  return jwt.sign({ id: user.id, role: user.role }, "myRefreshSecretKey");
+  return jwt.sign(
+    { id: user.id, role: user.role },
+    process.env.JWT_REFRESH_SECRET!
+  );
 };

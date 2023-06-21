@@ -108,7 +108,6 @@ export const loginUser = async (req: Request, res: Response) => {
     const options: SignOptions = {
       expiresIn: "7d",
     };
-    let token = "";
 
     // if password is incorrect, throw an error
 
@@ -125,7 +124,7 @@ export const loginUser = async (req: Request, res: Response) => {
     res.cookie("access_token", newAccessToken, accessTokenCookieOptions);
     res.cookie("refresh_token", newRefreshToken, refreshTokenCookieOptions);
     // send back the user to the client
-    res.status(200).json({ user, token: token });
+    res.status(200).json({ user });
   } catch (error: any) {
     // handle errors
     res.status(500).json({ error: error.message });
@@ -135,17 +134,17 @@ export const loginUser = async (req: Request, res: Response) => {
 let refreshTokens: any[] = [];
 export const refreshWebToken = async (req: Request, res: Response) => {
   try {
-    const refreshToken = req.body.token;
-    if (!refreshToken) {
+    const refresh_token = req.cookies.refresh_token as string;
+    if (!refresh_token) {
       return res.status(403).json("You are not authenticated!");
     }
     let payload: any = null;
-    if (refreshTokens.includes(refreshToken)) {
+    if (refreshTokens.includes(refresh_token)) {
       return res.status(403).json("You are not authenticated!");
     }
 
     if (process.env.JWT_SECRET) {
-      payload = verify(refreshToken, process.env.JWT_SECRET);
+      payload = verify(refresh_token, process.env.JWT_SECRET);
     }
     if (!payload) {
       return res.status(403).json("You are not authenticated!");

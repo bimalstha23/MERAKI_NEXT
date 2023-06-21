@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import morgan from "morgan";
 import startuproutes from "./startup/RoutesStartup";
+import cookieParser from "cookie-parser";
 
 require("dotenv").config();
 
@@ -10,6 +11,7 @@ const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
+app.use(cookieParser());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

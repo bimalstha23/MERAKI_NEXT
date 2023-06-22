@@ -1,17 +1,18 @@
 //  fetch category data
 
-import { AxiosInstance } from "../API/axios";
+import { axiosInstance } from "../API/axios";
+import { categoryRoutesPath } from "../config/api.routes";
 
 export const fetchCategories = async () => {
-  const response = await AxiosInstance({
+  const response = await axiosInstance({
     method: "GET",
-    url: "/getcategories",
+    url: categoryRoutesPath.getCategories,
   });
   return response.data;
 };
 
 export const fetchCategory = async (id: number) => {
-  const response = await AxiosInstance({
+  const response = await axiosInstance({
     method: "GET",
     url: `/getcategory/${id}`,
   });

@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom'
 export const Sidebar = () => {
 
     return (
-        <div className='w-64 h-screen bg-background text-SecondaryText ' >
-            <div className=" flex flex-col justify-between py-4  h-full bg-gray-50 rounded dark:bg-gray-800">
+        <div className='w-64 h-screen bg-[#121212] text-SecondaryText ' >
+            <div className=" flex flex-col justify-between py-4  h-full rounded">
                 <h1 className=" text-center text-5xl font-extrabold text-primary">
                     Meraki
                 </h1>

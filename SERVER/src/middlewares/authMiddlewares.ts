@@ -1,6 +1,7 @@
 import { verify } from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import prismaClient from "../PrismaClient";
+import AppError from "../utils/AppError/appError";
 
 interface CustomRequest extends Request {
   user?: any;
@@ -38,10 +39,7 @@ export const requireAuth = async (
   try {
     const user = res.locals.user;
     if (!user) {
-      return res.status(403).send({
-        success: false,
-        message: "You are not authorized to access this route",
-      });
+     return next(new AppError(`Invalid token or session has expired`, 403))
     }
     next();
   } catch (err: any) {

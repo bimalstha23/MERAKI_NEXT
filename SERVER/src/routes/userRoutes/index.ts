@@ -14,6 +14,6 @@ const userRoutes = AppRouter.getInstance();
 
 userRoutes.post(userRoutesPath.createUser, createUser);
 userRoutes.post(userRoutesPath.loginUser, loginUser);
-userRoutes.post(userRoutesPath.refresh, refreshWebToken);
+userRoutes.get(userRoutesPath.refresh, refreshWebToken);
 userRoutes.get(userRoutesPath.getme, deserializeUser, requireAuth, getMe);
 export default userRoutes;

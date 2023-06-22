@@ -18,10 +18,9 @@ export const deserializeUser = async (
     } else if (req?.cookies?.access_token) {
       access_token = req.cookies.access_token;
     }
-    console.log(req.cookies, "req.cookies.access_token");
 
     if (!access_token) {
-      res.status(403).send({
+      return res.status(403).send({
         success: false,
         message: "You are not logged in",
       });
@@ -32,15 +31,11 @@ export const deserializeUser = async (
     const decoded = verify(access_token, process.env.JWT_SECRET!) as JwtPayload;
 
     if (!decoded) {
-      res.status(403).send({
+      return res.status(403).send({
         success: false,
         message: "You are not authorized to access this route",
       });
-    } else {
-      console.log("decoded", decoded);
     }
-
-    console.log(decoded, "decoded");
 
     // Check if user still exist
     // const user = await findUserById(JSON.parse(session).id);
@@ -53,7 +48,7 @@ export const deserializeUser = async (
 
     console.log(user, "user");
     if (!user) {
-      res.status(403).send({
+      return res.status(403).send({
         success: false,
         message: "You are not authorized to access this route",
       });
@@ -65,10 +60,7 @@ export const deserializeUser = async (
     res.locals.user = user;
     next();
   } catch (err: any) {
-    // res.status(500).send({
-    //   success: false,
-    //   message: "Internal Server Error",
-    // });
     console.log(err);
+    res.status(500).json({ error: err.message });
   }
 };

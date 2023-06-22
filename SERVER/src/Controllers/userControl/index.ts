@@ -6,7 +6,7 @@ import {
   generateRefreshToken,
   hashPassword,
 } from "../../helper/authHelper";
-import { Secret, SignOptions, sign, verify } from "jsonwebtoken";
+import { JwtPayload, Secret, SignOptions, sign, verify } from "jsonwebtoken";
 import config from "config";
 
 const accessTokenCookieOptions: CookieOptions = {
@@ -105,11 +105,6 @@ export const loginUser = async (req: Request, res: Response) => {
       secretOrPrivateKey = process.env.JWT_SECRET;
     }
 
-    const options: SignOptions = {
-      expiresIn: "7d",
-    };
-
-    // if password is incorrect, throw an error
 
     if (!match) {
       return res.status(401).send({
@@ -120,7 +115,6 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const newAccessToken = generateAccessToken(user);
     const newRefreshToken = generateRefreshToken(user);
-    refreshTokens.push(newRefreshToken);
     res.cookie("access_token", newAccessToken, accessTokenCookieOptions);
     res.cookie("refresh_token", newRefreshToken, refreshTokenCookieOptions);
     // send back the user to the client
@@ -131,27 +125,23 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-let refreshTokens: any[] = [];
 export const refreshWebToken = async (req: Request, res: Response) => {
   try {
     const refresh_token = req.cookies.refresh_token as string;
     if (!refresh_token) {
-      return res.status(403).json("You are not authenticated!");
-    }
-    let payload: any = null;
-    if (refreshTokens.includes(refresh_token)) {
-      return res.status(403).json("You are not authenticated!");
+      return res.status(403).json("You are not authenticated! refresh token ");
     }
 
-    if (process.env.JWT_SECRET) {
-      payload = verify(refresh_token, process.env.JWT_SECRET);
-    }
+    const payload = verify(
+      refresh_token,
+      process.env.JWT_REFRESH_SECRET!
+    ) as JwtPayload;
     if (!payload) {
       return res.status(403).json("You are not authenticated!");
     }
     const user = await prismaClient.user.findUnique({
       where: {
-        id: payload.id,
+        id: Number(payload?.id as string),
       },
     });
     if (!user) {
@@ -159,7 +149,6 @@ export const refreshWebToken = async (req: Request, res: Response) => {
     }
     const newAccessToken = generateAccessToken(user);
     const newRefreshToken = generateRefreshToken(user);
-    refreshTokens.push(newRefreshToken);
     res.cookie("access_token", newAccessToken, accessTokenCookieOptions);
     res.cookie("refresh_token", newRefreshToken, refreshTokenCookieOptions);
 
@@ -168,6 +157,7 @@ export const refreshWebToken = async (req: Request, res: Response) => {
       refreshToken: newRefreshToken,
     });
   } catch (error: any) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };

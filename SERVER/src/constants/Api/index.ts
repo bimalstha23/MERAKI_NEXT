@@ -1,24 +1,24 @@
 export const userRoutesPath = {
-  createUser: "/createuser",
-  loginUser: "/login",
-  refresh: "/refreshToken",
-  getme: "/getme",
+  createUser: "/auth/createuser",
+  loginUser: "/auth/login",
+  refresh: "/auth/refreshToken",
+  getme: "/auth/getme",
 };
 
 export const productRoutesPath = {
-  createProduct: "/createproduct",
-  getProducts: "/getproducts",
-  getProduct: "/getproduct",
-  updateProduct: "/updateproduct",
-  deleteProduct: "/deleteproduct",
+  createProduct: "/product/createproduct",
+  getProducts: "/product/getproducts",
+  getProduct: "/product/getproduct",
+  updateProduct: "/product/updateproduct",
+  deleteProduct: "/product/deleteproduct",
 };
 
 export const categoryRoutesPath = {
-  createCategory: "/createcategory",
-  getCategories: "/getcategories",
-  getCategory: "/getcategory",
-  updateCategory: "/updatecategory",
-  deleteCategory: "/deletecategory",
+  createCategory: "/category/createcategory",
+  getCategories: "/category/getcategories",
+  getCategory: "/category/getcategory",
+  updateCategory: "/category/updatecategory",
+  deleteCategory: "/category/deletecategory",
 };
 
 export const basePath = {

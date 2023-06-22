@@ -22,6 +22,7 @@ module.exports = {
         textHighlight: '#FB2448',
         success: '#29CC97',
         error: '#FB2448',
+        gray:'#121212',
       }
     },
   },

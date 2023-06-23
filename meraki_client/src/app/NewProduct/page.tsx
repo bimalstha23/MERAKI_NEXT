@@ -1,7 +1,7 @@
 import Link from "next/link"
-import { Card } from "../Card/page"
+import  Card  from "../Card/page"
 
-export const NewProduct = () => {
+ const NewProduct = () => {
   return (
     <div className="flex flex-col justify-center items-center ">
 <h1 className="font-black">New Products</h1>
@@ -19,3 +19,4 @@ export const NewProduct = () => {
     </div>
   )
 }
+export default NewProduct;

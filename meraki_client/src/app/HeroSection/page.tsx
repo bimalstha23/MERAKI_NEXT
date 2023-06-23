@@ -1,4 +1,4 @@
-export const HeroSection = () => {
+ const HeroSection = () => {
   return (
     <div className="flex  justify-center items-center flex-row bg-black text-white h-2/4 py-48 gap-12 max-sm:flex-col">
       <div className="flex flex-col justify-start items-start gap-4 max-sm:items-center max-sm:text-sm ">
@@ -16,3 +16,4 @@ export const HeroSection = () => {
     </div>
   );
 };
+export default HeroSection;

@@ -37,7 +37,7 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
         : theme.typography.fontWeightMedium,
   };
 }
-export const NavBar = () => {
+ const NavBar = () => {
   const [searchparam, setSearchParam] = useState<string>("");
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
@@ -171,3 +171,4 @@ export const NavBar = () => {
   </div>
   )
 }
+export default NavBar;

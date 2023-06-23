@@ -7,7 +7,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Category  from '../Category/page'
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
-export const Categories = () => {
+ const Categories = () => {
   return (
 <div className="flex flex-col justify-center items-center">
     <h1 className="font-black">Categories</h1>
@@ -47,3 +47,4 @@ export const Categories = () => {
 
   )
 }
+export default Categories;

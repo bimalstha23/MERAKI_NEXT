@@ -8,7 +8,7 @@ interface propsType{
   description:string,
 }
 
-export const  Card:FC<propsType> = ({image,stock,name,price,description}) => {
+ const  Card:FC<propsType> = ({image,stock,name,price,description}) => {
   return (
     <div className="flex flex-col justify-center items-center border">
  <Image
@@ -25,5 +25,6 @@ export const  Card:FC<propsType> = ({image,stock,name,price,description}) => {
     </div>
   )
 }
-
+ 
+export default Card;
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const CategoryTypes = () => {
+export const Category = () => {
   return (
     <div className="flex flex-col justify-center items-center border bg-primary">
     <h1>Necklace</h1>

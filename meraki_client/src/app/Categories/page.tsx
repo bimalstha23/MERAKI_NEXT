@@ -4,7 +4,7 @@ import PaginationItem from '@mui/material/PaginationItem';
 import Stack from '@mui/material/Stack';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { CategoryTypes } from '../CategoryTypes/page'
+import { Category } from '../Category/page'
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 export const Categories = () => {
@@ -14,21 +14,21 @@ export const Categories = () => {
     <div>
               <Carousel>
                   <div className='flex flex-row justify-center items-center gap-3 max-sm:flex-col'>
-                  <CategoryTypes/>
-                  <CategoryTypes/>
-                  <CategoryTypes/>
+                  <Category/>
+                  <Category/>
+                  <Category/>
 
   
                   </div>
                   <div className='flex flex-row justify-center items-center gap-3 max-sm:flex-col'>
-                  <CategoryTypes/>
-                  <CategoryTypes/>
-                  <CategoryTypes/>
+                  <Category/>
+                  <Category/>
+                  <Category/>
                   </div>
                   <div className='flex flex-row justify-center items-center gap-3 max-sm:flex-col'>
-                  <CategoryTypes/>
-                  <CategoryTypes/>
-                  <CategoryTypes/>
+                  <Category/>
+                  <Category/>
+                  <Category/>
                   </div>
               </Carousel>
             </div>

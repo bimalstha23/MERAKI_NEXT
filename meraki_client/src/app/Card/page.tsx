@@ -1,7 +1,14 @@
 import Image from 'next/image'
+import { FC } from 'react'
+interface propsType{
+  image:string,
+  stock:string,
+  name:string,
+  price:string,
+  description:string,
+}
 
-
-export const Cart = ({image,stock,name,price,description}) => {
+export const  Card:FC<propsType> = ({image,stock,name,price,description}) => {
   return (
     <div className="flex flex-col justify-center items-center border">
  <Image

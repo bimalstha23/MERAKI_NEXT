@@ -8,7 +8,7 @@ export const fetchCategories = async () => {
     method: "GET",
     url: categoryRoutesPath.getCategories,
   });
-  return response.data;
+  return response;
 };
 
 export const fetchCategory = async (id: number) => {

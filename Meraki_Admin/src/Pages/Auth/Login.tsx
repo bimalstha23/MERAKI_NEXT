@@ -20,7 +20,10 @@ export const Login = () => {
 
     const { isLoading, mutate, } = useMutation({
         mutationFn: LoginMutation,
-        mutationKey: ['login']
+        mutationKey: ['login'],
+        onSuccess: (data) => {
+            setUser(data)
+        }
     })
 
     const handleLogin = async (data: FormValue) => {

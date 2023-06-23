@@ -2,12 +2,18 @@ import Select from 'react-select'
 import { inputSelect } from '../../Utils/custom'
 import { ImageUpload } from './ImageUpload'
 import { Controller, useForm } from 'react-hook-form'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { fetchCategories } from '../../ApiHandle/categoryApi'
 import { ICategory, IFormValues } from './types'
 import { FC } from 'react'
+import { AddProductMutation } from '../../ApiHandle/productApi'
 
 export const AddProducts: FC = () => {
+    const { mutate } = useMutation({
+        mutationFn: AddProductMutation,
+        mutationKey: ['addProducts'],
+    })
+
     const { data: options } = useQuery({
         queryKey: ['categories'],
         queryFn: fetchCategories,
@@ -20,6 +26,7 @@ export const AddProducts: FC = () => {
             })
         }
     })
+    console.log(options, 'options')
 
     const { control, register, formState, watch, handleSubmit, setValue } = useForm<IFormValues>({
         defaultValues: {
@@ -35,7 +42,7 @@ export const AddProducts: FC = () => {
     })
 
     const submit = (data: IFormValues) => {
-        console.log('submit', data)
+        mutate(data)
     }
     const files = watch('images')
     return (

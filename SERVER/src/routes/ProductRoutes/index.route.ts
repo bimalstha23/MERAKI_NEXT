@@ -7,13 +7,17 @@ import {
   getProducts,
   updateProduct,
 } from "../../Controllers/productController";
+import { deserializeUser } from "../../middlewares/deserializeUser";
+import { upload } from "../../middlewares/upload";
 
 const productRouter = AppRouter.getInstance();
 
 productRouter.post(
   productRoutesPath.createProduct,
+  deserializeUser,
   requireAuth,
   isAdmin,
+  upload,
   addProduct
 );
 

@@ -12,11 +12,12 @@ export const isAdmin = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log('isAdmin')
   try {
-    console.log(req.body.userId, "userId");
+    const userID = res.locals.user.id;
     const user = await prismaClient.user.findUnique({
       where: {
-        id: req.body.userId,
+        id: userID,
       },
     });
     if (user?.role !== "ADMIN") {
@@ -37,9 +38,15 @@ export const requireAuth = async (
   next: NextFunction
 ) => {
   try {
+    console.log(
+      'require Auth',
+    );
     const user = res.locals.user;
     if (!user) {
-     return next(new AppError(`Invalid token or session has expired`, 403))
+     return res.status(403).send({
+        success: false,
+        message: "You are not authorized to access this route",
+      });
     }
     next();
   } catch (err: any) {

@@ -16,6 +16,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).array("images", 5); // Accept up to 5 files with the field name 'images'
 
+
 export const addProduct = async (req: Request, res: Response) => {
   try {
     const {
@@ -27,12 +28,14 @@ export const addProduct = async (req: Request, res: Response) => {
       description,
       discount,
     } = req.body;
-    console.log(req.files, "req.files");
+    console.log(req.body, "req.body")
+    console.log(req.file, "req.files")
     upload(req, res, async (err: any) => {
       if (err) {
         return res.status(500).json({ message: err.message });
       }
-
+      
+      console.log(req.files, "req.files");
       const fileNames = (req.files as Express.Multer.File[])?.map(
         (file: { filename: any }) => file.filename
       );

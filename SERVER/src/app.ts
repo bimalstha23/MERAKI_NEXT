@@ -5,6 +5,7 @@ import morgan from "morgan";
 import startuproutes from "./startup/RoutesStartup";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import bodyParser from "body-parser";
 
 require("dotenv").config();
 
@@ -13,6 +14,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 app.use(cookieParser());
+app.use(bodyParser.json() );
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const whitelist = ["http://localhost:5173"];
 const corsOptions = {

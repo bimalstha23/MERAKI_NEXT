@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-export const Login = () => {
+ const Login = () => {
   return (
     <div className="flex flex-row justify-center items-center">
       <div className='flex border p-3 rounded-2xl'>
@@ -42,3 +42,5 @@ export const Login = () => {
       </div>
   )
 }
+
+export default Login;

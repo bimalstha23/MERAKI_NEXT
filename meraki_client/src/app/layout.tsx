@@ -1,3 +1,4 @@
+import { Login } from './Login/page'
 import { NavBar } from './NavBar/page'
 import './globals.css'
 import { Inter } from 'next/font/google'
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body  className="{inter.className} ">
       <NavBar/>
+      {/* <Login/> */}
         <div>{children}</div>
         </body>
     </html>

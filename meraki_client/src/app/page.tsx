@@ -8,7 +8,7 @@ export default function Home() {
     <div>
 
     <HeroSection/>
-  <div className='px-32'>
+  <div className='px-36'>
     <Categories/>
     <NewProduct/>
   </div>

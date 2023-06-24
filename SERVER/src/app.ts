@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(bodyParser.json() );
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const whitelist = ["http://localhost:5173"];
+const whitelist = ["http://localhost:5173" , "*"];
 const corsOptions = {
   credentials: true, // This is important.
   origin: (origin: any, callback: any) => {

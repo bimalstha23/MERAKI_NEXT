@@ -4,20 +4,21 @@ import multer, { MulterError } from "multer";
 import prismaClient from "../../PrismaClient";
 import { ProductStatus } from "@prisma/client";
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/"); // Directory where uploaded files will be stored
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix); // Filename for the uploaded file
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "uploads/"); // Directory where uploaded files will be stored
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//     cb(null, file.fieldname + "-" + uniqueSuffix); // Filename for the uploaded file
+//   },
+// });
 
-const upload = multer({ storage: storage }).array("images", 5); // Accept up to 5 files with the field name 'images'
+// const upload = multer({ storage: storage }).array("images", 5); // Accept up to 5 files with the field name 'images'
 
 
 export const addProduct = async (req: Request, res: Response) => {
+  console.log('we are here ')
   try {
     const {
       name,
@@ -30,16 +31,12 @@ export const addProduct = async (req: Request, res: Response) => {
     } = req.body;
     console.log(req.body, "req.body")
     console.log(req.file, "req.files")
-    upload(req, res, async (err: any) => {
-      if (err) {
-        return res.status(500).json({ message: err.message });
-      }
-      
+   
       console.log(req.files, "req.files");
       const fileNames = (req.files as Express.Multer.File[])?.map(
-        (file: { filename: any }) => file.filename
+        (file: { filename: any , path:string }) => file.path
       );
-
+        console.log(fileNames, "fileNames")
       const imagesData = fileNames?.map((fileName: string) => ({
         url: fileName,
       }));
@@ -47,11 +44,11 @@ export const addProduct = async (req: Request, res: Response) => {
       await prismaClient.product.create({
         data: {
           name,
-          cost_price,
-          selling_price,
+          cost_price:Number(cost_price),
+          selling_price:Number(selling_price),
           description,
-          quantity,
-          discount: discount || 0,
+          quantity : Number(quantity),
+          discount: Number(discount) || 0,
           createdAt: new Date(),
           updatedAt: new Date(),
           category: {
@@ -64,9 +61,9 @@ export const addProduct = async (req: Request, res: Response) => {
       });
 
       res.status(201).json({ message: "Product created successfully" });
-    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
+    console.log(error.message, "error.message")
   }
 };
 

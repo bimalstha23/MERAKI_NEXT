@@ -162,6 +162,13 @@ export const getProducts = async (
       skip,
       take,
     });
+    let nextPage = null
+    let hasNextPage = false
+    if(page && take){
+        nextPage = products.length < take ? null : Number(page) + 1;
+        hasNextPage = products.length < take ? false : true;
+      }
+    
 
     const updatedProducts = products.map((product) => {
       if (product.quantity > 0) {
@@ -175,12 +182,18 @@ export const getProducts = async (
         instock: false,
       };
     });
-
-    res.status(200).json({ updatedProducts });
+  
+    res.status(200).json({ data:updatedProducts , pagination:{
+      nextPage,
+      has_next_page:hasNextPage,
+      total:updatedProducts.length,
+      currentPage:page ? Number(page) : 1,
+      pageSize:take ? take : 10
+    } });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
-};
+  };
 
 export const getProduct = async (
   req: Request,

@@ -1,8 +1,11 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, styled, tableCellClasses } from '@mui/material'
 import { FC, useEffect, useState } from 'react'
-import { IProduct } from './types';
 import DummyProduct from "../../assets/dummy/DummyProduct.svg"
 import { MdModeEditOutline } from "react-icons/md"
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { getProductsQuery } from '../../ApiHandle/productApi';
+import { useOnScreen } from '../../Hooks/utilityHooks/useOnScreen';
+import { IProduct } from '../../globalTypes';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -18,70 +21,23 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 
-const rows: Array<IProduct> = [
-    {
-        id: 1,
-        name: "Product 1",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-        category: "Category 1",
-        quantity: 10,
-        price: 100,
-        image: DummyProduct
-    },
-    {
-        id: 1,
-        name: "Product 1",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-        category: "Category 1",
-        quantity: 10,
-        price: 100,
-        image: DummyProduct
-    }, {
-        id: 1,
-        name: "Product 1",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-        category: "Category 1",
-        quantity: 10,
-        price: 100,
-        image: DummyProduct
-    }, {
-        id: 1,
-        name: "Product 1",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-        category: "Category 1",
-        quantity: 10,
-        price: 100,
-        image: DummyProduct
-    }, {
-        id: 1,
-        name: "Product 1",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-        category: "Category 1",
-        quantity: 10,
-        price: 100,
-        image: DummyProduct
-    },
-    {
-        id: 1,
-        name: "Product 1",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-        category: "Category 1",
-        quantity: 10,
-        price: 100,
-        image: DummyProduct
-    }, {
-        id: 1,
-        name: "Product 1",
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-        category: "Category 1",
-        quantity: 10,
-        price: 100,
-        image: DummyProduct
-    },
-]
+
 
 export const ProductsTable: FC = () => {
     const [maxHeight, setMaxHeight] = useState<number>(0);
+    const { measureRef, isIntersecting, observer } = useOnScreen();
+
+    const filter = {
+        pageSize: 2,
+    }
+
+
+    const { data, fetchNextPage, hasNextPage, isLoading, isFetching } = useInfiniteQuery({
+        queryKey: ['products'],
+        queryFn: ({ pageParam = 1 }) => getProductsQuery({ ...filter, page: pageParam }),
+        getNextPageParam: (lastPage) => lastPage.pagination.nextPage ? lastPage.pagination.nextPage : undefined,
+    })
+
     useEffect(() => {
         const updateMaxHeight = () => {
             const windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -95,6 +51,13 @@ export const ProductsTable: FC = () => {
             window.removeEventListener('resize', updateMaxHeight);
         };
     }, []);
+    console.log(hasNextPage, 'hasNextPage')
+    useEffect(() => {
+        if (isIntersecting && hasNextPage) {
+            fetchNextPage()
+            observer.disconnect();
+        }
+    }, [isIntersecting, hasNextPage, fetchNextPage]);
 
     return (
         <TableContainer component={Paper} sx={{
@@ -117,54 +80,66 @@ export const ProductsTable: FC = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
-                        <TableRow key={row.id}>
-                            <TableCell align="center">
-                                <img src={row.image} alt="" />
-                            </TableCell>
-                            <TableCell sx={{
-                                fontWeight: '500',
-                                fontSize: '18px',
-                                color: '#121212'
-                            }} align="center"> {row.name}</TableCell>
-                            <TableCell sx={{
-                                fontWeight: '500',
-                                fontSize: '18px',
-                                color: '#121212'
-                            }} align="center">{row.description}</TableCell>
-                            <TableCell sx={{
-                                fontWeight: '500',
-                                fontSize: '18px',
-                                color: '#121212'
-                            }} align="center">{row.category}</TableCell>
-                            <TableCell sx={{
-                                fontWeight: '500',
-                                fontSize: '18px',
-                                color: '#121212'
-                            }} align="center">{row.quantity}</TableCell>
-                            <TableCell sx={{
-                                fontWeight: '500',
-                                fontSize: '18px',
-                                color: '#121212'
-                            }} align="center">{row.price}</TableCell>
-                            <TableCell sx={{
-                                fontWeight: '500',
-                                fontSize: '18px',
-                                color: '#121212'
-                            }} align="center">{row.id}</TableCell>
-                            <TableCell sx={{
-                                fontWeight: '500',
-                                fontSize: '18px',
-                                color: '#121212'
-                            }} align="center">
-                                <button className=" text-textHighlight px-4 py-2 rounded-md">
-                                    <MdModeEditOutline />
-                                </button>
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                    {
+                        data?.pages?.map((data) => {
+                            return data?.data?.map((row: any) => (
+                                <TableRow key={row.id}>
+                                    <TableCell align="center">
+                                        <img src={row.images[0].url} alt="" />
+                                    </TableCell>
+                                    <TableCell sx={{
+                                        fontWeight: '500',
+                                        fontSize: '18px',
+                                        color: '#121212'
+                                    }} align="center"> {row.name}</TableCell>
+                                    <TableCell sx={{
+                                        fontWeight: '500',
+                                        fontSize: '18px',
+                                        color: '#121212'
+                                    }} align="center">{row.description}</TableCell>
+                                    <TableCell sx={{
+                                        fontWeight: '500',
+                                        fontSize: '18px',
+                                        color: '#121212'
+                                    }} align="center">{row.category.name}</TableCell>
+                                    <TableCell sx={{
+                                        fontWeight: '500',
+                                        fontSize: '18px',
+                                        color: '#121212'
+                                    }} align="center">{row.quantity}</TableCell>
+                                    <TableCell sx={{
+                                        fontWeight: '500',
+                                        fontSize: '18px',
+                                        color: '#121212'
+                                    }} align="center">{row.selling_price}</TableCell>
+                                    <TableCell sx={{
+                                        fontWeight: '500',
+                                        fontSize: '18px',
+                                        color: '#121212'
+                                    }} align="center">{row.id}</TableCell>
+                                    <TableCell sx={{
+                                        fontWeight: '500',
+                                        fontSize: '18px',
+                                        color: '#121212'
+                                    }} align="center">
+                                        <button className=" text-textHighlight px-4 py-2 rounded-md">
+                                            <MdModeEditOutline />
+                                        </button>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        })
+                    }
+
+
+
+
                 </TableBody>
             </Table>
+            <button onClick={() => {
+                console.log('fetching next page')
+                return fetchNextPage()
+            }}>Fetch Next Page</button>
         </TableContainer>
     )
 }

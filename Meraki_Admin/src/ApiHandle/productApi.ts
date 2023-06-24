@@ -36,3 +36,12 @@ export const AddProductMutation = async (product:IFormValues)=>{
     })
     return res
 }
+
+
+export const getProductsQuery = (params:any)=>{
+    return axiosInstance({
+        method: "get",
+        url: productRoutesPath.getProducts,
+        params 
+    })
+}

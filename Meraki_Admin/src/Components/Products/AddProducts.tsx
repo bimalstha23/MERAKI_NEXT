@@ -7,11 +7,18 @@ import { fetchCategories } from '../../ApiHandle/categoryApi'
 import { ICategory, IFormValues } from './types'
 import { FC } from 'react'
 import { AddProductMutation } from '../../ApiHandle/productApi'
+import { enqueueSnackbar } from 'notistack'
 
 export const AddProducts: FC = () => {
     const { mutate } = useMutation({
         mutationFn: AddProductMutation,
         mutationKey: ['addProducts'],
+        onSuccess: () => {
+            enqueueSnackbar('Product Added Successfully', { variant: 'success' })
+        },
+        onError: (data: any) => {
+            enqueueSnackbar(data.message, { variant: 'error' })
+        }
     })
 
     const { data: options } = useQuery({
@@ -24,6 +31,9 @@ export const AddProducts: FC = () => {
                     label: category.name,
                 }
             })
+        },
+        onError: (data: any) => {
+            enqueueSnackbar(data.message, { variant: 'error' })
         }
     })
     console.log(options, 'options')

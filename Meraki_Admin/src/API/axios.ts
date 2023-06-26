@@ -20,8 +20,6 @@ export const axiosInstance = async (
   await mutex.waitForUnlock();
   try {
     const response: AxiosResponse = await Axios(config);
-    // console.log(response, "response");
-    console.log(response.data, "rasdasdasc");
     return response.data;
   } catch (error: any) {
     console.error(error, "error");

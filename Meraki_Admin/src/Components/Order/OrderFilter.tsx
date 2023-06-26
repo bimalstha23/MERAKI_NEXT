@@ -6,13 +6,12 @@ import { useEffect, useState } from 'react'
 import { useDebounce } from '../../Hooks/utilityHooks/useDebounce'
 import { useQuery } from '@tanstack/react-query'
 import { fetchCategories } from '../../ApiHandle/categoryApi'
-import { ICategory } from './types'
 import { enqueueSnackbar } from 'notistack'
+import { Category } from '../../globalTypes'
 
-export const FilterComp = () => {
+export const OrderFilter = () => {
     const { setProductFilters, ProductFilters } = useProduct()
-
-
+    
     const [category, setCategory] = useState<any>()
     const [time, setTime] = useState<any>()
     const [search, setSearch] = useState<any>('')
@@ -22,7 +21,7 @@ export const FilterComp = () => {
         queryKey: ['categories'],
         queryFn: fetchCategories,
         select: (data) => {
-            return data.categories.map((category: ICategory) => {
+            return data.categories.map((category: Category) => {
                 return {
                     value: category.id,
                     label: category.name,
@@ -33,7 +32,6 @@ export const FilterComp = () => {
             enqueueSnackbar(data.message, { variant: 'error' })
         }
     })
-
 
     const timeOptions = [
         {

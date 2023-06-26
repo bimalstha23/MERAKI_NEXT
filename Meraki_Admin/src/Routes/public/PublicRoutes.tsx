@@ -4,9 +4,26 @@ import { Payments } from "../../Pages/Payments/Payments";
 import { Products } from "../../Pages/Products/Products";
 import { Settings } from "../../Pages/Setings/Settings";
 import { Shipping } from "../../Pages/Shipping/Shipping";
+import { OrderProvider } from "../../Providers/OrderProvider";
+import { ProductProvider } from "../../Providers/ProductProvider";
 import { createRoutes } from "../createRoutes"
 import { publicRoutePath } from "./public-Route-path";
-// import { createBrowserRouter } from "react-router-dom";
+
+const Product = () => {
+    return (
+        <ProductProvider>
+            <Products />
+        </ProductProvider>
+    )
+}
+
+const OrderPage = () => {
+    return (
+        <OrderProvider>
+            <Order />
+        </OrderProvider>
+    )
+}
 
 export const publicRoutes = [
     createRoutes({
@@ -15,7 +32,7 @@ export const publicRoutes = [
         children: [
             createRoutes({
                 path: publicRoutePath.Order,
-                element: Order,
+                element: OrderPage,
             }),
             createRoutes({
                 path: publicRoutePath.Payments,
@@ -23,7 +40,7 @@ export const publicRoutes = [
             }),
             createRoutes({
                 path: publicRoutePath.Products,
-                element: Products,
+                element: Product,
             }),
             createRoutes({
                 path: publicRoutePath.Shipping,

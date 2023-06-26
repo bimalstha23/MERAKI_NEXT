@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../Hooks/AuthHooks/useAuth";
+import { useAuth } from "../../Hooks/ProviderHooks/useAuth";
 import { useMutation } from "@tanstack/react-query";
 import { LoginMutation } from "../../ApiHandle/AuthApi";
 

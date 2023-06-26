@@ -10,6 +10,7 @@ import { AddProductMutation } from '../../ApiHandle/productApi'
 import { enqueueSnackbar } from 'notistack'
 
 export const AddProducts: FC = () => {
+
     const { mutate } = useMutation({
         mutationFn: AddProductMutation,
         mutationKey: ['addProducts'],
@@ -36,7 +37,6 @@ export const AddProducts: FC = () => {
             enqueueSnackbar(data.message, { variant: 'error' })
         }
     })
-    console.log(options, 'options')
 
     const { control, register, formState, watch, handleSubmit, setValue } = useForm<IFormValues>({
         defaultValues: {
@@ -48,15 +48,31 @@ export const AddProducts: FC = () => {
             discount: '' as unknown as number,
             category: '' as unknown as number,
             images: [],
+            status: 'ACTIVE'
         }
     })
 
-    const submit = (data: IFormValues) => {
-        mutate(data)
+    const submit = (data: IFormValues, event: any) => {
+        const submitName = event.nativeEvent.submitter.name
+        switch (submitName) {
+            case 'addProduct':
+                mutate(data)
+                break;
+            case 'saveDraft':
+                mutate({ ...data, status: 'DRAFT' })
+                break;
+            case 'moveToArchive':
+                mutate({ ...data, status: 'ARCHIVED' })
+                break;
+            default:
+                break
+        }
     }
+
     const files = watch('images')
+
     return (
-        <form className="flex flex-row justify-center gap-5 " onSubmit={handleSubmit(submit)}>
+        <form className="flex flex-row justify-center gap-5 " onSubmit={handleSubmit((data, event) => submit(data, event))}>
             <div className="w-full flex flex-col  gap-8">
                 <div className='flex flex-col justify-center items-start w-full gap-3'>
                     <label className='font-bold' htmlFor="">Product Name</label>
@@ -112,13 +128,13 @@ export const AddProducts: FC = () => {
                     </div>
                     droppedFiles</div>
                 <div className='flex flex-row justify-between items-center'>
-                    <button type='submit' className='py-3 px-4 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
+                    <button name='addProduct' type='submit' className='py-3 px-4 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
                         Add Product
                     </button>
-                    <button className='py-3 px-4 bg-textHighlight rounded-2xl font-extrabold text-SecondaryText'>
+                    <button type='submit' name='saveDraft' className='py-3 px-4 bg-textHighlight rounded-2xl font-extrabold text-SecondaryText'>
                         Save as Draft
                     </button>
-                    <button className='py-3 px-4 bg-background rounded-2xl font-extrabold text-SecondaryText'>
+                    <button name='moveToArchive' type='submit' className='py-3 px-4 bg-background rounded-2xl font-extrabold text-SecondaryText'>
                         Move to Archive
                     </button>
                 </div>
@@ -132,8 +148,8 @@ const DroppedFiles: FC<{ files: File[] }> = ({ files }) => {
         <div>
             <h2>Uploaded Files:</h2>
             <div className="flex flex-wrap justify-center gap-2">
-                {files.map((file) => (
-                    <img src={URL.createObjectURL(file)} className="w-1/4 inline object-contain" alt="Uploaded file" />
+                {files.map((file, index: number) => (
+                    <img key={index} src={URL.createObjectURL(file)} className="w-1/4 inline object-contain" alt="Uploaded file" />
                 ))}
             </div>
         </div>

@@ -3,22 +3,9 @@ import { Product } from "@prisma/client";
 import multer, { MulterError } from "multer";
 import prismaClient from "../../PrismaClient";
 import { ProductStatus } from "@prisma/client";
-
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "uploads/"); // Directory where uploaded files will be stored
-//   },
-//   filename: function (req, file, cb) {
-//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-//     cb(null, file.fieldname + "-" + uniqueSuffix); // Filename for the uploaded file
-//   },
-// });
-
-// const upload = multer({ storage: storage }).array("images", 5); // Accept up to 5 files with the field name 'images'
-
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 export const addProduct = async (req: Request, res: Response) => {
-  console.log('we are here ')
   try {
     const {
       name,
@@ -28,18 +15,17 @@ export const addProduct = async (req: Request, res: Response) => {
       selling_price,
       description,
       discount,
+      status,
     } = req.body;
-    console.log(req.body, "req.body")
-    console.log(req.file, "req.files")
-   
-      console.log(req.files, "req.files");
-      const fileNames = (req.files as Express.Multer.File[])?.map(
-        (file: { filename: any , path:string }) => file.path
-      );
-        console.log(fileNames, "fileNames")
-      const imagesData = fileNames?.map((fileName: string) => ({
-        url: fileName,
-      }));
+      const storage  = getStorage()
+      const imagesUrls  = [] as any
+      for (const file of req.files as Express.Multer.File[]) {
+        const storageRef = ref(storage, `images/${file.originalname}`);
+        await uploadBytes(storageRef, file.buffer);
+        const url = await getDownloadURL(storageRef);
+        imagesUrls.push({url:url})
+      }
+
 
       await prismaClient.product.create({
         data: {
@@ -51,11 +37,12 @@ export const addProduct = async (req: Request, res: Response) => {
           discount: Number(discount) || 0,
           createdAt: new Date(),
           updatedAt: new Date(),
+          status: status as ProductStatus,
           category: {
             connect: { id: Number(categoryId) },
           },
           images: {
-            create: imagesData,
+            create: imagesUrls,
           },
         },
       });
@@ -82,23 +69,63 @@ export const getProducts = async (
       status,
       page,
       pageSize,
+      onStock,
+      outOfStock,
     } = req.query;
 
     // Prepare filter options based on query parameters
     const filterOptions: {
       category?: {
-        name?: string;
+        id: number;
       };
       price?: {
         gte?: number;
         lte?: number;
       };
       status?: string;
+      quantity?: {
+        gte?: number; // Add quantity filter for onStock
+        lte?: number; // Add quantity filter for outOfStock
+      };
     } = {};
-
+    
     if (category) {
       filterOptions.category = {
-        name: category as string,
+        id: Number(category) as unknown as number,
+      };
+    }
+    
+    if (minPrice || maxPrice) {
+      filterOptions.price = {};
+    
+      if (minPrice) {
+        filterOptions.price.gte = parseInt(minPrice as string, 10);
+      }
+    
+      if (maxPrice) {
+        filterOptions.price.lte = parseInt(maxPrice as string, 10);
+      }
+    }
+    
+    if (status) {
+      filterOptions.status = status as string;
+    }
+    
+    if (onStock) {
+      filterOptions.quantity = {
+        gte: 1, // Filter for onStock products (quantity greater than or equal to 1)
+      };
+    }
+    
+    if (outOfStock) {
+      filterOptions.quantity = {
+        lte: 0, // Filter for outOfStock products (quantity less than or equal to 0)
+      };
+    }
+    
+    if (category) {
+      filterOptions.category = {
+        id: Number(category) as unknown as number,
       };
     }
 
@@ -191,6 +218,7 @@ export const getProducts = async (
       pageSize:take ? take : 10
     } });
   } catch (error: any) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
   };

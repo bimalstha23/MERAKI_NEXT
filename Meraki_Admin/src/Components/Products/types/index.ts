@@ -25,4 +25,5 @@ export interface IFormValues {
   quantity: number;
   discount: number;
   images: File[];
+  status: string;
 }

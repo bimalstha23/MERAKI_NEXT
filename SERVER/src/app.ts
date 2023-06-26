@@ -1,11 +1,11 @@
 import express, { Application } from "express";
 import { NextFunction, Request, Response } from "express";
-import createError from "http-errors";
 import morgan from "morgan";
 import startuproutes from "./startup/RoutesStartup";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import bodyParser from "body-parser";
+import { startStorage } from "./startup/storageStartup";
 
 require("dotenv").config();
 
@@ -29,35 +29,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// app.options("*", (req: Request, res: Response, next: NextFunction) => {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   req.header("Access-Control-Allow-Origin");
-//   req.header("Access-Control-Allow-Credentials");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-//   );
-//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-//   res.sendStatus(200);
-// });
 
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
   res.send({ message: "You're in right place folk 🐻" });
 });
-
+startStorage();
 startuproutes(app);
-
-// app.use((req: Request, res: Response, next: NextFunction) => {
-//   next(createError.NotFound());
-// });
-// UnKnown Routes
-// app.all("*", (req: Request, res: Response, next: NextFunction) => {
-//   const err = new Error(`Route ${req.originalUrl} not found`) as any;
-//   err.statusCode = 404;
-//   next(err);
-// });
-
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(err.status || 500);
   res.send({

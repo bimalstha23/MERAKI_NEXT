@@ -5,7 +5,7 @@ import { publicRoutes } from './Routes/public/PublicRoutes';
 import { privateRoutes } from './Routes/private/PrivateRoutes';
 import { useQuery } from '@tanstack/react-query';
 import { getMeQuery } from './ApiHandle/AuthApi';
-import { useAuth } from './Hooks/AuthHooks/useAuth';
+import { useAuth } from './Hooks/ProviderHooks/useAuth';
 
 function App() {
   const { setUser, user } = useAuth();

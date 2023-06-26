@@ -11,7 +11,8 @@ export const AddProductMutation = async (product:IFormValues)=>{
         description:product.description,
         quantity:product.quantity,
         discount:product.discount,
-        categoryId:product.category
+        categoryId:product.category,
+        status:product.status 
     }
 
     const formData = new FormData()
@@ -23,8 +24,6 @@ export const AddProductMutation = async (product:IFormValues)=>{
     product.images.forEach((image)=>{
         formData.append("images",image)
     })
-
-
 
     const res = await axiosInstance({
         method: "post",

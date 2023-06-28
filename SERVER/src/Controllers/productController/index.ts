@@ -209,7 +209,7 @@ export const getProducts = async (
         instock: false,
       };
     });
-  
+    
     res.status(200).json({ data:updatedProducts , pagination:{
       nextPage,
       has_next_page:hasNextPage,
@@ -228,8 +228,7 @@ export const getProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params;
-
+    const { id } = req.query;
     const product = await prismaClient.product.findUnique({
       where: {
         id: Number(id),
@@ -239,9 +238,9 @@ export const getProduct = async (
         images: true,
       },
     });
-
     res.status(200).json({ product });
-  } catch {
+  } catch(error) {
+    console.log(error)
     res.status(500).json({ message: "Something went wrong" });
   }
 };
@@ -251,7 +250,7 @@ export const updateProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { id } = req.params;
+    const { id } = req.query;
     const {
       name,
       categoryId,
@@ -260,6 +259,7 @@ export const updateProduct = async (
       selling_price,
       description,
       discount,
+      status
     } = req.body;
 
     const product = await prismaClient.product.update({
@@ -268,18 +268,20 @@ export const updateProduct = async (
       },
       data: {
         name,
-        cost_price,
-        selling_price,
+        cost_price:Number(cost_price),
+        selling_price: Number(selling_price),
         description,
-        quantity,
-        discount: discount || 0,
+       quantity: Number(quantity),
+        status,
+        discount:Number(discount) || 0,
         category: {
           connect: { id: Number(categoryId) },
         },
       },
     });
     res.status(200).json({ product });
-  } catch {
+  } catch(error) {
+    console.error(error , 'updateProduct Error')
     res.status(500).json({ message: "Something went wrong" });
   }
 };
@@ -290,7 +292,6 @@ export const deleteProduct = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-
     await prismaClient.product.delete({
       where: {
         id: Number(id),

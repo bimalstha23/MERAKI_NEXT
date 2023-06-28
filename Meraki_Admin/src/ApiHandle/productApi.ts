@@ -44,3 +44,34 @@ export const getProductsQuery = (params:any)=>{
         params 
     })
 }
+
+export const getProductQuery = (id:number|string)=>{
+    return axiosInstance({
+        method: "get",
+        url: productRoutesPath.getProduct,
+        params: {
+            id
+        }
+    })
+}
+
+export const updateProductMutation =  (product:IFormValues)=>{
+return  axiosInstance({
+        method: "put",
+        url: productRoutesPath.updateProduct,
+        data: {
+            name: product.name,
+            cost_price:product.costPrice,
+            selling_price:product.sellingPrice,
+            description:product.description,
+            quantity:product.quantity,
+            discount:product.discount,
+            categoryId:product.category,
+            status:product.status,
+        },
+        params: {
+            id:product.id
+        }
+    })
+    // return res
+}

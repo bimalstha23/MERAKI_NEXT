@@ -1,5 +1,5 @@
 import { TableCell, TableRow } from '@mui/material'
-import { FC, Fragment } from 'react'
+import { FC } from 'react'
 import { MdModeEditOutline } from "react-icons/md"
 
 export const TableRowComp: FC<{ row: any; innerRef?: (node: HTMLTableRowElement | null) => void }> = ({ row }) => {

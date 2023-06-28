@@ -4,6 +4,7 @@ import { isAdmin, requireAuth } from "../../middlewares/authMiddlewares";
 import { productRoutesPath } from "../../constants/Api";
 import {
   addProduct,
+  getProduct,
   getProducts,
   updateProduct,
 } from "../../Controllers/productController";
@@ -21,12 +22,18 @@ productRouter.post(
   addProduct
 );
 
-productRouter.get(productRoutesPath.getProducts, getProducts);
+productRouter.get(productRoutesPath.getProducts, deserializeUser,
+  requireAuth,
+  isAdmin, getProducts);
 productRouter.post(
   productRoutesPath.updateProduct,
   requireAuth,
   isAdmin,
   updateProduct
 );
+
+productRouter.get(productRoutesPath.getProduct,deserializeUser ,requireAuth , isAdmin ,   getProduct)
+productRouter.put(productRoutesPath.updateProduct,deserializeUser ,requireAuth , isAdmin ,   updateProduct)
+
 
 export default productRouter;

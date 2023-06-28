@@ -9,6 +9,7 @@ import { FC } from 'react'
 import { AddProductMutation } from '../../ApiHandle/productApi'
 import { enqueueSnackbar } from 'notistack'
 
+
 export const AddProducts: FC = () => {
 
     const { mutate } = useMutation({
@@ -38,7 +39,7 @@ export const AddProducts: FC = () => {
         }
     })
 
-    const { control, register, formState, watch, handleSubmit, setValue } = useForm<IFormValues>({
+    const { control, register, watch, handleSubmit, setValue } = useForm<IFormValues>({
         defaultValues: {
             name: '',
             description: '',
@@ -106,27 +107,27 @@ export const AddProducts: FC = () => {
                 <ImageUpload setValue={setValue} />
                 <DroppedFiles files={files} />
                 <div className='flex flex-col gap-4'>
-                    <div className='flex flex-row justify-center items-center gap-4'>
-                        <div className='flex flex-row justify-center items-center w-full gap-3'>
-                            <label className='font-bold w-full' htmlFor="">Cost Price:</label>
+                    <div className='flex flex-row justify-center items-center gap-10'>
+                        <div className='flex flex-row justify-center items-center w-full '>
+                            <label className='font-bold ' htmlFor="">Cost Price:</label>
                             <input {...register('costPrice')} className='rounded-lg bg-[#FB244833] w-full px-2 h-10 py-1 outline-4 outline-textHighlight focus:outline-4 focus:outline-textHighlight border-4 border-textHighlight  ' type="text" placeholder='Rs' />
                         </div>
-                        <div className='flex flex-row justify-center items-center w-full gap-3'>
-                            <label className='font-bold w-full' htmlFor="">Selling price:</label>
+                        <div className='flex flex-row justify-center items-center w-full '>
+                            <label className='font-bold ' htmlFor="">Selling price:</label>
                             <input {...register('sellingPrice')} className='rounded-lg bg-[#29CC9733] w-full px-2 h-10 py-1 outline-4 border-4 border-greenText focus:outline-4 focus:outline-greenText   ' type="text" placeholder='Rs' />
                         </div>
                     </div>
-                    <div className='flex flex-row justify-center items-center gap-4'>
-                        <div className='flex flex-row justify-center items-center w-full gap-3'>
-                            <label className='font-bold w-full' htmlFor="">Quantity:</label>
+                    <div className='flex flex-row justify-center items-center gap-10'>
+                        <div className='flex flex-row justify-center items-center w-full '>
+                            <label className='font-bold' htmlFor="">Quantity:</label>
                             <input {...register('quantity')} className='rounded-lg bg-white w-full px-2 h-10 py-1 outline-4 border-2 border-PrimaryText focus:outline-1 focus:outline-PrimaryText ' type="text" placeholder='PCs' />
                         </div>
-                        <div className='flex flex-row justify-center items-center w-full gap-3'>
-                            <label className='font-bold w-full' htmlFor="">Discount %:</label>
+                        <div className='flex flex-row justify-center items-center w-full '>
+                            <label className='font-bold' htmlFor="">Discount:</label>
                             <input {...register('discount')} className='rounded-lg bg-white w-full px-2 h-10 py-1 outline-4 border-2 border-PrimaryText focus:outline-1 focus:outline-PrimaryText   ' type="text" placeholder='%' />
                         </div>
                     </div>
-                    droppedFiles</div>
+                </div>
                 <div className='flex flex-row justify-between items-center'>
                     <button name='addProduct' type='submit' className='py-3 px-4 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
                         Add Product
@@ -143,14 +144,17 @@ export const AddProducts: FC = () => {
     )
 }
 
-const DroppedFiles: FC<{ files: File[] }> = ({ files }) => {
+
+const DroppedFiles: FC<{ files?: File[], }> = ({ files = [] }) => {
     return (
         <div>
-            <h2>Uploaded Files:</h2>
             <div className="flex flex-wrap justify-center gap-2">
-                {files.map((file, index: number) => (
-                    <img key={index} src={URL.createObjectURL(file)} className="w-1/4 inline object-contain" alt="Uploaded file" />
-                ))}
+
+                {
+                    files.length > 0 && files?.map((file, index: number) => (
+                        <img key={index} src={URL.createObjectURL(file)} className="w-1/4 inline object-contain" alt="Uploaded file" />
+                    ))
+                }
             </div>
         </div>
     );

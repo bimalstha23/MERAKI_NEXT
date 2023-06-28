@@ -1,4 +1,5 @@
 export interface IProduct {
+  product: any;
   id: number;
   name: string;
   price: number;
@@ -16,6 +17,7 @@ export interface ICategory {
 }
 
 export interface IFormValues {
+  id?: any;
   name: string;
   costPrice: number;
   sellingPrice: number;
@@ -24,6 +26,6 @@ export interface IFormValues {
   category: number;
   quantity: number;
   discount: number;
-  images: File[];
+  images: any[];
   status: string;
 }

@@ -1,9 +1,9 @@
 import { Box, Tabs, Tab } from "@mui/material"
 import { TabPanel, TabContext } from "@mui/lab"
 import React, { useEffect, useState } from "react"
-import { FilterComp } from "../../Components/Products/FilterComp";
-import { ProductsTable } from "../../Components/Products/ProductsTable";
 import { useSearchParams } from "react-router-dom";
+import { OrderFilter } from "../../Components/Order/OrderFilter";
+import { CreateOrder } from "../../Components/Order/CreateOrder";
 
 export const Order = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -78,25 +78,20 @@ export const Order = () => {
                 <div className="w-full">
                     <TabPanel value={'orders'}>
                         <div className="w-full">
-                            <FilterComp />
-                            <ProductsTable Tab="ACTIVE" />
+                            <OrderFilter />
                         </div>
                     </TabPanel>
                     <TabPanel value={'createorder'}>
                         <div className="w-full">
-                            <FilterComp />
-                            <ProductsTable Tab="DRAFT" />
+                            <CreateOrder />
                         </div>
                     </TabPanel>
                     <TabPanel value={'board'}>
                         <div className="w-full">
-                            <FilterComp />
-                            <ProductsTable Tab="onstocks" />
                         </div>
                     </TabPanel>
-
                     <TabPanel value={'delivered'}>
-                        <FilterComp />
+                        <OrderFilter />
                     </TabPanel>
                 </div>
             </TabContext>

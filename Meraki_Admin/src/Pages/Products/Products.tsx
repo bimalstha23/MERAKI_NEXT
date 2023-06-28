@@ -82,7 +82,9 @@ export const Products = () => {
                     </Tabs>
                 </Box>
                 <div className="w-full">
-                    <TabPanel value={'active'}>
+                    <TabPanel value={'active'} sx={{
+                        padding: "0px"
+                    }}>
                         <div className="w-full">
                             <FilterComp />
                             <ProductsTable Tab="ACTIVE" />

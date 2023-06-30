@@ -32,6 +32,31 @@ export const isAdmin = async (
   }
 };
 
+export const IsManager = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userID = res.locals.user.id;
+    const user = await prismaClient.user.findUnique({
+      where: {
+        id: userID,
+      },
+    });
+    if (user?.role === "Manager" || user?.role === "ADMIN") {
+      next();
+    }
+    return res.status(403).send({
+      success: false,
+      message: "You are not authorized to access this route",
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 export const requireAuth = async (
   req: CustomRequest,
   res: Response,

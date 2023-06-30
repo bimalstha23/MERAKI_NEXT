@@ -21,6 +21,16 @@ export const categoryRoutesPath = {
   deleteCategory: "/category/deletecategory",
 };
 
+export const orderRoutesPath = {
+  createOrder: "/order/createorder",
+  getOrders: "/order/getorders",
+  getOrder: "/order/getorder",
+  updateOrder: "/order/updateorder",
+  deleteOrder: "/order/deleteorder",
+};
+
+
+
 export const basePath = {
   version: "/v1",
   baseuri: "/api/meraki",

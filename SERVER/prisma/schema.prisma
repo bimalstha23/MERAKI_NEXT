@@ -12,6 +12,14 @@ enum ProductStatus {
   ARCHIVED
 }
 
+enum OrderStatus {
+  PENDING
+  DELIVERED
+  CANCELLED
+  PACKED
+  SHIPED
+}
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -50,16 +58,23 @@ model Image {
 }
 
 model Order {
-  id               Int       @id @default(autoincrement())
+  id               Int         @id @default(autoincrement())
   customer_name    String
   customer_phone   String
   customer_email   String
   customer_address String
   total_amount     Float
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
   deletedAt        DateTime?
+  discount         Float
+  profit           Float
   products         Product[]
+  delivery_fee     Float       @default(0)
+  userId           Int
+  user             User        @relation(fields: [userId], references: [id])
+  status           OrderStatus @default(PENDING)
+  createdByAdmin   Boolean     @default(false)
 }
 
 model User {
@@ -67,12 +82,13 @@ model User {
   email     String    @unique
   password  String
   createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  updatedAt DateTime? @default(now()) @updatedAt
   deletedAt DateTime?
   role      Role      @default(USER)
   name      String?
   phone     String?
   address   String?
+  orders    Order[]
 }
 
 model Category {
@@ -81,5 +97,6 @@ model Category {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
   deletedAt DateTime?
+  image     String?
   Product   Product[]
 }

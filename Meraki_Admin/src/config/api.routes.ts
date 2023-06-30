@@ -20,3 +20,12 @@ export const userRoutesPath = {
     updateCategory: "/category/updatecategory",
     deleteCategory: "/category/deletecategory",
   };
+
+  export const orderRoutesPath = {
+    createOrder: "/order/createorder",
+    getOrders: "/order/getorders",
+    getOrder: "/order/getorder",
+    updateOrder: "/order/updateorder",
+    deleteOrder: "/order/deleteorder",
+  };
+  

@@ -8,6 +8,7 @@ import { useProduct } from '../../Hooks/ProviderHooks/useProduct';
 import { MdModeEditOutline } from "react-icons/md"
 import { useAuth } from '../../Hooks/ProviderHooks/useAuth';
 import { UpdateProduct } from './UpdateProduct';
+import { useNavigate } from 'react-router-dom';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -29,6 +30,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
     const { measureRef, isIntersecting, observer } = useOnScreen();
     const { ProductFilters } = useProduct()
     const { setSelectedProduct, selectedProduct } = useAuth()
+    const [selectedtableProducts, setSelectedtableProducts] = useState<any>([])
     const [dialogOption, setDialogOption] = useState<{
         isOpen: boolean,
         id: number | string
@@ -36,6 +38,8 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
         isOpen: false,
         id: ''
     })
+    const navigate = useNavigate()
+
 
 
     const filterOptions: {
@@ -98,29 +102,50 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
     }, [isIntersecting, hasNextPage, fetchNextPage]);
 
     const handleClick = (_event: any, row: any) => {
-        const selectedIndex = selectedProduct.findIndex((item: any) => item.id === row.id);
+        const selectedIndex = Tab === 'ACTIVE' ? selectedProduct.findIndex((item: any) => item.id === row.id) : selectedtableProducts.findIndex((item: any) => item.id === row.id)
         let newSelected: any = [];
-
         const newRow = {
             quantity: 1,
             image: row.images[0].url,
             name: row.name,
             price: row.selling_price,
+            const_price: row.cost_price,
             id: row.id,
-            category: row.category.name,
+            category: row.category.id,
+            productQuantity: row.quantity,
+            discount: row.discount,
+            totalPrice: row.selling_price - (row.discount / 100 * row.selling_price)
         }
 
-
-        if (selectedIndex === -1) {
-            newSelected = [...selectedProduct, newRow]; // Add the selected item to the array
+        if (Tab === 'ACTIVE') {
+            if (selectedIndex === -1) {
+                newSelected = [...selectedProduct, newRow]; // Add the selected item to the array
+            } else {
+                newSelected = [...selectedProduct.slice(0, selectedIndex), ...selectedProduct.slice(selectedIndex + 1)]; // Remove the selected item from the array
+            }
         } else {
-            newSelected = [...selectedProduct.slice(0, selectedIndex), ...selectedProduct.slice(selectedIndex + 1)]; // Remove the selected item from the array
+            if (selectedIndex === -1) {
+                newSelected = [...selectedtableProducts, row]; // Add the selected item to the array
+            } else {
+                newSelected = [...selectedtableProducts.slice(0, row), ...selectedtableProducts.slice(selectedIndex + 1)]; // Remove the selected item from the array
+            }
         }
-        setSelectedProduct(newSelected);
+        if (Tab === 'ACTIVE') {
+            setSelectedProduct(newSelected);
+        } else {
+            setSelectedtableProducts(newSelected);
+        }
     };
 
 
-    const isSelected = (id: any) => selectedProduct?.findIndex((item: any) => item?.id === id) !== -1;
+    const isSelected = (id: any) => {
+        if (Tab === 'ACTIVE') {
+            return selectedProduct?.findIndex((item: any) => item?.id === id) !== -1;
+        } else {
+            return selectedtableProducts?.findIndex((item: any) => item?.id === id) !== -1;
+        }
+    }
+
     const handleDialogClose = () => {
         setDialogOption({
             isOpen: false,
@@ -144,14 +169,17 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
                     }),
                 }}
             >
-                {selectedProduct.length > 0 ? (
+                {selectedProduct.length > 0 || selectedtableProducts?.length ? (
                     <Typography
                         sx={{ flex: '1 1 100%' }}
                         color="inherit"
                         variant="subtitle1"
                         component="div"
-                    >
-                        {selectedProduct.length} Selected Products
+                    >{
+                            Tab === 'ACTIVE' ? <h1>{selectedProduct.length}</h1> : <h1>
+                                {selectedtableProducts.length}
+                            </h1>
+                        }
                     </Typography>
                 ) : (
                     <Typography
@@ -163,10 +191,22 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
                         {Tab} Products
                     </Typography>
                 )}
-                {selectedProduct.length > 0 ? (
-                    <button>
-                        <MdModeEditOutline />
-                    </button>
+                {selectedProduct?.length > 0 || selectedtableProducts?.length > 0 ? (
+                    <div className='flex flex-row justify-center items-center gap-5'>
+                        {Tab === 'ACTIVE' &&
+                            <button onClick={() => navigate('/order?tab=createorder')} name='createOrder' type='submit' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
+                                Create Order
+                            </button>}
+                        {Tab === 'ARCHIVED' || Tab === 'DRAFT' ? (
+                            <button name='createOrder' type='submit' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
+                                Move To Active
+                            </button>
+                        ) : Tab === 'ACTIVE' ? (
+                            <button name='createOrder' type='submit' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
+                                Move To Archive
+                            </button>
+                        ) : null}
+                    </div>
                 ) : (
                     <Typography
                         sx={{ flex: '1 1 100%' }}

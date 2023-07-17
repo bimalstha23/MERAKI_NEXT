@@ -41,7 +41,6 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
     const navigate = useNavigate()
 
 
-
     const filterOptions: {
         status?: string
         onStock?: boolean
@@ -68,13 +67,11 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
             break;
     }
 
-
     const { data, fetchNextPage, hasNextPage, isLoading, isFetching, refetch: refetchProduct } = useInfiniteQuery({
         queryKey: ['products', Tab],
         queryFn: ({ pageParam = 1 }) => getProductsQuery({ ...ProductFilters, ...filterOptions, page: pageParam }),
         getNextPageParam: (lastPage) => lastPage.pagination.nextPage ? lastPage.pagination.nextPage : undefined,
     })
-
 
     useEffect(() => {
         refetchProduct()
@@ -106,7 +103,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
         let newSelected: any = [];
         const newRow = {
             quantity: 1,
-            image: row.images[0].url,
+            image: row.images[0]?.url,
             name: row.name,
             price: row.selling_price,
             const_price: row.cost_price,
@@ -114,7 +111,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
             category: row.category.id,
             productQuantity: row.quantity,
             discount: row.discount,
-            totalPrice: row.selling_price - (row.discount / 100 * row.selling_price)
+            totalPrice: row.selling_price - (row.discount / 100 * row.selling_price) * 1,
         }
 
         if (Tab === 'ACTIVE') {
@@ -272,7 +269,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
                                                         />
                                                     </TableCell>
                                                     <TableCell align="center">
-                                                        <img className='w-28' src={row.images[0].url} alt="" />
+                                                        <img className='w-28' src={row.images[0]?.url} alt="" />
                                                     </TableCell>
                                                     <TableCell sx={{
                                                         fontWeight: '500',
@@ -335,7 +332,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
                                                         />
                                                     </TableCell>
                                                     <TableCell align="center">
-                                                        <img className='w-28' src={row.images[0].url} alt="" />
+                                                        <img className='w-28' src={row.images[0]?.url} alt="" />
                                                     </TableCell>
                                                     <TableCell sx={{
                                                         fontWeight: '500',

@@ -1,23 +1,21 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-enum Role {
-  Manager
+enum UserRole {
+  MANAGER
   ADMIN
   USER
 }
 
-enum ProductStatus {
+enum ProductState {
   ACTIVE
   DRAFT
   ARCHIVED
 }
 
-enum OrderStatus {
+enum OrderState {
   PENDING
   DELIVERED
   CANCELLED
   PACKED
-  SHIPED
+  SHIPPED
 }
 
 generator client {
@@ -30,51 +28,68 @@ datasource db {
 }
 
 model Product {
-  id            Int           @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   name          String
   description   String?
   selling_price Float
   cost_price    Float
   quantity      Int
   discount      Float?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  deletedAt     DateTime?
-  orders        Order[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   categoryId    Int
-  status        ProductStatus @default(ACTIVE)
-  category      Category      @relation(fields: [categoryId], references: [id])
+  status        ProductState   @default(ACTIVE)
+  category      Category       @relation(fields: [categoryId], references: [id])
   images        Image[]
+  orderProducts orderProduct[]
 }
 
 model Image {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   url       String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   productId Int
-  product   Product   @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 }
 
 model Order {
-  id               Int         @id @default(autoincrement())
+  id               Int            @id @default(autoincrement())
   customer_name    String
   customer_phone   String
-  customer_email   String
   customer_address String
   total_amount     Float
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
-  deletedAt        DateTime?
-  discount         Float
-  profit           Float
-  products         Product[]
-  delivery_fee     Float       @default(0)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  delivery_fee     Float          @default(0)
   userId           Int
-  user             User        @relation(fields: [userId], references: [id])
-  status           OrderStatus @default(PENDING)
-  createdByAdmin   Boolean     @default(false)
+  user             User           @relation(fields: [userId], references: [id])
+  status           OrderState     @default(PENDING)
+  createdByAdmin   Boolean        @default(false)
+  orderProducts    orderProduct[]
+  discount         Float          @default(0)
+  profit           Float          @default(0)
+  // payments         Payment[]
+}
+
+// model Payment {
+//   id        Int       @id @default(autoincrement())
+//   amount    Float
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime  @updatedAt
+//   orderId   Int
+//   order     Order     @relation(fields: [orderId], references: [id])
+// }
+
+model orderProduct {
+  id        Int      @id @default(autoincrement())
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orderId   Int
+  order     Order    @relation(fields: [orderId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
 }
 
 model User {
@@ -83,8 +98,7 @@ model User {
   password  String
   createdAt DateTime  @default(now())
   updatedAt DateTime? @default(now()) @updatedAt
-  deletedAt DateTime?
-  role      Role      @default(USER)
+  role      UserRole  @default(USER)
   name      String?
   phone     String?
   address   String?
@@ -96,7 +110,6 @@ model Category {
   name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
-  deletedAt DateTime?
   image     String?
-  Product   Product[]
+  products  Product[]
 }

@@ -29,8 +29,6 @@ export const orderRoutesPath = {
   deleteOrder: "/order/deleteorder",
 };
 
-
-
 export const basePath = {
   version: "/v1",
   baseuri: "/api/meraki",

@@ -31,7 +31,6 @@ export const createOrder = async (req: Request, res: Response) => {
         });
       }
       const productSubtotal = productData.selling_price * orderedQuantity;
-      console.log(productSubtotal , 'productSubtotal')
       // Check if the product has an individual discount
       if (productData.discount) {
         const productDiscount = productSubtotal * (productData.discount/100);
@@ -81,7 +80,7 @@ export const createOrder = async (req: Request, res: Response) => {
     }
 
     // Calculate the profit
-    const profit = discountedTotalAmount - totalCostPrice;
+    const profit = TotalAmount - totalCostPrice - Number(deleviry_fee);
 
     // Create the order and update the product quantities
     const order = await prismaClient.order.create({
@@ -90,26 +89,18 @@ export const createOrder = async (req: Request, res: Response) => {
         user: { connect: { id: userid } }, // Use 'user' instead of 'userId' and connect it to the corresponding user ID
         customer_name,
         customer_phone,
-        customer_email,
         customer_address,
         total_amount: discountedTotalAmount, // Use the discounted total amount
         discount: totalDiscount + (discountedTotalAmount * discount), // Save the combined discount value in the order
         profit, // Save the calculated profit in the order
+        createdByAdmin: true,
         delivery_fee: Number(deleviry_fee),
-        products: {
-          create: products.map((product: any) => ({
-            name: product.name, // Include 'name', 'selling_price', 'cost_price', and 'category' for each product
-            selling_price: product.selling_price,
-            cost_price: product.cost_price,
-            category: { connect: { id: product.categoryId } }, // Use 'connect' to associate an existing category with the product
+        orderProducts: {
+          create: products.map((product: { id: any; quantity: any; }) => ({
+            product: { connect: { id: product.id } },
             quantity: product.quantity,
-            // product: { connect: { id: product.id } }, // Use 'connect' to associate an existing product with the order
           })),
         },
-      },
-
-      include: {
-        products: true,
       },
     });
 
@@ -141,18 +132,242 @@ export const createOrder = async (req: Request, res: Response) => {
 
 export const getOrders = async (req: Request, res: Response) => {
   try {
+    const { customerName, orderId, sortBy, page, pageSize , filter ,  from , to } = req.query;
+
+    // Convert page and pageSize to numbers with default values
+    const pageNumber = Number(page) || 1;
+    const itemsPerPage = Number(pageSize)|| 10;
+
+    // Build the filters based on the query parameters
+    let filters = {
+      createdAt:{
+      }
+
+
+     } 
+   if(filter){
+   if(filter ==="last7days"){
+    const currentDate = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(currentDate.getDate() - 7);
+    filters.createdAt = {
+      gte: new Date(sevenDaysAgo).toISOString(), // Convert to ISO 8601 DateTime format
+    lte: new Date(currentDate).toISOString()
+    };
+   }
+    else if(filter ==="last1month"){
+    const currentDate = new Date();
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(currentDate.getDate() - 30);
+    filters.createdAt = {
+      gte: new Date(thirtyDaysAgo).toISOString(), // Convert to ISO 8601 DateTime format
+      lte: new Date(currentDate).toISOString()
+    };
+  }
+    else if(filter ==="last2days"){
+      const currentDate = new Date();
+      const twoDaysAgo = new Date();
+      twoDaysAgo.setDate(currentDate.getDate() - 2);
+      filters.createdAt = {
+        gte: new Date(twoDaysAgo).toISOString(), // Convert to ISO 8601 DateTime format
+        lte: new Date(currentDate).toISOString()
+      };
+    }
+    else if(filter ==="last6month"){
+      const currentDate = new Date();
+      const sixMonthAgo = new Date();
+      sixMonthAgo.setDate(currentDate.getDate() - 180);
+      filters.createdAt = {
+        gte: new Date(sixMonthAgo).toISOString(), // Convert to ISO 8601 DateTime format
+    lte: new Date(currentDate).toISOString()
+      };
+    }
+    else if(filter ==="last1year"){
+        const currentDate = new Date();
+        const oneYearAgo = new Date();
+        oneYearAgo.setDate(currentDate.getDate() - 365);
+        filters.createdAt = {
+          gte: new Date(oneYearAgo).toISOString(), // Convert to ISO 8601 DateTime format
+    lte: new Date(currentDate).toISOString()
+        };
+    }
+}
+ console.log(filters , 'filter')
+if(from && to){
+  filters.createdAt = {
+    gte: new Date(from as string),
+    lte: new Date(to as string)
+  };
+}
+
+
+
+    // Define the sorting options based on the sortBy query parameter
+    const sortingOptions: any = {};
+    if (sortBy === 'customerName') {
+      sortingOptions.user = {
+        name: 'asc',
+      };
+    } else if (sortBy === 'orderId') {
+      sortingOptions.id = 'asc';
+    }
+
+    const totalOrders = await prismaClient.order.count({ where: {
+      OR: customerName || orderId
+      ? [
+          { customer_name: { contains:customerName  as string, mode: "insensitive" } },
+          {
+            customer_address: {
+              contains: customerName as string,
+              mode: "insensitive",
+            },
+          },
+        ]
+      : undefined,
+    }, });
+
     const orders = await prismaClient.order.findMany({
+      where: {
+        OR: customerName
+        ? [
+            { customer_name: { contains:customerName  as string, mode: "insensitive" } },
+            {
+              customer_address: {
+                contains: customerName as string,
+                mode: "insensitive",
+              },
+            },
+            {
+              customer_phone: {
+                contains: customerName as string,
+                mode: "insensitive",
+              },
+            },
+            {
+              id:{
+                equals: parseInt(customerName as string),
+              },
+            }
+          ]
+        : undefined,
+          ...filters,
+      },
       include: {
-        products: {
+        user: true,
+        orderProducts: {
           include: {
-            category: true,
-            images: true,
+            product: {
+              select: {
+                name: true,
+                quantity: true,
+                description: true,
+                id: true,
+                images: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy:{
+        createdAt: 'asc'
+      },
+      skip: (pageNumber - 1) * itemsPerPage,
+      take: itemsPerPage,
+    });
+
+    // Function to filter out unnecessary product fields
+    const filterProductFields = (product: any) => {
+      const { cost_price, ...filteredProduct } = product;
+      return filteredProduct;
+    };
+
+    // Function to filter out unnecessary order fields
+    const filterOrderFields = (order: any) => {
+      order.orderProducts.forEach((orderProduct: any) => {
+        orderProduct.product = filterProductFields(orderProduct.product);
+      });
+      return order;
+    };
+
+    // Filter out unnecessary fields from the response
+    const filteredOrders = orders.map((order) => filterOrderFields(order));
+    const totalPages = Math.ceil(totalOrders / itemsPerPage);
+    const hasNextPage = pageNumber < totalPages;
+    const nextPage = hasNextPage ? pageNumber + 1 : null;
+
+    res.status(200).json({
+      data: filteredOrders,
+      pagination: {
+        nextPage,
+        has_next_page: hasNextPage,
+        total: totalOrders,
+        currentPage: pageNumber,
+        pageSize: itemsPerPage,
+      },
+    });
+  } catch (e) {
+    console.log(e)
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const getOrder =  async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const order = await prismaClient.order.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        user: true,
+        orderProducts: {
+          include: {
+            product: {
+              select: {
+                name: true,
+                quantity: true,
+                description: true,
+                id: true,
+                images: true,
+              },
+            },
           },
         },
       },
     });
-    res.status(200).json({ orders });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // Function to filter out unnecessary product fields
+    const filterProductFields = (product: any) => {
+      const { cost_price, ...filteredProduct } = product;
+      return filteredProduct;
+    };
+
+    // Function to filter out unnecessary order fields
+    const filterOrderFields = (order: any) => {
+      order.orderProducts.forEach((orderProduct: any) => {
+        orderProduct.product = filterProductFields(orderProduct.product);
+
+      });
+      return order;
+    };
+    //filter out unnecessary fields from the response
+
+
+    // Filter out unnecessary fields from the response
+    const filteredOrder = filterOrderFields(order);
+    // remove profit and discount from the response
+    delete filteredOrder.profit;
+    delete filteredOrder.discount;
+
+    res.status(200).json({ order: filteredOrder });
   } catch (e) {
+    console.log(e)
     res.status(500).json({ message: "Something went wrong" });
   }
-}
+
+
+
+};

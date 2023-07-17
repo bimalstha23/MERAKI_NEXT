@@ -11,9 +11,36 @@ import { useOrder } from '../../Hooks/ProviderHooks/useOrder'
 
 export const OrderFilter = () => {
     const { setorderFilters, orderFilters } = useOrder()
+    const timeOptions = [
+        {
+            value: 'All',
+            label: 'All'
+        },
 
+        {
+            value: 'last2days',
+            label: 'Last 2 days'
+        }, {
+
+        },
+        {
+            value: 'last7days',
+            label: 'last7days'
+        }, {
+            value: "last1month",
+            label: "last 1 month"
+        },
+        {
+            value: 'last6month',
+            label: 'last 6 month'
+        },
+        {
+            value: 'last1year',
+            label: 'Last Year'
+        }
+    ]
     // const [category, setCategory] = useState<any>()
-    const [time, setTime] = useState<any>()
+    const [time, setTime] = useState<any>(timeOptions[0].value)
     const [search, setSearch] = useState<any>('')
     const [debouncedValue] = useDebounce(search, 1000)
 
@@ -34,17 +61,8 @@ export const OrderFilter = () => {
     // })
 
 
-    const timeOptions = [
-        {
-            value: 'asc', label: 'Ascending',
-
-        }, {
-            value: 'dsc', label: 'Descending',
-        },
-    ]
-
     useEffect(() => {
-        setorderFilters({ ...orderFilters, sortOrder: time })
+        setorderFilters({ ...orderFilters, filter: time })
     }, [
         time
     ])
@@ -52,6 +70,10 @@ export const OrderFilter = () => {
     useEffect(() => {
         setorderFilters({ ...orderFilters, searchTerm: debouncedValue })
     }, [debouncedValue])
+
+    const handleChange = (selectedOption: any) => {
+        setTime(selectedOption.value)
+    }
 
     return (
         <div className='flex flex-row w-full justify-center items-center py-5 shadow-2xl'>
@@ -73,7 +95,7 @@ export const OrderFilter = () => {
                     <label className='font-bold' htmlFor="filter">
                         Time
                     </label>
-                    <Select onChange={(e) => setTime(e?.value)} value={time} options={timeOptions} styles={customStyles} className='z-50' />
+                    <Select options={timeOptions} defaultValue={timeOptions[0]} onChange={handleChange} styles={customStyles} className='z-50' />
                 </div>
             </form>
         </div>

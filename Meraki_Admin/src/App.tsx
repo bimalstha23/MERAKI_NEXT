@@ -29,7 +29,7 @@ function App() {
       setShowComponent(true);
       clearTimeout(toRef);
       // it is good practice to clear the timeout (but I am not sure why)
-    }, 1000)
+    }, 2000)
   }, [user]);
 
   if (isLoading || !showComponent) {

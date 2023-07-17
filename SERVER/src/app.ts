@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const whitelist = ["http://localhost:5173" , "*"];
 const corsOptions = {
   credentials: true, // This is important.
+
   origin: (origin: any, callback: any) => {
     if (whitelist.includes(origin)) return callback(null, true);
 

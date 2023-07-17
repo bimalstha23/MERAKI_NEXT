@@ -44,13 +44,9 @@ export const IsManager = async (
         id: userID,
       },
     });
-    if (user?.role === "Manager" || user?.role === "ADMIN") {
+    if (user?.role === "MANAGER" || user?.role === "ADMIN") {
       next();
     }
-    return res.status(403).send({
-      success: false,
-      message: "You are not authorized to access this route",
-    });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

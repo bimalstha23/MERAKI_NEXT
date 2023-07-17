@@ -10,3 +10,19 @@ export const createOrder  = (data:any)=>{
         data
     })
 }
+
+export const getOrders  = (params:any)=>{
+    return axiosInstance({
+        method: "get",
+        url: orderRoutesPath.getOrders,
+        params
+    })
+}
+
+export const getOrder = (params:any)=>{
+    return axiosInstance({
+        method: "get",
+        url: orderRoutesPath.getOrder,
+        params
+    })
+}

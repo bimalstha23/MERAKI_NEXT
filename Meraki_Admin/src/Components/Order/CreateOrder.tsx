@@ -21,8 +21,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export const CreateOrder = () => {
     const { selectedProduct, setSelectedProduct, user } = useAuth()
-    console.log(user, 'useasdasdr')
-    console.log(user?.user?.id, "useasdasdr")
     const [discount, setDiscount] = useState<boolean>(false)
     const { handleSubmit, register, reset, watch } = useForm({
         defaultValues: {
@@ -72,7 +70,7 @@ export const CreateOrder = () => {
         const updatedSelect = selectedProduct.map((item: any) => {
             if (item.id === row.id) {
                 if (item.quantity < item.productQuantity) {
-                    return { ...item, quantity: item.quantity + 1, totalPrice: item.totalPrice * (item.quantity + 1) }
+                    return { ...item, quantity: item.quantity + 1, totalPrice: (item.price - (row.discount / 100 * row.price)) * (item.quantity + 1) }
                 } else {
                     enqueueSnackbar('Product Quantity is not available', { variant: 'error' })
                 }
@@ -108,34 +106,24 @@ export const CreateOrder = () => {
     // Calculate the total amount, total discount, and total cost price
     for (const product of selectedProduct) {
         const orderedQuantity = product.quantity;
-        console.log(product, 'product')
 
         const productData = product;
 
         const productSubtotal = product.price * orderedQuantity;
-        console.log(productSubtotal, 'productSubtotal')
         // Check if the product has an individual discount
         if (productData.discount) {
             const discountDecimal = productData.discount / 100;
-            console.log(discountDecimal, 'discountDecimal')
             const productDiscount = productSubtotal * discountDecimal;
-            console.log(productDiscount, 'productDiscount')
             totalDiscount += productDiscount;
         }
         calculatedTotalAmount += productSubtotal;
 
         // totalCostPrice += productData.cost_price * orderedQuantity;
     }
-    console.log(calculatedTotalAmount, 'calculatedTotalAmount')
-    console.log(totalDiscount, 'totalDiscount')
     // Apply the overall discount to the total amount
     const discountedTotalAmount = calculatedTotalAmount - totalDiscount;
-    console.log(discountedTotalAmount, 'discountedTotalAmount')
     const extraDiscountAmount = (discountedTotalAmount * Number(watchDiscount)) / 100;
-    console.log(extraDiscountAmount, 'extraDiscountAmount')
     const totalAmount = discountedTotalAmount - extraDiscountAmount + Number(watchDeliverCharge);
-    console.log(totalAmount, 'totalAmount')
-    console.log(selectedProduct, 'asdasdasdwasdf')
     const submit = (data: any, event: any) => {
         event.preventDefault();
         const products = selectedProduct.map((item: any) => {
@@ -161,7 +149,6 @@ export const CreateOrder = () => {
             userid: user?.user?.id,
             products,
         }
-        console.log(order, '√asdfafs')
         mutate(order)
 
     }

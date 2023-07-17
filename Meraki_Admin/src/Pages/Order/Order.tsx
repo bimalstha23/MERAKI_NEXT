@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom";
 import { OrderFilter } from "../../Components/Order/OrderFilter";
 import { CreateOrder } from "../../Components/Order/CreateOrder";
+import { OrderTable } from "../../Components/Order/OrderTable";
 
 export const Order = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -79,6 +80,7 @@ export const Order = () => {
                     <TabPanel value={'orders'}>
                         <div className="w-full">
                             <OrderFilter />
+                            <OrderTable />
                         </div>
                     </TabPanel>
                     <TabPanel value={'createorder'}>

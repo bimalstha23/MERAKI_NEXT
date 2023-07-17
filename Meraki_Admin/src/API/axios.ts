@@ -11,6 +11,10 @@ const Axios: AxiosInstance = axios.create({
 //   (response) => response,
 //   (error) => Promise.reject(error.response.data.err)
 // );
+const redirectToLogin = () => {
+  // Replace "/login" with the appropriate path to your login page
+  window.location.href = "/";
+};
 
 const mutex: Mutex = new Mutex();
 
@@ -38,14 +42,22 @@ export const axiosInstance = async (
               ...config,
               withCredentials: true,
             });
+            console.log("refresh token success")
             return response.data;
           } else {
+            // redirectToLogin()
+            // do not retry the initial request 
             console.log("refresh token expired");
           }
+        } catch{
+          // redirectToLogin()
+          console.log("refresh token expired");
         } finally {
           release();
         }
       } else {
+        // Wait for the mutex to unlock and then retry the initial request
+        // redirectToLogin()
         await mutex.waitForUnlock();
         const response: AxiosResponse = await Axios(config);
         return response.data;

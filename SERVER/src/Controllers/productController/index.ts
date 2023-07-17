@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Product } from "@prisma/client";
 import multer, { MulterError } from "multer";
 import prismaClient from "../../PrismaClient";
-import { ProductStatus } from "@prisma/client";
+import { ProductState } from "@prisma/client";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 export const addProduct = async (req: Request, res: Response) => {
@@ -37,7 +37,7 @@ export const addProduct = async (req: Request, res: Response) => {
           discount: Number(discount) || 0,
           createdAt: new Date(),
           updatedAt: new Date(),
-          status: status as ProductStatus,
+          status: status as ProductState,
           category: {
             connect: { id: Number(categoryId) },
           },
@@ -181,7 +181,7 @@ export const getProducts = async (
               },
             ]
           : undefined,
-        status: productStatus ? (productStatus as ProductStatus) : "ACTIVE",
+        status: productStatus ? (productStatus as ProductState) : "ACTIVE",
       },
       orderBy: {
         [sortBy as string]: sortOrderValid || undefined,

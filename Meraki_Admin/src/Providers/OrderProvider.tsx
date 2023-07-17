@@ -7,10 +7,11 @@ interface IOrderFilter {
     status?: string,
     page?: number,
     pageSize?: number,
+    filter?: string
 }
 
 export const OrderContext = createContext({
-    orderFilters: {},
+    orderFilters: {} as IOrderFilter,
     setorderFilters: (_value: IOrderFilter) => { }
 });
 

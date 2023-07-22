@@ -1,12 +1,13 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
-import { getOrder } from "../../ApiHandle/OrderAPi"
+import { changeStatus, getOrder } from "../../ApiHandle/OrderAPi"
 import Select from 'react-select'
 import { HiLocationMarker } from "react-icons/hi"
 import { FaUserCircle } from "react-icons/fa"
 import { RiTruckLine } from "react-icons/ri"
 import { Table, TableCell, TableHead, TableRow, styled, tableCellClasses } from "@mui/material"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { enqueueSnackbar } from "notistack"
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -60,6 +61,25 @@ export const OrderDetail = () => {
     const seconds = date.getSeconds()
     const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`
     const [status, setStatus] = useState<any>({ value: data?.order?.status, label: data?.order?.status })
+    useEffect(() => {
+        if (data) {
+            setStatus({ value: data?.order?.status, label: data?.order?.status })
+        }
+    }, [data])
+
+    const { mutate, isLoading: mutationLoading } = useMutation({
+        mutationFn: changeStatus,
+        mutationKey: ['changeStatus , order'],
+        onSuccess: (data: any) => {
+            enqueueSnackbar('Status Changed Successfully', {
+                variant: 'success'
+            })
+        }
+    })
+
+    const handleChangeStatus = () => {
+        mutate({ id: data?.order?.id, status: status.value })
+    }
 
     return (
         <div className="flex flex-col w-full p-20">
@@ -81,6 +101,8 @@ export const OrderDetail = () => {
                             isLoading={isLoading}
                         />
                         <button
+                            disabled={status.value === data?.order?.status || isLoading || mutationLoading}
+                            onClick={handleChangeStatus}
                             className="bg-green-500 text-white px-5 py-2 rounded-md ml-5"
                         >
                             Save

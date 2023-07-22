@@ -16,7 +16,7 @@ export const createOrder = async (req: Request, res: Response) => {
       customer_address_landmark,
     } = req.body;
     
-
+    
     let calculatedTotalAmount = 0;
     let totalDiscount = 0;
     let totalCostPrice = 0;
@@ -371,11 +371,10 @@ export const getOrder =  async (req: Request, res: Response) => {
   }
 };
 
-
 export const ChangeOrderStatus = async (req: Request, res: Response) => {
   try {
     const { id, status } = req.body;
-
+    console.log(id , status)
     const order = await prismaClient.order.findUnique({
       where: { id: Number(id) },
     });
@@ -394,5 +393,4 @@ export const ChangeOrderStatus = async (req: Request, res: Response) => {
     console.log(e)
     res.status(500).json({ message: "Something went wrong" });
   }
-
 }

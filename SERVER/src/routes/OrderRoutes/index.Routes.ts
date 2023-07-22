@@ -10,6 +10,6 @@ const OrderRouter = AppRouter.getInstance();
 OrderRouter.post(orderRoutesPath.createOrder , deserializeUser , requireAuth, isAdmin,  createOrder)
 OrderRouter.get(orderRoutesPath.getOrders , deserializeUser , requireAuth, IsManager,  getOrders)
 OrderRouter.get(orderRoutesPath.getOrder , deserializeUser , requireAuth, IsManager,  getOrder)
-OrderRouter.put(orderRoutesPath.updateOrder , deserializeUser , requireAuth, IsManager,  ChangeOrderStatus)
+OrderRouter.patch(orderRoutesPath.changeStatus , deserializeUser , requireAuth, IsManager,  ChangeOrderStatus)
 
 export default OrderRouter;

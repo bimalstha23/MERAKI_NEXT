@@ -29,7 +29,7 @@ export const getOrder = (params:any)=>{
 
 export const changeStatus = (data:any)=>{
     return axiosInstance({
-        method: "put",
+        method: "patch",
         url: orderRoutesPath.changeStatus,
         data
     })

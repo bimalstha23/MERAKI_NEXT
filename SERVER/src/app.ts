@@ -30,7 +30,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
   res.send({ message: "You're in right place folk 🐻" });
 });

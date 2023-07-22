@@ -54,22 +54,23 @@ model Image {
 }
 
 model Order {
-  id               Int            @id @default(autoincrement())
-  customer_name    String
-  customer_phone   String
-  customer_address String
-  total_amount     Float
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  delivery_fee     Float          @default(0)
-  userId           Int
-  user             User           @relation(fields: [userId], references: [id])
-  status           OrderState     @default(PENDING)
-  createdByAdmin   Boolean        @default(false)
-  orderProducts    orderProduct[]
-  discount         Float          @default(0)
-  profit           Float          @default(0)
-  // payments         Payment[]
+  id                        Int            @id @default(autoincrement())
+  customer_name             String
+  customer_phone            String
+  customer_address          String
+  customer_address_landmark String?
+  customer_email            String?
+  total_amount              Float
+  createdAt                 DateTime       @default(now())
+  updatedAt                 DateTime       @updatedAt
+  delivery_fee              Float          @default(0)
+  userId                    Int
+  user                      User           @relation(fields: [userId], references: [id])
+  status                    OrderState     @default(PENDING)
+  createdByAdmin            Boolean        @default(false)
+  orderProducts             orderProduct[]
+  discount                  Float          @default(0)
+  profit                    Float          @default(0)
 }
 
 // model Payment {

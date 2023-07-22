@@ -12,4 +12,5 @@ export const publicRoutePath: IpublicRoutesPath = {
   Shipping: "shipping",
   Payments: "payments",
   Settings: "settings",
+  orderDetails:"order/:id",
 };

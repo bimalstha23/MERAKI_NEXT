@@ -13,6 +13,7 @@ export const createOrder = async (req: Request, res: Response) => {
       products,
       userid,
       discount,
+      customer_address_landmark,
     } = req.body;
     
 
@@ -90,6 +91,8 @@ export const createOrder = async (req: Request, res: Response) => {
         customer_name,
         customer_phone,
         customer_address,
+        customer_address_landmark,
+        customer_email,
         total_amount: discountedTotalAmount, // Use the discounted total amount
         discount: totalDiscount + (discountedTotalAmount * discount), // Save the combined discount value in the order
         profit, // Save the calculated profit in the order
@@ -313,10 +316,10 @@ if(from && to){
 
 export const getOrder =  async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.query;
 
     const order = await prismaClient.order.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: Number(id) },
       include: {
         user: true,
         orderProducts: {
@@ -328,6 +331,7 @@ export const getOrder =  async (req: Request, res: Response) => {
                 description: true,
                 id: true,
                 images: true,
+                selling_price: true,
               },
             },
           },
@@ -341,7 +345,7 @@ export const getOrder =  async (req: Request, res: Response) => {
 
     // Function to filter out unnecessary product fields
     const filterProductFields = (product: any) => {
-      const { cost_price, ...filteredProduct } = product;
+      const { cost_price, quantity ,  ...filteredProduct } = product;
       return filteredProduct;
     };
 
@@ -353,21 +357,42 @@ export const getOrder =  async (req: Request, res: Response) => {
       });
       return order;
     };
-    //filter out unnecessary fields from the response
-
 
     // Filter out unnecessary fields from the response
     const filteredOrder = filterOrderFields(order);
     // remove profit and discount from the response
     delete filteredOrder.profit;
-    delete filteredOrder.discount;
 
+    
     res.status(200).json({ order: filteredOrder });
   } catch (e) {
     console.log(e)
     res.status(500).json({ message: "Something went wrong" });
   }
-
-
-
 };
+
+
+export const ChangeOrderStatus = async (req: Request, res: Response) => {
+  try {
+    const { id, status } = req.body;
+
+    const order = await prismaClient.order.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    await prismaClient.order.update({
+      where: { id: Number(id) },
+      data: { status },
+    });
+
+    res.status(200).json({ message: "Order status updated successfully" });
+  } catch (e) {
+    console.log(e)
+    res.status(500).json({ message: "Something went wrong" });
+  }
+
+}

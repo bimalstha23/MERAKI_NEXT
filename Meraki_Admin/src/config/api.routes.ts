@@ -27,5 +27,7 @@ export const userRoutesPath = {
     getOrder: "/order/getorder",
     updateOrder: "/order/updateorder",
     deleteOrder: "/order/deleteorder",
+    changeStatus: "/order/changestatus",
+
   };
   

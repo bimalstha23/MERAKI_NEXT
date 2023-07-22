@@ -31,10 +31,11 @@ export const CreateOrder = () => {
             email: "",
             discount: "",
             deliveryCharge: "",
+            landmark: "",
         }
     })
 
-    const { mutate } = useMutation({
+    const { mutate, isLoading } = useMutation({
         mutationKey: ['createOrder', 'orders', 'order'],
         mutationFn: createOrder,
         onSuccess: () => {
@@ -137,7 +138,6 @@ export const CreateOrder = () => {
             }
         })
 
-
         const order = {
             customer_name: data.name,
             customer_phone: data.phone,
@@ -146,12 +146,14 @@ export const CreateOrder = () => {
             total_amount: totalAmount,
             discount: data.discount,
             deleviry_fee: data.deliveryCharge,
+            customer_address_landmark: data.landmark,
             userid: user?.user?.id,
             products,
         }
+        console.log(order, 'order')
         mutate(order)
-
     }
+
     return (
         <div className="flex flex-col justify-center items-center">
             <div className="flex flex-row justify-center items-start w-full gap-5">
@@ -162,8 +164,16 @@ export const CreateOrder = () => {
                             <input {...register('name')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='name' type="text" placeholder='Customer Name' />
                         </div>
                         <div className='flex flex-col justify-center items-start w-full gap-3'>
+                            <label className='font-bold' htmlFor="">Customer email address</label>
+                            <input {...register('email')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='name' type="text" placeholder='Customer Email Address' />
+                        </div>
+                        <div className='flex flex-col justify-center items-start w-full gap-3'>
                             <label className='font-bold' htmlFor="">Customer's Address</label>
                             <input {...register('address')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='address' type="text" placeholder="Customer's address" />
+                        </div>
+                        <div className='flex flex-col justify-center items-start w-full gap-3'>
+                            <label className='font-bold' htmlFor="">Customer's Address landmark</label>
+                            <input {...register('landmark')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='address' type="text" placeholder="Customer's Landmark eg:infront of  hospital" />
                         </div>
 
                         <div className='flex flex-col justify-center items-start w-full gap-3'>
@@ -191,7 +201,7 @@ export const CreateOrder = () => {
                             </label>
                             <textarea {...register('description')} id="description" placeholder="description" rows={10} cols={50} className='outline rounded-sm p-5 w-full focus:outline-textHighlight'></textarea>
                         </div>
-                        <button name='createOrder' type='submit' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
+                        <button disabled={isLoading} name='createOrder' type='submit' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
                             Create Order
                         </button>
                     </div>

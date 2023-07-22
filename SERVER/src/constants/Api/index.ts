@@ -26,6 +26,7 @@ export const orderRoutesPath = {
   getOrders: "/order/getorders",
   getOrder: "/order/getorder",
   updateOrder: "/order/updateorder",
+  changeStatus: "/order/changestatus",
   deleteOrder: "/order/deleteorder",
 };
 

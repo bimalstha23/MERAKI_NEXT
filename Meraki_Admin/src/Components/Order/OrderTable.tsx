@@ -5,6 +5,7 @@ import { Fragment, useEffect, useState } from "react";
 import { TableSkeleton } from "../Products/TableSkeleton";
 import { useOnScreen } from "../../Hooks/utilityHooks/useOnScreen";
 import { useOrder } from "../../Hooks/ProviderHooks/useOrder";
+import { Link } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -154,7 +155,9 @@ export const OrderTable = () => {
                                         if (pageIndex === orderData?.pages?.length - 1 && rowIndex === page?.data?.length - 1) {
                                             return (<TableRow
                                                 hover
-                                                role='button' sx={{
+                                                component={Link}
+                                                to={`/order/${row.id}`}
+                                                sx={{
                                                     cursor: 'pointer',
                                                 }}
                                                 key={row.id} ref={measureRef}>
@@ -223,7 +226,9 @@ export const OrderTable = () => {
                                             return <TableRow
                                                 key={row.id}
                                                 hover
-                                                role='button' sx={{
+                                                component={Link}
+                                                to={`/order/${row.id}`}
+                                                sx={{
                                                     cursor: 'pointer',
                                                 }}
                                             >

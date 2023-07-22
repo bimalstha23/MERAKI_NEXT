@@ -21,4 +21,5 @@ export interface IpublicRoutesPath {
   Shipping: string;
   Payments: string;
   Settings: string;
+  orderDetails: string;
 }

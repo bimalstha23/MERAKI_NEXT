@@ -11,6 +11,7 @@ const Axios: AxiosInstance = axios.create({
 //   (response) => response,
 //   (error) => Promise.reject(error.response.data.err)
 // );
+
 const redirectToLogin = () => {
   // Replace "/login" with the appropriate path to your login page
   window.location.href = "/";

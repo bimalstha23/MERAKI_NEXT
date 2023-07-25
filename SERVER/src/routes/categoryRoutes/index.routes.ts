@@ -1,3 +1,4 @@
+import { deserializeUser } from './../../middlewares/deserializeUser';
 import {
   addCategory,
   deleteCategory,
@@ -14,6 +15,7 @@ const categoryRouter = AppRouter.getInstance();
 
 categoryRouter.post(
   categoryRoutesPath.createCategory,
+  deserializeUser,
   requireAuth,
   isAdmin,
   CategoryImageUpload,
@@ -24,6 +26,7 @@ categoryRouter.get(categoryRoutesPath.getCategories, getCategories);
 categoryRouter.get(categoryRoutesPath.getCategory, getCategory);
 categoryRouter.put(
   categoryRoutesPath.updateCategory,
+  deserializeUser,
   requireAuth,
   isAdmin,
   updateCategory
@@ -31,6 +34,7 @@ categoryRouter.put(
 
 categoryRouter.delete(
   categoryRoutesPath.deleteCategory,
+  deserializeUser,
   requireAuth,
   isAdmin,
   deleteCategory

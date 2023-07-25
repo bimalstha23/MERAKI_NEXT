@@ -1,4 +1,4 @@
-import { Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, styled, tableCellClasses } from "@mui/material";
+import { Backdrop, Checkbox, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, styled, tableCellClasses } from "@mui/material";
 import { useForm } from "react-hook-form"
 import { useAuth } from "../../Hooks/ProviderHooks/useAuth";
 import { useState } from "react";
@@ -329,6 +329,12 @@ export const CreateOrder = () => {
                     </div>
                 </div>
             </div>
+            {isLoading && <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isLoading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>}
         </div>
     )
 }

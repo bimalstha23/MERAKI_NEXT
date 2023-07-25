@@ -6,8 +6,8 @@ import { CategoryLists } from "../../Components/Category/CategoryLists";
 import { AddCategory } from "../../Components/Category/AddCategory";
 
 export const Category = () => {
-   
-   
+
+
     const TabItems = [
         {
             title: 'All Categories',

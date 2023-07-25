@@ -18,3 +18,15 @@ export const fetchCategory = async (id: number) => {
   });
   return response.data;
 };
+
+export const addCategory = async (data: any) => {
+  const response = await axiosInstance({
+    method: "POST",
+    url: categoryRoutesPath.createCategory,
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+  },
+  });
+  return response;
+}

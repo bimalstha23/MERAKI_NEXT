@@ -14,15 +14,16 @@ export const addCategory = async(req: Request, res: Response) => {
       image = await getDownloadURL(storageRef);
     }
 
-    prismaClient.category.create({
+   const category =  prismaClient.category.create({
       data: {
         name,
         createdAt: new Date(),
         updatedAt: new Date(),
         image,
       },
-    });
-    res.status(201).json({ message: "Category added successfully" });
+    }).then((res)=>console.log('category created ', res));
+
+    res.status(201).json({...category ,   message: "Category added successfully" });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

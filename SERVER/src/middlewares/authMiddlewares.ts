@@ -20,6 +20,7 @@ export const isAdmin = async (
         id: userID,
       },
     });
+    console.log('user', user)
     if (user?.role !== "ADMIN") {
       return res.status(403).send({
         success: false,
@@ -66,7 +67,7 @@ export const requireAuth = async (
     if (!user) {
      return res.status(403).send({
         success: false,
-        message: "You are not authorized to access this route",
+        message: "You are not Logged in",
       });
     }
     next();

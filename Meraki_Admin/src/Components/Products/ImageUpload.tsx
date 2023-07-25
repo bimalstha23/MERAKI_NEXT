@@ -68,7 +68,7 @@ export const ImageUpload: FC<ImageUploadProps> = ({ setValue }) => {
                             className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
                         >
                             <span>Upload a file</span>
-                            <input onChange={handleFileSelect} name="images" id="file-upload" type="file" className="sr-only" />
+                            <input onChange={handleFileSelect} multiple name="images" id="file-upload" type="file" className="sr-only" />
                         </label>
                         <p className="pl-1">or drag and drop</p>
                     </div>

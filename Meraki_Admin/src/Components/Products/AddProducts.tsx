@@ -8,15 +8,18 @@ import { ICategory, IFormValues } from './types'
 import { FC } from 'react'
 import { AddProductMutation } from '../../ApiHandle/productApi'
 import { enqueueSnackbar } from 'notistack'
+import { Backdrop, CircularProgress } from '@mui/material'
+import queryClient from '../../API/ReactQuery'
 
 
 export const AddProducts: FC = () => {
 
-    const { mutate } = useMutation({
+    const { mutate, isLoading } = useMutation({
         mutationFn: AddProductMutation,
-        mutationKey: ['addProducts'],
+        mutationKey: ['addProducts , products'],
         onSuccess: () => {
             enqueueSnackbar('Product Added Successfully', { variant: 'success' })
+            queryClient.invalidateQueries(['products'])
         },
         onError: (data: any) => {
             enqueueSnackbar(data.message, { variant: 'error' })
@@ -98,7 +101,7 @@ export const AddProducts: FC = () => {
                 </div>
                 <div className='flex flex-col justify-center items-start gap-3 '>
                     <label className='font-bold' htmlFor="filter">
-                        Category
+                        Description
                     </label>
                     <textarea {...register('description')} id="description" rows={10} cols={50} className='outline rounded-sm p-5 w-full focus:outline-textHighlight'></textarea>
                 </div>
@@ -140,6 +143,12 @@ export const AddProducts: FC = () => {
                     </button>
                 </div>
             </div>
+            {isLoading && <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isLoading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>}
         </form>
     )
 }

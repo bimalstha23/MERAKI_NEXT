@@ -7,6 +7,7 @@ import {
 } from "../../Controllers/categoryController";
 import { categoryRoutesPath } from "../../constants/Api";
 import { isAdmin, requireAuth } from "../../middlewares/authMiddlewares";
+import { CategoryImageUpload } from "../../middlewares/upload";
 import AppRouter from "../../utils/AppRouter";
 
 const categoryRouter = AppRouter.getInstance();
@@ -15,11 +16,12 @@ categoryRouter.post(
   categoryRoutesPath.createCategory,
   requireAuth,
   isAdmin,
+  CategoryImageUpload,
   addCategory
 );
 
 categoryRouter.get(categoryRoutesPath.getCategories, getCategories);
-categoryRouter.get(categoryRoutesPath.updateCategory, getCategory);
+categoryRouter.get(categoryRoutesPath.getCategory, getCategory);
 categoryRouter.put(
   categoryRoutesPath.updateCategory,
   requireAuth,

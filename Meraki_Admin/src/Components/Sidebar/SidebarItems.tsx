@@ -17,8 +17,8 @@ export const SideBarItems: Array<ISidebarItems> = [
         path: publicRoutePath.Order,
         icon: <FaShoppingCart size={30} />,
     }, {
-        title: "Shiping",
-        path: publicRoutePath.Shipping,
+        title: "Categories",
+        path: publicRoutePath.Category,
         icon: <MdLocalShipping size={30} />,
     }, {
         title: "Payments",

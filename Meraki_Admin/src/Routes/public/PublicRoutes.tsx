@@ -4,11 +4,11 @@ import { OrderDetail } from "../../Pages/OrderDetail/OrderDetail";
 import { Payments } from "../../Pages/Payments/Payments";
 import { Products } from "../../Pages/Products/Products";
 import { Settings } from "../../Pages/Setings/Settings";
-import { Shipping } from "../../Pages/Shipping/Shipping";
 import { OrderProvider } from "../../Providers/OrderProvider";
 import { ProductProvider } from "../../Providers/ProductProvider";
 import { createRoutes } from "../createRoutes"
 import { publicRoutePath } from "./public-Route-path";
+import { Category } from "../../Pages/Category/Category";
 
 const Product = () => {
     return (
@@ -44,8 +44,8 @@ export const publicRoutes = [
                 element: Product,
             }),
             createRoutes({
-                path: publicRoutePath.Shipping,
-                element: Shipping,
+                path: publicRoutePath.Category,
+                element: Category,
             }),
             createRoutes({
                 path: publicRoutePath.Settings,

@@ -1,14 +1,25 @@
 import { Request, Response } from "express";
 import prismaClient from "../../PrismaClient";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-export const addCategory = (req: Request, res: Response) => {
+export const addCategory = async(req: Request, res: Response) => {
   try {
     const { name } = req.body;
+    let image = "";
+    const storage  = getStorage()
+
+    if (req.file) {
+      const storageRef = ref(storage, `Category/${req.file.originalname}`);
+      await uploadBytes(storageRef, req.file.buffer);
+      image = await getDownloadURL(storageRef);
+    }
+
     prismaClient.category.create({
       data: {
         name,
         createdAt: new Date(),
         updatedAt: new Date(),
+        image,
       },
     });
     res.status(201).json({ message: "Category added successfully" });

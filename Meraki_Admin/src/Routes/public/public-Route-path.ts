@@ -9,7 +9,7 @@ export const publicRoutePath: IpublicRoutesPath = {
   Home: "/",
   Products: "/products",
   Order: "/order",
-  Shipping: "shipping",
+  Category: "/category",
   Payments: "payments",
   Settings: "settings",
   orderDetails:"order/:id",

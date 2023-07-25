@@ -50,8 +50,8 @@ export const OrderDetail = () => {
         value: 'SHIPPED',
         label: 'SHIPPED'
     }
-
     ]
+    
     const date = new Date(data?.order?.createdAt)
     const year = date.getFullYear()
     const month = date.getMonth()

@@ -272,7 +272,7 @@ if(from && to){
         },
       },
       orderBy:{
-        createdAt: 'asc'
+        createdAt: 'desc'
       },
       skip: (pageNumber - 1) * itemsPerPage,
       take: itemsPerPage,

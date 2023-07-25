@@ -1,20 +1,24 @@
-import { Box, Tabs, Tab } from "@mui/material"
-import { TabPanel, TabContext } from "@mui/lab"
-import React, { useEffect, useState } from "react"
+import { TabContext, TabPanel } from "@mui/lab"
+import { Box, Tab, Tabs } from "@mui/material"
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { OrderFilter } from "../../Components/Order/OrderFilter";
-import { CreateOrder } from "../../Components/Order/CreateOrder";
-import { OrderTable } from "../../Components/Order/OrderTable";
+import { CategoryLists } from "../../Components/Category/CategoryLists";
+import { AddCategory } from "../../Components/Category/AddCategory";
 
-export const Order = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [value, setValue] = useState<string>(searchParams.get('tab') || 'orders');
-
-    useEffect(() => {
-        if (searchParams.get('tab')) {
-            setValue(searchParams.get('tab') || 'orders');
+export const Category = () => {
+   
+   
+    const TabItems = [
+        {
+            title: 'All Categories',
+            params: 'categories'
+        }, {
+            title: 'Add Category',
+            params: 'addcategory'
         }
-    }, [searchParams, value]);
+    ]
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [value, setValue] = useState<string>(searchParams.get('orders') || 'categories');
 
     const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
         setValue(newValue);
@@ -22,26 +26,6 @@ export const Order = () => {
             tab: newValue,
         });
     };
-
-    const TabItems = [
-        {
-            title: "Orders",
-            params: "orders"
-        },
-        {
-            title: "board",
-            params: "board"
-        },
-        {
-            title: "create order",
-            params: "createorder"
-        },
-        {
-            title: "Delivered",
-            params: "delivered"
-        }
-    ]
-
 
     return (
         <div className="flex flex-col items-center w-full  px-10">
@@ -77,23 +61,19 @@ export const Order = () => {
                     </Tabs>
                 </Box>
                 <div className="w-full">
-                    <TabPanel value={'orders'}>
-                        <div className="w-full">
-                            <OrderFilter />
-                            <OrderTable />
-                        </div>
+                    <TabPanel
+                        sx={{
+                            width: "100%"
+                        }}
+                        value="categories">
+                        <CategoryLists />
                     </TabPanel>
-                    <TabPanel value={'createorder'}>
-                        <div className="w-full">
-                            <CreateOrder />
-                        </div>
-                    </TabPanel>
-                    <TabPanel value={'board'}>
-                        <div className="w-full">
-                        </div>
-                    </TabPanel>
-                    <TabPanel value={'delivered'}>
-                        <OrderFilter />
+                    <TabPanel
+                        sx={{
+                            width: "100%"
+                        }}
+                        value="addcategory">
+                        <AddCategory />
                     </TabPanel>
                 </div>
             </TabContext>

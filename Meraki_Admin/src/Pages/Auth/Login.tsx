@@ -10,7 +10,7 @@ interface FormValue {
 export const Login = () => {
     const { setUser } = useAuth()
 
-    const { register, handleSubmit, formState: { errors } } = useForm<FormValue>({
+    const { register, handleSubmit, } = useForm<FormValue>({
         mode: "onBlur",
         defaultValues: {
             email: "",

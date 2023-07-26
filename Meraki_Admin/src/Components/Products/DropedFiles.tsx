@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-export const DroppedFiles: FC<{ files?: File[], urls?: any }> = ({ files = [], urls }) => {
+export const DroppedFiles: FC<{ files?: File[], urls?: any }> = ({ urls }) => {
     return (
         <div>
             <div className="flex flex-wrap justify-center gap-2">

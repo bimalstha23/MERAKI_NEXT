@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 import { IFormValues } from './types';
 
 interface ImageUploadProps {

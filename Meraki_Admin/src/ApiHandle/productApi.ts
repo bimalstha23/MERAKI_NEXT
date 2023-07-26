@@ -75,3 +75,20 @@ return  axiosInstance({
     })
     // return res
 }
+
+
+export const changeStatusMutation = async ({productids,status}:{
+    productids:number[],
+    status:string
+})=>{
+return axiosInstance({
+        method: "patch",
+        url: productRoutesPath.changeStatus,
+        data: {
+            productids,
+            status
+        }
+    })
+}
+
+

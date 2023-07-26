@@ -302,3 +302,42 @@ export const deleteProduct = async (
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+export const changeStatusofProduct = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { productids, status } = req.body;
+
+    // Validate the incoming data
+    if (!Array.isArray(productids) || productids.length === 0 || !status) {
+      res.status(400).json({ message: "Invalid product data" });
+      return;
+    }
+
+    // Loop through each product in the array and update its status
+    const updatedProducts: Product[] = [];
+
+    for (const productId of productids) {
+      // Validate productId
+      if (!productId) {
+        res.status(400).json({ message: "Invalid product data" });
+        return;
+      }
+
+      // Find the product in the database and update its status
+      const updatedProduct = await prismaClient.product.update({
+        where: { id: Number(productId) },
+        data: { status: status as ProductState },
+      });
+
+      updatedProducts.push(updatedProduct);
+    }
+
+    res.status(200).json({ updatedProducts });
+  } catch (error) {
+    console.error(error, "changeStatusofProduct Error");
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};

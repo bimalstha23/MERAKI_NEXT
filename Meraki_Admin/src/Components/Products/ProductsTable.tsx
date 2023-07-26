@@ -1,7 +1,7 @@
-import { Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography, alpha, styled, tableCellClasses } from '@mui/material'
-import { FC, Fragment, useEffect, useState } from 'react'
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { getProductsQuery } from '../../ApiHandle/productApi';
+import { Backdrop, Checkbox, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography, alpha, styled, tableCellClasses } from '@mui/material'
+import { FC, Fragment, MouseEvent, useEffect, useState } from 'react'
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
+import { changeStatusMutation, getProductsQuery } from '../../ApiHandle/productApi';
 import { useOnScreen } from '../../Hooks/utilityHooks/useOnScreen';
 import { TableSkeleton } from './TableSkeleton';
 import { useProduct } from '../../Hooks/ProviderHooks/useProduct';
@@ -9,6 +9,8 @@ import { MdModeEditOutline } from "react-icons/md"
 import { useAuth } from '../../Hooks/ProviderHooks/useAuth';
 import { UpdateProduct } from './UpdateProduct';
 import { useNavigate } from 'react-router-dom';
+import { enqueueSnackbar } from 'notistack';
+import queryClient from '../../API/ReactQuery';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -148,6 +150,33 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
     }
 
 
+    const { mutate, isLoading: isMutating } = useMutation({
+        mutationFn: changeStatusMutation,
+        mutationKey: ['products', Tab],
+        onSuccess: () => {
+            queryClient.invalidateQueries(['products', Tab])
+            enqueueSnackbar('Products Status Changed Successfully', {
+                variant: 'success'
+            })
+            setSelectedProduct([])
+        },
+        onError: () => {
+            enqueueSnackbar('Error Changing Products Status', {
+                variant: 'error'
+            })
+        }
+    })
+
+    const handleChangeStatus = (event: MouseEvent<HTMLButtonElement>) => {
+        const status = event.currentTarget.name
+        const ids = Tab === 'ACTIVE' ? selectedProduct.map((item: any) => item.id) : selectedtableProducts.map((item: any) => Number(item.id))
+        mutate({
+            productids: ids,
+            status: status.toUpperCase()
+        })
+    }
+
+
     return (
         <div>
             <Toolbar
@@ -192,11 +221,15 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
                                 Create Order
                             </button>}
                         {Tab === 'ARCHIVED' || Tab === 'DRAFT' ? (
-                            <button name='createOrder' type='submit' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
+                            <button
+                                onClick={(event) => handleChangeStatus(event)}
+                                name='Active' type='button' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
                                 Move To Active
                             </button>
                         ) : Tab === 'ACTIVE' ? (
-                            <button name='createOrder' type='submit' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
+                            <button
+                                onClick={(event) => handleChangeStatus(event)}
+                                name='Archived' type='submit' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
                                 Move To Archive
                             </button>
                         ) : null}
@@ -405,7 +438,12 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
                 </Table>
             </TableContainer>
             <UpdateProduct id={dialogOption.id} isOpen={dialogOption.isOpen} handleClose={handleDialogClose} />
-
+            {isMutating && <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isMutating}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>}
         </div>
 
     )

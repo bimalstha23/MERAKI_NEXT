@@ -11,6 +11,7 @@ export const productRoutesPath = {
   getProduct: "/product/getproduct",
   updateProduct: "/product/updateproduct",
   deleteProduct: "/product/deleteproduct",
+  changeStatus: "/product/changestatus",
 };
 
 export const categoryRoutesPath = {

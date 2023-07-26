@@ -30,3 +30,13 @@ export const addCategory = async (data: any) => {
   });
   return response;
 }
+
+export const updateCategory = async (data: any) => {
+  const response = await axiosInstance({
+    method: "PUT",
+    url: categoryRoutesPath.updateCategory,
+    data,
+
+  });
+  return response;
+}

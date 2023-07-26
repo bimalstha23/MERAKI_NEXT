@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prismaClient from "../../PrismaClient";
+import { OrderState } from "@prisma/client";
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
@@ -135,19 +136,25 @@ export const createOrder = async (req: Request, res: Response) => {
 
 export const getOrders = async (req: Request, res: Response) => {
   try {
-    const { customerName, orderId, sortBy, page, pageSize , filter ,  from , to } = req.query;
+    const { customerName, sortBy, page, pageSize , filter ,  from , to,status } = req.query;
 
     // Convert page and pageSize to numbers with default values
     const pageNumber = Number(page) || 1;
     const itemsPerPage = Number(pageSize)|| 10;
 
     // Build the filters based on the query parameters
-    let filters = {
-      createdAt:{
+    let filters:{
+      createdAt?:any,
+      status?:OrderState | any,
+    } = {     } 
+      if(status && status !=="DELIVERED" && status !=="CANCELLED"){
+        filters.status = {
+          notIn: ["CANCELLED" , "DELIVERED"],
+        }
+      }else if(status){
+        filters.status = status as OrderState
       }
 
-
-     } 
    if(filter){
    if(filter ==="last7days"){
     const currentDate = new Date();
@@ -176,6 +183,7 @@ export const getOrders = async (req: Request, res: Response) => {
         lte: new Date(currentDate).toISOString()
       };
     }
+    
     else if(filter ==="last6month"){
       const currentDate = new Date();
       const sixMonthAgo = new Date();
@@ -215,8 +223,8 @@ if(from && to){
       sortingOptions.id = 'asc';
     }
 
-    const totalOrders = await prismaClient.order.count({ where: {
-      OR: customerName || orderId
+    const totalOrders = await prismaClient.order.count({     where: {
+      OR: customerName
       ? [
           { customer_name: { contains:customerName  as string, mode: "insensitive" } },
           {
@@ -225,8 +233,20 @@ if(from && to){
               mode: "insensitive",
             },
           },
+          {
+            customer_phone: {
+              contains: customerName as string,
+              mode: "insensitive",
+            },
+          },
+          {
+            id:{
+              equals: parseInt(customerName as string),
+            },
+          }
         ]
       : undefined,
+        ...filters,
     }, });
 
     const orders = await prismaClient.order.findMany({

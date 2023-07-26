@@ -4,7 +4,6 @@ import { OrderDetail } from "../../Pages/OrderDetail/OrderDetail";
 import { Payments } from "../../Pages/Payments/Payments";
 import { Products } from "../../Pages/Products/Products";
 import { Settings } from "../../Pages/Setings/Settings";
-import { OrderProvider } from "../../Providers/OrderProvider";
 import { ProductProvider } from "../../Providers/ProductProvider";
 import { createRoutes } from "../createRoutes"
 import { publicRoutePath } from "./public-Route-path";
@@ -20,9 +19,7 @@ const Product = () => {
 
 const OrderPage = () => {
     return (
-        <OrderProvider>
-            <Order />
-        </OrderProvider>
+        <Order />
     )
 }
 

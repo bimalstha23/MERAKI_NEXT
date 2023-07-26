@@ -15,7 +15,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         background: 'linear-gradient(180deg, #373737 0%, #121212 84.9%)',
         color: theme.palette.common.white,
-        fontSize: '24px',
+        fontSize: '18px',
         fontWeight: '600',
     },
     [`&.${tableCellClasses.body}`]: {
@@ -39,6 +39,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
         id: ''
     })
     const navigate = useNavigate()
+
 
 
     const filterOptions: {
@@ -67,15 +68,11 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
             break;
     }
 
-    const { data, fetchNextPage, hasNextPage, isLoading, isFetching, refetch: refetchProduct } = useInfiniteQuery({
-        queryKey: ['products', Tab],
+    const { data, fetchNextPage, hasNextPage, isLoading, isFetching, } = useInfiniteQuery({
+        queryKey: ['products', Tab, ProductFilters],
         queryFn: ({ pageParam = 1 }) => getProductsQuery({ ...ProductFilters, ...filterOptions, page: pageParam }),
         getNextPageParam: (lastPage) => lastPage.pagination.nextPage ? lastPage.pagination.nextPage : undefined,
     })
-
-    useEffect(() => {
-        refetchProduct()
-    }, [ProductFilters, refetchProduct])
 
     useEffect(() => {
         const updateMaxHeight = () => {
@@ -317,16 +314,14 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
                                             } else {
                                                 return <TableRow
                                                     hover
-                                                    onClick={(event) => handleClick(event, row)}
-                                                    role="checkbox"
                                                     aria-checked={isItemSelected}
                                                     // disabled={row?.unstakeTimestamp ? true : false}
                                                     tabIndex={-1}
                                                     selected={isItemSelected}
-                                                    sx={{ cursor: 'pointer' }}
                                                     key={row.id}>
                                                     <TableCell>
                                                         <Checkbox
+                                                            onClick={(event) => handleClick(event, row)}
                                                             color="primary"
                                                             checked={isItemSelected}
                                                         />
@@ -339,11 +334,20 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
                                                         fontSize: '18px',
                                                         color: '#121212'
                                                     }} align="center"> {row.name}</TableCell>
-                                                    <TableCell sx={{
-                                                        fontWeight: '500',
-                                                        fontSize: '18px',
-                                                        color: '#121212'
-                                                    }} align="center">{row.description}</TableCell>
+                                                    <TableCell
+                                                        sx={{
+                                                            fontWeight: '500',
+                                                            fontSize: '18px',
+                                                            color: '#121212',
+                                                            maxWidth: '400px', // Set your desired maximum width for the cell
+                                                            whiteSpace: 'nowrap',
+                                                            overflow: 'hidden',
+                                                            textOverflow: 'ellipsis',
+                                                        }}
+                                                        align="center"
+                                                    >
+                                                        {row.description}
+                                                    </TableCell>
                                                     <TableCell sx={{
                                                         fontWeight: '500',
                                                         fontSize: '18px',

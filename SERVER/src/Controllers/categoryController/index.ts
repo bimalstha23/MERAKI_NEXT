@@ -54,8 +54,9 @@ export const getCategory = async (req: Request, res: Response) => {
 
 export const updateCategory = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const { name } = req.body;
+    const { name , id } = req.body;
+    console.log('req.body', req.body)
+
     await prismaClient.category.update({
       where: {
         id: Number(id),
@@ -67,6 +68,7 @@ export const updateCategory = async (req: Request, res: Response) => {
     });
     res.status(200).json({ message: "Category updated successfully" });
   } catch (error: any) {
+    console.log(error)
     res.status(500).json({ error: error.message });
   }
 };

@@ -1,4 +1,4 @@
-import { AppBar, Button, Dialog, IconButton, Slide, Toolbar, Typography } from "@mui/material";
+import { AppBar, Dialog, IconButton, Slide, Toolbar, Typography } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import { FC, ReactElement, Ref, forwardRef, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -93,11 +93,11 @@ export const UpdateProduct: FC<IupdateProduct> = ({ isOpen, id, handleClose }) =
 
 
     const { mutate } = useMutation({
-        mutationKey: ['product , products'],
+        mutationKey: ['product , products', id],
         mutationFn: updateProductMutation,
         onSuccess: () => {
             enqueueSnackbar('Product Updated  Successfully', { variant: 'success' })
-            queryClient.invalidateQueries(['products'])
+            queryClient.invalidateQueries(['products', id])
         },
         onError: (data: any) => {
             enqueueSnackbar(data.message, { variant: 'error' })

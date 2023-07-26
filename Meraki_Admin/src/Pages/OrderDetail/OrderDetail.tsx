@@ -28,8 +28,10 @@ export const OrderDetail = () => {
         queryKey: ['order', id],
         queryFn: () => getOrder(id),
         enabled: !!id,
-        onError: (data: any) => {
-            console.log(data)
+        onError: () => {
+            enqueueSnackbar('Error Fetching Order', {
+                variant: 'error'
+            })
         }
     })
 
@@ -51,7 +53,7 @@ export const OrderDetail = () => {
         label: 'SHIPPED'
     }
     ]
-    
+
     const date = new Date(data?.order?.createdAt)
     const year = date.getFullYear()
     const month = date.getMonth()
@@ -70,7 +72,7 @@ export const OrderDetail = () => {
     const { mutate, isLoading: mutationLoading } = useMutation({
         mutationFn: changeStatus,
         mutationKey: ['changeStatus , order'],
-        onSuccess: (data: any) => {
+        onSuccess: () => {
             enqueueSnackbar('Status Changed Successfully', {
                 variant: 'success'
             })

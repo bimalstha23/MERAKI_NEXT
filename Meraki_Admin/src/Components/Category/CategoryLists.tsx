@@ -4,7 +4,7 @@ import { CategoryCard } from "./CategoryCard";
 
 export const CategoryLists = () => {
     const { data } = useQuery({
-        queryKey: ["category"],
+        queryKey: ["categories"],
         queryFn: fetchCategories
     })
 

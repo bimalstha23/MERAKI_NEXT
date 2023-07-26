@@ -1,10 +1,9 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { getOrders } from "../../ApiHandle/OrderAPi"
 import { Box, Paper, Table, TableBody, TableCell, TableCellProps, TableContainer, TableHead, TableRow, Typography, styled, tableCellClasses } from "@mui/material"
-import { Fragment, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { TableSkeleton } from "../Products/TableSkeleton";
 import { useOnScreen } from "../../Hooks/utilityHooks/useOnScreen";
-import { useOrder } from "../../Hooks/ProviderHooks/useOrder";
 import { Link } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -22,6 +21,12 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 interface StatusCellProps extends TableCellProps {
     status: string;
 }
+interface OrderTableProps {
+    status: string;
+    orderFilters?: any;
+
+}
+
 
 const StatusCell = styled(Box)<StatusCellProps>(({ theme, status }) => ({
     fontWeight: '500',
@@ -38,20 +43,35 @@ const StatusCell = styled(Box)<StatusCellProps>(({ theme, status }) => ({
 
 
 
-export const OrderTable = () => {
-    const { orderFilters } = useOrder();
-    const { data: orderData, isLoading, isFetching, hasNextPage, fetchNextPage, refetch } = useInfiniteQuery({
-        queryKey: ['orders'],
-        queryFn: ({ pageParam = 1 }) => getOrders({ page: pageParam, customerName: orderFilters?.searchTerm, sortOrder: orderFilters.sortOrder, filter: orderFilters.filter, pageSize: 14 }),
+
+
+export const OrderTable: FC<OrderTableProps> = ({ status, orderFilters }) => {
+
+    const [filterstatus, setfilterstatus] = useState<string>(status === 'DELIVERED' || 'CANCELLED' ? status : "all")
+
+    useEffect(() => {
+        if (status === 'DELIVERED' || 'CANCELLED') {
+            setfilterstatus(status)
+        } else {
+            setfilterstatus("all")
+        }
+    }, [status])
+
+
+
+    const { data: orderData, isLoading, isFetching, hasNextPage, fetchNextPage, } = useInfiniteQuery({
+        queryKey: ['orders', status, orderFilters],
+        queryFn: ({ pageParam = 1 }) => getOrders({ page: pageParam, customerName: orderFilters?.searchTerm, sortOrder: orderFilters.sortOrder, filter: orderFilters.filter, pageSize: 14, status: filterstatus }),
         getNextPageParam: (lastPage) => lastPage.pagination.nextPage ? lastPage.pagination.nextPage : undefined,
     })
 
     const [maxHeight, setMaxHeight] = useState<number>(0);
     const { measureRef, isIntersecting, observer } = useOnScreen();
 
-    useEffect(() => {
-        refetch()
-    }, [orderFilters])
+
+
+
+
 
     useEffect(() => {
         const updateMaxHeight = () => {
@@ -70,6 +90,7 @@ export const OrderTable = () => {
     useEffect(() => {
         if (isIntersecting && hasNextPage) {
             fetchNextPage()
+            console.log('fetching next page')
             observer.disconnect();
         }
     }, [isIntersecting, hasNextPage, fetchNextPage]);
@@ -115,14 +136,6 @@ export const OrderTable = () => {
         const a = randomAvatarCollection[randomNumber]
         return a
     };
-
-    const options = [
-        { value: 'PENDING', label: 'PENDING' },
-        { value: 'DELIVERED', label: 'DELIVERED' },
-        { value: 'CANCELLED', label: 'CANCELLED' },
-        { value: 'PACKED', label: 'PACKED' },
-        { value: 'SHIPPED', label: 'SHIPPED' },
-    ]
 
     return (
         <TableContainer component={Paper} sx={{
@@ -209,18 +222,7 @@ export const OrderTable = () => {
                                                     fontSize: '18px',
                                                     color: '#121212'
                                                 }} align="center">{row.user.name}</TableCell>
-                                                {/* <TableCell sx={{
-                                                    fontWeight: '500',
-                                                    fontSize: '18px',
-                                                    color: '#121212'
-                                                }} align="center">
-                                                    <button onClick={() => setDialogOption({
-                                                        id: row.id,
-                                                        isOpen: true,
-                                                    })} className=" text-textHighlight px-4 py-2 rounded-md">
-                                                        <MdModeEditOutline />
-                                                    </button>
-                                                </TableCell> */}
+
                                             </TableRow>)
                                         } else {
                                             return <TableRow
@@ -277,18 +279,7 @@ export const OrderTable = () => {
                                                     fontSize: '18px',
                                                     color: '#121212'
                                                 }} align="center">{row.user.name}</TableCell>
-                                                {/* <TableCell sx={{
-                                                    fontWeight: '500',
-                                                    fontSize: '18px',
-                                                    color: '#121212'
-                                                }} align="center">
-                                                    <button onClick={() => setDialogOption({
-                                                        id: row.id,
-                                                        isOpen: true,
-                                                    })} className=" text-textHighlight px-4 py-2 rounded-md">
-                                                        <MdModeEditOutline />
-                                                    </button>
-                                                </TableCell> */}
+
                                             </TableRow>
                                         }
                                     })

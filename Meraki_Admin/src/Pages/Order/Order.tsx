@@ -39,9 +39,13 @@ export const Order = () => {
         {
             title: "Delivered",
             params: "delivered"
+        }, {
+            title: "Canceled",
+            params: "cancelled"
         }
     ]
 
+    const [orderFiltersState, setOrderFiltersState] = useState<any>({});
 
     return (
         <div className="flex flex-col items-center w-full  px-10">
@@ -79,8 +83,11 @@ export const Order = () => {
                 <div className="w-full">
                     <TabPanel value={'orders'}>
                         <div className="w-full">
-                            <OrderFilter />
-                            <OrderTable />
+                            <OrderFilter setorderFilters={setOrderFiltersState} orderFilters={orderFiltersState} />
+                            <OrderTable status="All"
+                                orderFilters={orderFiltersState}
+
+                            />
                         </div>
                     </TabPanel>
                     <TabPanel value={'createorder'}>
@@ -93,7 +100,23 @@ export const Order = () => {
                         </div>
                     </TabPanel>
                     <TabPanel value={'delivered'}>
-                        <OrderFilter />
+                        <OrderFilter
+                            setorderFilters={setOrderFiltersState}
+                            orderFilters={orderFiltersState}
+                        />
+                        <OrderTable status="DELIVERED"
+                            orderFilters={orderFiltersState}
+                        />
+                    </TabPanel>
+                    <TabPanel value={'cancelled'}>
+                        <OrderFilter
+                            setorderFilters={setOrderFiltersState}
+                            orderFilters={orderFiltersState}
+                        />
+                        <OrderTable status="CANCELLED"
+                            orderFilters={orderFiltersState}
+
+                        />
                     </TabPanel>
                 </div>
             </TabContext>

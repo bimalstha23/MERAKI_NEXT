@@ -22,6 +22,7 @@ model Product {
   images        Image[]
   category      Category       @relation(fields: [categoryId], references: [id])
   orderProducts orderProduct[]
+  soldCount     Int            @default(0)
 }
 
 model Image {
@@ -72,9 +73,19 @@ model User {
   updatedAt DateTime? @default(now()) @updatedAt
   name      String?
   phone     String?
-  address   String?
+  profile   String?
   role      UserRole  @default(USER)
   orders    Order[]
+  address   address[]
+}
+
+model address {
+  id        Int      @id @default(autoincrement())
+  address   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Category {

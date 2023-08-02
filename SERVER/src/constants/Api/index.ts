@@ -30,6 +30,21 @@ export const orderRoutesPath = {
   changeStatus: "/order/changestatus",
   deleteOrder: "/order/deleteorder",
 };
+export const paymentRoutesPath = {
+  createPayment: "/payment/createpayment",
+  getPayments: "/payment/getpayments",
+  getPayment: "/payment/getpayment",
+  updatePayment: "/payment/updatepayment",
+  deletePayment: "/payment/deletepayment",
+};
+
+export const statsRoutesPath = {
+  getStats: "/stats/getstats",
+  getChartData: "/stats/getchartdata",
+  getTopProducts: "/stats/gettopproducts",
+  
+};
+
 
 export const basePath = {
   version: "/v1",

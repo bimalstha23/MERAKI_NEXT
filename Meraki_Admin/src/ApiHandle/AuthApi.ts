@@ -30,3 +30,15 @@ export const getMeQuery = async () => {
   }).then((res: any) => res.data);
   return response;
 };
+
+export const SignupMutation = async (data:{
+    name:string,
+    email:string,
+    password:string
+})=>{
+    return axiosInstance({
+        method: "post",
+        url: userRoutesPath.createUser,
+        data:data
+    })
+}

@@ -8,6 +8,7 @@ import { ProductProvider } from "../../Providers/ProductProvider";
 import { createRoutes } from "../createRoutes"
 import { publicRoutePath } from "./public-Route-path";
 import { Category } from "../../Pages/Category/Category";
+import { Stats } from "../../Pages/Stats/Stats";
 
 const Product = () => {
     return (
@@ -28,6 +29,10 @@ export const publicRoutes = [
         path: publicRoutePath.Home,
         element: DashBoard,
         children: [
+            createRoutes({
+                path: '/',
+                element: Stats,
+            }),
             createRoutes({
                 path: publicRoutePath.Order,
                 element: OrderPage,

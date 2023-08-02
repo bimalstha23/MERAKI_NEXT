@@ -20,6 +20,7 @@ export const AddProducts: FC = () => {
         onSuccess: () => {
             enqueueSnackbar('Product Added Successfully', { variant: 'success' })
             queryClient.invalidateQueries(['products'])
+            reset()
         },
         onError: (data: any) => {
             enqueueSnackbar(data.message, { variant: 'error' })
@@ -42,7 +43,7 @@ export const AddProducts: FC = () => {
         }
     })
 
-    const { control, register, watch, handleSubmit, setValue } = useForm<IFormValues>({
+    const { control, register, watch, handleSubmit, setValue, reset } = useForm<IFormValues>({
         defaultValues: {
             name: '',
             description: '',

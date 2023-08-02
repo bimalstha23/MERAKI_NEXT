@@ -32,4 +32,9 @@ export const userRoutesPath = {
     changeStatus: "/order/changestatus",
 
   };
-  
+
+  export const statsRoutesPath = {
+    getStats: "/stats/getstats",
+    getChartData: "/stats/getchartdata",
+    getTopProducts: "/stats/gettopproducts",
+  };

@@ -42,8 +42,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
     })
     const navigate = useNavigate()
 
-
-
+    
     const filterOptions: {
         status?: string
         onStock?: boolean

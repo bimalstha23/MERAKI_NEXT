@@ -48,6 +48,7 @@ export const createOrder = async (req: Request, res: Response) => {
     let TotalAmount  = discountedTotalAmount
     if(discount){
       const extraDiscount = discountedTotalAmount * (discount/100);
+      totalDiscount += extraDiscount;
       TotalAmount = discountedTotalAmount - extraDiscount;
     }
     // Apply the delivery fee to the total amount
@@ -95,7 +96,7 @@ export const createOrder = async (req: Request, res: Response) => {
         customer_address_landmark,
         customer_email,
         total_amount: discountedTotalAmount, // Use the discounted total amount
-        discount: totalDiscount + (discountedTotalAmount * discount), // Save the combined discount value in the order
+        discount: totalDiscount, // Save the combined discount value in the order
         profit, // Save the calculated profit in the order
         createdByAdmin: true,
         delivery_fee: Number(deleviry_fee),
@@ -120,10 +121,10 @@ export const createOrder = async (req: Request, res: Response) => {
       }
 
       const newQuantity = productData.quantity - orderedQuantity;
-
+      const soldCount = productData.soldCount + orderedQuantity;
       await prismaClient.product.update({
         where: { id: product.id },
-        data: { quantity: newQuantity },
+        data: { quantity: newQuantity , soldCount: soldCount },
       });
     }
 
@@ -199,10 +200,11 @@ export const getOrders = async (req: Request, res: Response) => {
         oneYearAgo.setDate(currentDate.getDate() - 365);
         filters.createdAt = {
           gte: new Date(oneYearAgo).toISOString(), // Convert to ISO 8601 DateTime format
-    lte: new Date(currentDate).toISOString()
+          lte: new Date(currentDate).toISOString()
         };
     }
 }
+
  console.log(filters , 'filter')
 if(from && to){
   filters.createdAt = {

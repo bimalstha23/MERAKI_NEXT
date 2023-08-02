@@ -12,6 +12,7 @@ export interface PublicRoutes {
 
 export interface IprivateRoutesPath {
   Login: string;
+  Regsiter: string;
 }
 
 export interface IpublicRoutesPath {

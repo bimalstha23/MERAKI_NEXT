@@ -1,5 +1,13 @@
 import { Request, Response } from "express";
 import prismaClient from "../../PrismaClient";
+interface SaleData {
+  createdAt: string;
+  _sum: {
+    total_amount: number;
+  };
+}
+
+
 
 export const getStats = async (req: Request, res: Response) => {
   try {
@@ -111,31 +119,43 @@ export const getChartData = async (req: Request, res: Response) => {
       try{
         const currentDate = new Date();
         const oneWeekAgo = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-         
-        const lastWeekSales = await prismaClient.order.findMany({
+        const lastweek = new Date(currentDate.getTime() - 14 * 24 * 60 * 60 * 1000);
+        const lastWeekSales = await prismaClient.order.groupBy({
+          by: ["createdAt"],
           where: {
             createdAt: {
-              gte: oneWeekAgo.toISOString(),
-              lte: currentDate.toISOString(),
+              gte: lastweek,
+              lte: oneWeekAgo,
             },
           },
           orderBy: {
             createdAt: "asc",
           },
+          _sum: {
+            total_amount: true,
+          },
         });
-        const thisWeeksales = await prismaClient.order.findMany({
+        const thisWeeksales = await prismaClient.order.groupBy({
+          by: ["createdAt"],
           where: {
             createdAt: {
-              gte: currentDate.toISOString(),
+              gte: oneWeekAgo,
+              lte: currentDate,
             },
           },
           orderBy: {
             createdAt: "asc",
           },
+          _sum: {
+            total_amount: true,
+          },
         });
+        const lastWeekSalesData = combineDailySales(lastWeekSales);
+        const thisWeekSalesData = combineDailySales(thisWeeksales);
+
         res.status(200).json({
-          lastWeekSales,
-          thisWeeksales
+          lastWeekSales:lastWeekSalesData,
+          thisWeeksales:thisWeekSalesData
         });
 
       }catch(e){
@@ -143,3 +163,24 @@ export const getChartData = async (req: Request, res: Response) => {
           res.status(500).json({message:"Something went wrong"});
       }
 }
+
+// Helper function to combine the total sales data by date
+const combineDailySales = (salesData: any): { createdAt: string; total_sales: number }[] => {
+  const combinedSalesData: { [key: string]: number } = {};
+  const combinedSalesArray: { createdAt: string; total_sales: number }[] = [];
+
+  for (const sale of salesData) {
+    const date = new Date(sale.createdAt).toLocaleDateString();
+    if (combinedSalesData[date]) {
+      combinedSalesData[date] += sale._sum.total_amount;
+    } else {
+      combinedSalesData[date] = sale._sum.total_amount;
+    }
+  }
+
+  for (const date in combinedSalesData) {
+    combinedSalesArray.push({ createdAt: date, total_sales: combinedSalesData[date] });
+  }
+
+  return combinedSalesArray;
+};

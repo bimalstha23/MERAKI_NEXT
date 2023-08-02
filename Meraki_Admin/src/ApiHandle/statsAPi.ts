@@ -11,3 +11,10 @@ export const getStats = (filter:string) => {
         }
     })
 }
+
+export const getChartData = ()=>{
+    return axiosInstance({
+        method: "GET",
+        url: statsRoutesPath.getChartData,
+    })
+}

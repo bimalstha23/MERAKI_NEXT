@@ -4,6 +4,8 @@ import { useState } from "react"
 import Select from 'react-select'
 import { customStyles } from "../../Utils/custom"
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { ChartComp } from "../../Components/DashBoard/Chart"
+
 const timeOptions = [
     {
         value: 'lifetime',
@@ -42,8 +44,6 @@ export const Stats = () => {
         setFilter(selectedOption.value)
     }
 
-    console.log(data)
-
     return (
         <div className='w-full flex flex-col  px-10 gap-4'>
             <div className='flex flex-col justify-center items-center'>
@@ -58,7 +58,7 @@ export const Stats = () => {
                     onChange={handleChange} styles={customStyles} className='z-50' />
             </div>
             <div className="flex flex-row flex-wrap gap-4 justify-start items-start">
-                <div className="p-7 shadow-2xl rounded-xl w-[300px] bg-success text-black ">
+                <div className="p-7 shadow-xl rounded-xl w-[300px] bg-success text-black ">
                     <h1 className="text-slate-700 text-base">
                         Total Profit
                     </h1>
@@ -66,28 +66,28 @@ export const Stats = () => {
                         Rs. {data?.totalProfit || 0}
                     </h1>
                 </div>
-                <div className="p-7 shadow-2xl rounded-xl w-[300px]  text-black ">
+                <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
                     <h1 className="text-slate-700 text-base">
                         Total Sales
                     </h1>
                     <h1 className="font-extrabold text-3xl">
                         Rs. {data?.TotalSales || 0}
                     </h1>
-                </div>  <div className="p-7 shadow-2xl rounded-xl w-[300px]  text-black ">
+                </div>  <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
                     <h1 className="text-slate-700 text-base">
                         Products Sold
                     </h1>
                     <h1 className="font-extrabold text-3xl">
                         {data?.TotalProductsSold || 0}
                     </h1>
-                </div>  <div className="p-7 shadow-2xl rounded-xl w-[300px]  text-black ">
+                </div>  <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
                     <h1 className="text-slate-700 text-base">
                         Total Orders
                     </h1>
                     <h1 className="font-extrabold text-3xl">
                         {data?.TotalOrders || 0}
                     </h1>
-                </div>  <div className="p-7 shadow-2xl rounded-xl w-[300px]  text-black ">
+                </div>  <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
                     <h1 className="text-slate-700 text-base">
                         Total Users
                     </h1>
@@ -96,15 +96,17 @@ export const Stats = () => {
                     </h1>
                 </div>
             </div>
-            <div className="flex flex-row justify-center items-center w-full mt-10">
-                <div className="w-full">
+            <div className="flex flex-row gap-10 w-full mt-10">
+                <div className="w-full ">
                     <TableContainer
+                        className="shadow-2xl"
                         component={Paper}
 
                         sx={{
                             width: '100%',
                             minWidth: '100%',
-                            borderRadius: '15px'
+                            borderRadius: '15px',
+                            boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
                         }}
                     >
                         <Table
@@ -188,13 +190,10 @@ export const Stats = () => {
 
                     </TableContainer>
                 </div>
-                <div className="w-full">
-
+                <div className="w-[70%]">
+                    <ChartComp />
                 </div>
             </div>
-
-
-
-        </div >
+        </div>
     )
 }

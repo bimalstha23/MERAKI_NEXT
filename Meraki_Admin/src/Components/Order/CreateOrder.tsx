@@ -6,7 +6,9 @@ import { enqueueSnackbar } from "notistack";
 import { useMutation } from "@tanstack/react-query";
 import { createOrder } from "../../ApiHandle/OrderAPi";
 import * as yup from 'yup'
-
+import { yupResolver } from "@hookform/resolvers/yup";
+import { ErrorMessage } from "@hookform/error-message";
+import { Link } from "react-router-dom";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         background: 'linear-gradient(180deg, #373737 0%, #121212 84.9%)',
@@ -27,24 +29,26 @@ export const CreateOrder = () => {
         address: yup.string().required(),
         phone: yup.number().required(),
         email: yup.string().required(),
-        discount: yup.string().required(),
-        deliveryCharge: yup.string().required(),
+        discount: yup.number(),
+        deliveryCharge: yup.number().min(10),
         landmark: yup.string().required(),
     })
 
     const { selectedProduct, setSelectedProduct, user } = useAuth()
     const [discount, setDiscount] = useState<boolean>(false)
-    const { handleSubmit, register, reset, watch } = useForm({
+    const { handleSubmit, register, reset, watch, formState: { errors } } = useForm({
         defaultValues: {
             name: '',
             description: '',
             address: '',
-            phone: '',
+            phone: undefined,
             email: "",
-            discount: "",
-            deliveryCharge: "",
+            discount: undefined,
+            deliveryCharge: undefined,
             landmark: "",
-        }
+        },
+        resolver: yupResolver(schema)
+
     })
 
     const { mutate, isLoading } = useMutation({
@@ -56,12 +60,11 @@ export const CreateOrder = () => {
             reset()
         },
     })
-    const [selected, setSelected] = useState<any>([]);
+
     const toggleDiscount = () => {
         setDiscount(!discount)
     }
 
-    const isSelected = (id: any) => selected?.findIndex((item: any) => item?.id === id) !== -1;
 
 
 
@@ -69,7 +72,7 @@ export const CreateOrder = () => {
 
 
     const handleIncreament = (row: any) => {
-        const updatedSelect = selectedProduct.map((item: any) => {
+        const updatedSelect = selectedProduct?.map((item: any) => {
             if (item.id === row.id) {
                 if (item.quantity < item.productQuantity) {
                     return { ...item, quantity: item.quantity + 1, totalPrice: (item.price - (row.discount / 100 * row.price)) * (item.quantity + 1) }
@@ -87,10 +90,12 @@ export const CreateOrder = () => {
 
 
     const handleDecreament = (row: any) => {
-        const updatedSelect = selectedProduct.map((item: any) => {
+        const updatedSelect = selectedProduct?.map((item: any) => {
             if (item.id === row.id) {
                 if (item.quantity > 0) {
-                    return { ...item, quantity: item.quantity - 1 }
+                    return { ...item, quantity: item.quantity - 1, totalPrice: (item.price - (row.discount / 100 * row.price)) * (item.quantity - 1) }
+                } else {
+                    return
                 }
             } else
                 return {
@@ -128,7 +133,7 @@ export const CreateOrder = () => {
     const totalAmount = discountedTotalAmount - extraDiscountAmount + Number(watchDeliverCharge);
     const submit = (data: any, event: any) => {
         event.preventDefault();
-        const products = selectedProduct.map((item: any) => {
+        const products = selectedProduct?.map((item: any) => {
             return {
                 id: item.id,
                 quantity: item.quantity,
@@ -163,36 +168,58 @@ export const CreateOrder = () => {
                         <div className='flex flex-col justify-center items-start w-full gap-3'>
                             <label className='font-bold' htmlFor="">Customer Full Name</label>
                             <input {...register('name')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='name' type="text" placeholder='Customer Name' />
+                            <ErrorMessage errors={errors} name="name"
+                                render={({ message }) => <p className="text-red-500 text-xs">{message}</p>}
+                            />
                         </div>
                         <div className='flex flex-col justify-center items-start w-full gap-3'>
                             <label className='font-bold' htmlFor="">Customer email address</label>
                             <input {...register('email')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='name' type="text" placeholder='Customer Email Address' />
+                            <ErrorMessage errors={errors} name="email"
+                                render={({ message }) => <p className="text-red-500 text-xs">{message}</p>}
+                            />
                         </div>
                         <div className='flex flex-col justify-center items-start w-full gap-3'>
                             <label className='font-bold' htmlFor="">Customer's Address</label>
                             <input {...register('address')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='address' type="text" placeholder="Customer's address" />
+                            <ErrorMessage errors={errors} name="address"
+                                render={({ message }) => <p className="text-red-500 text-xs">{message}</p>}
+                            />
                         </div>
                         <div className='flex flex-col justify-center items-start w-full gap-3'>
                             <label className='font-bold' htmlFor="">Customer's Address landmark</label>
                             <input {...register('landmark')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='address' type="text" placeholder="Customer's Landmark eg:infront of  hospital" />
+                            <ErrorMessage errors={errors} name="landmark"
+                                render={({ message }) => <p className="text-red-500 text-xs">{message}</p>}
+                            />
                         </div>
 
                         <div className='flex flex-col justify-center items-start w-full gap-3'>
                             <label className='font-bold' htmlFor="">Customer's Phone Number</label>
                             <input {...register('phone')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='phone' type="number" placeholder="Customer's Phone Number" />
+                            <ErrorMessage errors={errors} name="phone"
+                                render={({ message }) => <p className="text-red-500 text-xs">{message}</p>}
+                            />
                         </div>
                         <div className='flex flex-col justify-center items-start w-full gap-3'>
                             <label className='font-bold' htmlFor="">Delivery Charge</label>
                             <input {...register('deliveryCharge')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='phone' type="number" placeholder="delivery Charge" />
+                            <ErrorMessage errors={errors} name="deliveryCharge"
+                                render={({ message }) => <p className="text-red-500 text-xs">{message}</p>}
+                            />
                         </div>
                         <div className="flex flex-row justify-start items-center">
                             <Checkbox checked={discount} onChange={toggleDiscount} />
                             <h1 className="text-slate-400 text-xs">Want to add Extra Total Discount? (Note: if there is global discount on product it will be automatically apllied)</h1>
+
                         </div>
                         {discount &&
                             <div className='flex flex-col justify-center items-start w-full gap-3'>
                                 <label className='font-bold' htmlFor="">Extra Discount</label>
                                 <input {...register('discount')} className='rounded-sm bg-white w-full px-2 h-10 py-1 outline focus:outline-1 focus:outline-textHighlight   ' id='phone' type="number" placeholder="Discount" />
+                                <ErrorMessage errors={errors} name="discount"
+                                    render={({ message }) => <p className="text-red-500 text-xs">{message}</p>}
+                                />
                             </div>
                         }
 
@@ -200,14 +227,17 @@ export const CreateOrder = () => {
                             <label className='font-bold' htmlFor="filter">
                                 Description
                             </label>
-                            <textarea {...register('description')} id="description" placeholder="description" rows={10} cols={50} className='outline rounded-sm p-5 w-full focus:outline-textHighlight'></textarea>
+                            <textarea {...register('description')} id="description" placeholder="description" rows={10} cols={20} className='outline rounded-sm p-5 w-full focus:outline-textHighlight'></textarea>
+                            <ErrorMessage errors={errors} name="description"
+                                render={({ message }) => <p className="text-red-500 text-xs">{message}</p>}
+                            />
                         </div>
-                        <button disabled={isLoading} name='createOrder' type='submit' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
+                        {selectedProduct?.length > 0 && <button disabled={isLoading} name='createOrder' type='submit' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
                             Create Order
-                        </button>
+                        </button>}
                     </div>
                 </form>
-                <div className="w-full">
+                {selectedProduct?.length > 0 ? <div className="w-full">
                     <TableContainer component={Paper} sx={{
                         maxHeight: `${800}px`,
                     }}
@@ -231,19 +261,15 @@ export const CreateOrder = () => {
                             <TableBody>
                                 {
                                     selectedProduct?.map((row: any) => {
-                                        const isItemSelected = isSelected(row.id);
+
                                         return (<TableRow
                                             sx={{
                                                 cursor: 'pointer',
                                             }}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
                                             tabIndex={-1}
                                             key={row.id}
-                                            selected={isItemSelected}
                                         >
-                                            <TableCell>
-                                            </TableCell>
+
                                             <TableCell align="center">
                                                 <img className="w-28" src={row.image} alt="" />
                                             </TableCell>
@@ -312,11 +338,16 @@ export const CreateOrder = () => {
                             }
                             <div className="flex flex-row items-start gap-6 text-start">
                                 <h1 className="text-slate-400 text-xs">Total Amount</h1>
-                                <h1 className="text-slate-400 text-xs">{totalAmount}</h1>
+                                <h1 className="text-slate-400 text-xs">{totalAmount || 0}</h1>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> : <div className="w-full flex justify-center items-center min-h-[60vh]">
+                    <h1 className="text-slate-400 text-base">Please <Link className="text-blue-600 font-bold" to={'/products?tab=onstocks'} >
+                        Select Product
+                    </Link>
+                        {" "}  to continue creating order</h1>
+                </div>}
             </div>
             {isLoading && <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

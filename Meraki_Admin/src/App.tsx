@@ -11,7 +11,7 @@ function App() {
   const { setUser, user } = useAuth();
   const [showComponent, setShowComponent] = useState(false)
 
-  const { isLoading: loading, isFetching } = useQuery({
+  const { isLoading: loading } = useQuery({
     queryKey: ['user'],
     queryFn: getMeQuery,
     onSuccess(data) {

@@ -14,7 +14,6 @@ export const FilterComp = () => {
 
 
     const [category, setCategory] = useState<any>()
-    const [time, setTime] = useState<any>()
     const [search, setSearch] = useState<any>('')
     const [debouncedValue] = useDebounce(search, 1000)
 
@@ -35,26 +34,19 @@ export const FilterComp = () => {
     })
 
 
-    const timeOptions = [
-        {
-            value: 'asc', label: 'Ascending',
-
-        }, {
-            value: 'dsc', label: 'Descending',
-        },
-    ]
-
-
     useEffect(() => {
-        setProductFilters({ ...ProductFilters, category: category, sortOrder: time })
+        setProductFilters({ ...ProductFilters, category: category })
     }, [
         category,
-        time
     ])
 
     useEffect(() => {
         setProductFilters({ ...ProductFilters, searchTerm: debouncedValue })
     }, [debouncedValue])
+
+    const handleChange = (selectedOption: any) => {
+        setCategory(selectedOption.value)
+    }
 
     return (
         <div className='flex flex-row w-full justify-center items-center py-5'>
@@ -70,14 +62,9 @@ export const FilterComp = () => {
                     <label className='font-bold' htmlFor="filter">
                         Category
                     </label>
-                    <Select onChange={(e) => setCategory(e?.value)} value={category} options={options} styles={customStyles} className='z-50' />
+                    <Select onChange={handleChange} options={options} styles={customStyles} className='z-50' />
                 </div>
-                <div className='flex flex-col justify-center items-start'>
-                    <label className='font-bold' htmlFor="filter">
-                        Time
-                    </label>
-                    <Select onChange={(e) => setTime(e?.value)} value={time} options={timeOptions} styles={customStyles} className='z-50' />
-                </div>
+
             </form>
         </div>
     )

@@ -4,11 +4,12 @@ import { IFormValues } from './types';
 
 interface ImageUploadProps {
     setValue: UseFormSetValue<IFormValues>;
+    droppedFiles: File[];
+    setDroppedFiles: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
-export const ImageUpload: FC<ImageUploadProps> = ({ setValue }) => {
+export const ImageUpload: FC<ImageUploadProps> = ({ setValue, droppedFiles, setDroppedFiles }) => {
     const [isDragging, setIsDragging] = useState(false);
-    const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
 
 
     useEffect(() => {

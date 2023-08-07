@@ -13,19 +13,11 @@ export const ChartComp = () => {
     })
     const ref = useRef();
 
-    console.log(salesData)
     const lastWeekDates = salesData?.lastWeekSales?.map((sale: any) => new Date(sale.createdAt).toLocaleDateString());
     const lastWeekAmounts = salesData?.lastWeekSales?.map((sale: any) => sale.total_sales);
 
     const thisWeekDates = salesData?.thisWeeksales?.map((sale: any) => new Date(sale.createdAt).toLocaleDateString());
     const thisWeekAmounts = salesData?.thisWeeksales?.map((sale: any) => sale.total_sales);
-
-    console.log(
-        lastWeekDates,
-        lastWeekAmounts,
-        thisWeekDates,
-        thisWeekAmounts
-    )
 
     const chartData = {
         labels: [...lastWeekDates || [], ...thisWeekDates || []],

@@ -75,10 +75,16 @@ export const getStats = async (req: Request, res: Response) => {
           gte: filters.createdAt?.gte,
           lte: filters.createdAt?.lte,
         },
+      
       },
     };
 
-    const orders = await prismaClient.order.findMany(ordersQuery);
+    const orders = await prismaClient.order.findMany({ where:{
+        ...ordersQuery.where,
+        NOT:{
+          status:"CANCELLED"
+        }
+    }});
     const TotalOrders  = orders.length;
     const Totalproducts = await prismaClient.product.count();
     const TotalCategories = await prismaClient.category.count();
@@ -114,7 +120,6 @@ export const getStats = async (req: Request, res: Response) => {
   }
 };
 
-
 export const getChartData = async (req: Request, res: Response) => {
       try{
         const currentDate = new Date();
@@ -127,6 +132,9 @@ export const getChartData = async (req: Request, res: Response) => {
               gte: lastweek,
               lte: oneWeekAgo,
             },
+            NOT:{
+              status:"CANCELLED"
+            }
           },
           orderBy: {
             createdAt: "asc",
@@ -142,6 +150,9 @@ export const getChartData = async (req: Request, res: Response) => {
               gte: oneWeekAgo,
               lte: currentDate,
             },
+            NOT:{
+              status:"CANCELLED"
+            }
           },
           orderBy: {
             createdAt: "asc",
@@ -149,6 +160,8 @@ export const getChartData = async (req: Request, res: Response) => {
           _sum: {
             total_amount: true,
           },
+          
+         
         });
         const lastWeekSalesData = combineDailySales(lastWeekSales);
         const thisWeekSalesData = combineDailySales(thisWeeksales);

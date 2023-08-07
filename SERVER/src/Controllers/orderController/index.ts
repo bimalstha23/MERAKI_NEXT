@@ -396,20 +396,51 @@ export const getOrder =  async (req: Request, res: Response) => {
 export const ChangeOrderStatus = async (req: Request, res: Response) => {
   try {
     const { id, status } = req.body;
-    console.log(id , status)
+    
     const order = await prismaClient.order.findUnique({
       where: { id: Number(id) },
+      include:{
+        orderProducts:{
+          include:{
+            product:true
+          }
+        }
+      }
     });
+
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
+    if(order.status === "CANCELLED" && status === "CANCELLED"){
+      return res.status(400).json({ message: "Order is already cancelled" });
+    }
+
+    if(order.status === "DELIVERED" && status === "DELIVERED"){
+      return res.status(400).json({ message: "Order is already delivered" });
+    }
     await prismaClient.order.update({
       where: { id: Number(id) },
       data: { status },
     });
 
+    if(status === "CANCELLED"){
+      for (const orderProduct of order.orderProducts) {
+        const productData = await prismaClient.product.findUnique({ where: { id: orderProduct.product.id } });
+        if (!productData) {
+          return res.status(400).json({
+            message: `Invalid product ID: ${orderProduct.product.id}. Product not found.`,
+          });
+        }
+        const newQuantity = productData.quantity + orderProduct.quantity;
+        const soldCount = productData.soldCount - orderProduct.quantity;
+        await prismaClient.product.update({
+          where: { id: orderProduct.product.id },
+          data: { quantity: newQuantity , soldCount: soldCount },
+        });
+      }
+    }
     res.status(200).json({ message: "Order status updated successfully" });
   } catch (e) {
     console.log(e)

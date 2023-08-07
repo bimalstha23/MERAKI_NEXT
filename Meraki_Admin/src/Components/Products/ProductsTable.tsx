@@ -42,7 +42,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
     })
     const navigate = useNavigate()
 
-    
+
     const filterOptions: {
         status?: string
         onStock?: boolean
@@ -97,7 +97,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
     }, [isIntersecting, hasNextPage, fetchNextPage]);
 
     const handleClick = (_event: any, row: any) => {
-        const selectedIndex = Tab === 'ACTIVE' ? selectedProduct.findIndex((item: any) => item.id === row.id) : selectedtableProducts.findIndex((item: any) => item.id === row.id)
+        const selectedIndex = Tab === 'ACTIVE' || Tab === 'onstocks' ? selectedProduct.findIndex((item: any) => item.id === row.id) : selectedtableProducts.findIndex((item: any) => item.id === row.id)
         let newSelected: any = [];
         const newRow = {
             quantity: 1,
@@ -112,7 +112,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
             totalPrice: row.selling_price - (row.discount / 100 * row.selling_price) * 1,
         }
 
-        if (Tab === 'ACTIVE') {
+        if (Tab === 'ACTIVE' || Tab === 'onstocks') {
             if (selectedIndex === -1) {
                 newSelected = [...selectedProduct, newRow]; // Add the selected item to the array
             } else {
@@ -125,7 +125,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
                 newSelected = [...selectedtableProducts.slice(0, row), ...selectedtableProducts.slice(selectedIndex + 1)]; // Remove the selected item from the array
             }
         }
-        if (Tab === 'ACTIVE') {
+        if (Tab === 'ACTIVE' || Tab === 'onstocks') {
             setSelectedProduct(newSelected);
         } else {
             setSelectedtableProducts(newSelected);
@@ -134,7 +134,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
 
 
     const isSelected = (id: any) => {
-        if (Tab === 'ACTIVE') {
+        if (Tab === 'ACTIVE' || Tab==='onstocks') {
             return selectedProduct?.findIndex((item: any) => item?.id === id) !== -1;
         } else {
             return selectedtableProducts?.findIndex((item: any) => item?.id === id) !== -1;
@@ -198,7 +198,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
                         variant="subtitle1"
                         component="div"
                     >{
-                            Tab === 'ACTIVE' ? <h1>{selectedProduct.length}</h1> : <h1>
+                            Tab === 'ACTIVE' || Tab === 'onstocks' ? <h1>{selectedProduct.length}</h1> : <h1>
                                 {selectedtableProducts.length}
                             </h1>
                         }
@@ -215,7 +215,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
                 )}
                 {selectedProduct?.length > 0 || selectedtableProducts?.length > 0 ? (
                     <div className='flex flex-row justify-center items-center gap-5'>
-                        {Tab === 'ACTIVE' &&
+                        {Tab === 'ACTIVE' || Tab === 'onstocks' &&
                             <button onClick={() => navigate('/order?tab=createorder')} name='createOrder' type='submit' className='w-36 py-2 bg-greenText rounded-2xl font-extrabold text-SecondaryText'>
                                 Create Order
                             </button>}

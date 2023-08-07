@@ -3,7 +3,7 @@ import { getStats } from "../../ApiHandle/statsAPi"
 import { useState } from "react"
 import Select from 'react-select'
 import { customStyles } from "../../Utils/custom"
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { Paper, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
 import { ChartComp } from "../../Components/DashBoard/Chart"
 
 const timeOptions = [
@@ -35,7 +35,7 @@ const timeOptions = [
 export const Stats = () => {
     const [filter, setFilter] = useState<string>('lifetime')
 
-    const { data } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["stats", filter],
         queryFn: () => getStats(filter)
     })
@@ -57,45 +57,62 @@ export const Stats = () => {
                     value={timeOptions.find((option) => option.value === filter)}
                     onChange={handleChange} styles={customStyles} className='z-50' />
             </div>
-            <div className="flex flex-row flex-wrap gap-4 justify-start items-start">
-                <div className="p-7 shadow-xl rounded-xl w-[300px] bg-success text-black ">
-                    <h1 className="text-slate-700 text-base">
-                        Total Profit
-                    </h1>
-                    <h1 className="font-extrabold text-3xl">
-                        Rs. {data?.totalProfit || 0}
-                    </h1>
+            {!isLoading ?
+                <div className="flex flex-row flex-wrap gap-4 justify-start items-start">
+                    <div className="p-7 shadow-xl rounded-xl w-[300px] bg-success text-black ">
+                        <h1 className="text-slate-700 text-base">
+                            Total Profit
+                        </h1>
+                        <h1 className="font-extrabold text-3xl">
+                            Rs. {data?.totalProfit || 0}
+                        </h1>
+                    </div>
+                    <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
+                        <h1 className="text-slate-700 text-base">
+                            Total Sales
+                        </h1>
+                        <h1 className="font-extrabold text-3xl">
+                            Rs. {data?.TotalSales || 0}
+                        </h1>
+                    </div>  <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
+                        <h1 className="text-slate-700 text-base">
+                            Products Sold
+                        </h1>
+                        <h1 className="font-extrabold text-3xl">
+                            {data?.TotalProductsSold || 0}
+                        </h1>
+                    </div>  <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
+                        <h1 className="text-slate-700 text-base">
+                            Total Orders
+                        </h1>
+                        <h1 className="font-extrabold text-3xl">
+                            {data?.TotalOrders || 0}
+                        </h1>
+                    </div>  <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
+                        <h1 className="text-slate-700 text-base">
+                            Total Users
+                        </h1>
+                        <h1 className="font-extrabold text-3xl">
+                            {data?.Totalusers || 0}
+                        </h1>
+                    </div>
+                </div> :
+                <div
+                    className="flex flex-row flex-wrap gap-4 justify-start items-start"
+                >
+                    {Array.from(Array(5).keys()).map((_i: number) => (
+                        <Skeleton
+                            key={_i}
+                            variant="rectangular"
+                            width={300}
+                            height={118}
+                            className="rounded-xl"
+                        />
+                    ))
+                    }
                 </div>
-                <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
-                    <h1 className="text-slate-700 text-base">
-                        Total Sales
-                    </h1>
-                    <h1 className="font-extrabold text-3xl">
-                        Rs. {data?.TotalSales || 0}
-                    </h1>
-                </div>  <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
-                    <h1 className="text-slate-700 text-base">
-                        Products Sold
-                    </h1>
-                    <h1 className="font-extrabold text-3xl">
-                        {data?.TotalProductsSold || 0}
-                    </h1>
-                </div>  <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
-                    <h1 className="text-slate-700 text-base">
-                        Total Orders
-                    </h1>
-                    <h1 className="font-extrabold text-3xl">
-                        {data?.TotalOrders || 0}
-                    </h1>
-                </div>  <div className="p-7 shadow-xl rounded-xl w-[300px]  text-black ">
-                    <h1 className="text-slate-700 text-base">
-                        Total Users
-                    </h1>
-                    <h1 className="font-extrabold text-3xl">
-                        {data?.Totalusers || 0}
-                    </h1>
-                </div>
-            </div>
+            }
+
             <div className="flex flex-row gap-10 w-full mt-10">
                 <div className="w-full ">
                     <TableContainer
@@ -161,7 +178,7 @@ export const Stats = () => {
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
+                            {!isLoading ? <TableBody>
                                 {data?.topProducts?.map((product: any) => (
                                     <TableRow>
                                         <TableCell>
@@ -185,7 +202,43 @@ export const Stats = () => {
 
                                     </TableRow>
                                 ))}
+                            </TableBody> : <TableBody>
+                                {Array.from(Array(10).keys()).map((_i: number) => (
+                                    <TableRow>
+                                        <TableCell>
+                                            <Skeleton animation='wave'>
+
+                                            </Skeleton>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Skeleton width={60} height={60} animation='wave'>
+
+                                            </Skeleton>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Skeleton animation='wave'>
+
+                                            </Skeleton>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Skeleton animation='wave'>
+
+                                            </Skeleton>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Skeleton animation='wave'>
+
+                                            </Skeleton>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Skeleton animation='wave'>
+
+                                            </Skeleton>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
                             </TableBody>
+                            }
                         </Table>
 
                     </TableContainer>

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { enqueueSnackbar } from "notistack";
 import { useMutation } from "@tanstack/react-query";
 import { createOrder } from "../../ApiHandle/OrderAPi";
-
+import * as yup from 'yup'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -20,6 +20,18 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 export const CreateOrder = () => {
+
+    const schema = yup.object().shape({
+        name: yup.string().required(),
+        description: yup.string().required(),
+        address: yup.string().required(),
+        phone: yup.number().required(),
+        email: yup.string().required(),
+        discount: yup.string().required(),
+        deliveryCharge: yup.string().required(),
+        landmark: yup.string().required(),
+    })
+
     const { selectedProduct, setSelectedProduct, user } = useAuth()
     const [discount, setDiscount] = useState<boolean>(false)
     const { handleSubmit, register, reset, watch } = useForm({
@@ -52,20 +64,9 @@ export const CreateOrder = () => {
     const isSelected = (id: any) => selected?.findIndex((item: any) => item?.id === id) !== -1;
 
 
-    const handleSelectAllClick = (event: { target: { checked: any; }; }) => {
-        setSelected(event.target.checked ? selectedProduct : []);
-    };
 
-    const handleClick = (_event: any, row: any) => {
-        const selectedIndex = selected.findIndex((item: any) => item.id === row.id);
-        let newSelected: any = [];
-        if (selectedIndex === -1) {
-            newSelected = [...selected, row]; // Add the selected item to the array
-        } else {
-            newSelected = [...selected.slice(0, selectedIndex), ...selected.slice(selectedIndex + 1)]; // Remove the selected item from the array
-        }
-        setSelected(newSelected);
-    };
+
+
 
     const handleIncreament = (row: any) => {
         const updatedSelect = selectedProduct.map((item: any) => {
@@ -217,13 +218,6 @@ export const CreateOrder = () => {
                             }}>
                                 <TableRow sx={{ overflow: 'auto' }}>
                                     <StyledTableCell>
-                                        <Checkbox
-                                            onChange={handleSelectAllClick}
-                                            color="primary"
-                                            inputProps={{
-                                                'aria-label': 'select all desserts',
-                                            }}
-                                        />
                                     </StyledTableCell>
                                     <StyledTableCell>Image</StyledTableCell>
                                     <StyledTableCell align="center">Name</StyledTableCell>
@@ -249,11 +243,6 @@ export const CreateOrder = () => {
                                             selected={isItemSelected}
                                         >
                                             <TableCell>
-                                                <Checkbox
-                                                    onChange={(event) => handleClick(event, row)}
-                                                    color="primary"
-                                                    checked={isItemSelected}
-                                                />
                                             </TableCell>
                                             <TableCell align="center">
                                                 <img className="w-28" src={row.image} alt="" />

@@ -7,7 +7,7 @@ import 'chart.js/auto'; // ADD THIS
 import { useRef } from "react";
 
 export const ChartComp = () => {
-    const { data: salesData, isLoading } = useQuery({
+    const { data: salesData } = useQuery({
         queryKey: ['products', 'orders'],
         queryFn: getChartData,
     })

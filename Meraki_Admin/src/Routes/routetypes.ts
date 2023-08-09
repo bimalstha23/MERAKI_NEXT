@@ -11,15 +11,16 @@ export interface PublicRoutes {
 }
 
 export interface IprivateRoutesPath {
-  Home: string;
-  Order: string;
-  Products: string;
-  Shipping: string;
-  Payments: string;
-  Settings: string;
+  Login: string;
+  Regsiter: string;
 }
 
 export interface IpublicRoutesPath {
   Home: string;
-  // register: string;
+  Order: string;
+  Products: string;
+  Category: string;
+  Payments: string;
+  Settings: string;
+  orderDetails: string;
 }

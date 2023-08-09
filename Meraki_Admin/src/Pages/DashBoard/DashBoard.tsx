@@ -3,9 +3,11 @@ import { Outlet } from 'react-router-dom'
 
 export const DashBoard = () => {
     return (
-        <div className='flex flex-row'>
+        <div className='flex flex-row justify-center items-center'>
             <Sidebar />
-            <Outlet />
+            <div className='w-full h-screen overflow-auto'>
+                <Outlet />
+            </div>
         </div>
     )
 }

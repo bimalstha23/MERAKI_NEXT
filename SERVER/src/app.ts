@@ -1,36 +1,40 @@
-import express from "express";
-import { NextFunction, Request, Response, Router } from "express";
-import createError from "http-errors";
+import express, { Application } from "express";
+import { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
-import productRouter from "./routes/ProductRoutes/index.route";
+import startuproutes from "./startup/RoutesStartup";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import bodyParser from "body-parser";
+import { startStorage } from "./startup/storageStartup";
 
 require("dotenv").config();
 
-const app = express();
+const app: Application = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
+app.use(cookieParser());
+app.use(bodyParser.json() );
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "OPTIONS, GET, POST, PUT, PATCH, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
+const whitelist = ["http://localhost:5173" , "*"];
+const corsOptions = {
+  credentials: true, // This is important.
+
+  origin: (origin: any, callback: any) => {
+    if (whitelist.includes(origin)) return callback(null, true);
+
+    callback(new Error("Not allowed by CORS"));
+  },
+};
+
+app.use(cors(corsOptions));
 
 app.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  res.send({ message: "Awesome it works 🐻" });
+  res.send({ message: "You're in right place folk 🐻" });
 });
-
-app.use("/api/products", productRouter);
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-  next(createError.NotFound());
-});
-
+startStorage();
+startuproutes(app);
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(err.status || 500);
   res.send({

@@ -8,11 +8,11 @@ import { useSearchParams } from "react-router-dom";
 
 export const Products = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const [value, setValue] = useState<string>(searchParams.get('tab') || 'drafts');
+    const [value, setValue] = useState<string>(searchParams.get('tab') || 'active');
 
     useEffect(() => {
         if (searchParams.get('tab')) {
-            setValue(searchParams.get('tab') || 'drafts');
+            setValue(searchParams.get('tab') || 'active');
         }
     }, [searchParams, value]);
 
@@ -24,6 +24,10 @@ export const Products = () => {
     };
 
     const TabItems = [
+        {
+            title: "Active",
+            params: "active"
+        },
         {
             title: "Drafts",
             params: "drafts"
@@ -47,7 +51,6 @@ export const Products = () => {
     return (
         <div className="flex flex-col items-center w-full  px-10">
             <h1 className="text-xl font-bold">Product Management</h1>
-
             <TabContext value={value}>
                 <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
                     <Tabs value={value} onChange={handleChange} sx={{
@@ -78,18 +81,25 @@ export const Products = () => {
                         ))}
                     </Tabs>
                 </Box>
-
                 <div className="w-full">
+                    <TabPanel value={'active'} sx={{
+                        padding: "0px"
+                    }}>
+                        <div className="w-full">
+                            <FilterComp />
+                            <ProductsTable Tab="ACTIVE" />
+                        </div>
+                    </TabPanel>
                     <TabPanel value={'drafts'}>
                         <div className="w-full">
                             <FilterComp />
-                            <ProductsTable />
+                            <ProductsTable Tab="DRAFT" />
                         </div>
                     </TabPanel>
                     <TabPanel value={'onstocks'}>
                         <div className="w-full">
                             <FilterComp />
-                            <ProductsTable />
+                            <ProductsTable Tab="onstocks" />
                         </div>
                     </TabPanel>
                     <TabPanel value={'addproduct'}>
@@ -97,11 +107,11 @@ export const Products = () => {
                     </TabPanel>
                     <TabPanel value={'outofstocks'}>
                         <FilterComp />
-                        <ProductsTable />
+                        <ProductsTable Tab="outofstocks" />
                     </TabPanel>
                     <TabPanel value={'archived'}>
                         <FilterComp />
-                        <ProductsTable />
+                        <ProductsTable Tab='ARCHIVED' />
                     </TabPanel>
                 </div>
             </TabContext>

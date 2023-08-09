@@ -7,5 +7,10 @@ import { IpublicRoutesPath } from "../routetypes";
 
 export const publicRoutePath: IpublicRoutesPath = {
   Home: "/",
-  // register: "/register",
+  Products: "/products",
+  Order: "/order",
+  Category: "/category",
+  Payments: "payments",
+  Settings: "settings",
+  orderDetails:"order/:id",
 };

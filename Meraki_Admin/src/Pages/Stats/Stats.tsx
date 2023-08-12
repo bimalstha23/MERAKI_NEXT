@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getStats } from "../../ApiHandle/statsAPi"
+import { getStats } from "../../services/statsAPi"
 import { useState } from "react"
 import Select from 'react-select'
 import { customStyles } from "../../Utils/custom"

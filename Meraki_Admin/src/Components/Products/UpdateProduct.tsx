@@ -7,10 +7,10 @@ import { ICategory, IFormValues } from "./types";
 import { inputSelect } from "../../Utils/custom";
 import { DroppedFiles } from "./DropedFiles";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { fetchCategories } from "../../ApiHandle/categoryApi";
+import { fetchCategories } from "../../services/categoryApi";
 import { enqueueSnackbar } from "notistack";
 import Select from "react-select";
-import { getProductQuery, updateProductMutation } from "../../ApiHandle/productApi";
+import { getProductQuery, updateProductMutation } from "../../services/productApi";
 import queryClient from "../../API/ReactQuery";
 
 

@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query"
-import { getOrders } from "../../ApiHandle/OrderAPi"
+import { getOrders } from "../../services/OrderAPi"
 import { Box, Paper, Table, TableBody, TableCell, TableCellProps, TableContainer, TableHead, TableRow, Typography, styled, tableCellClasses } from "@mui/material"
 import { FC, Fragment, useEffect, useState } from "react";
 import { TableSkeleton } from "../Products/TableSkeleton";

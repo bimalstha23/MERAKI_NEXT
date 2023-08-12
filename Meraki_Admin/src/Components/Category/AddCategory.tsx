@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { addCategory } from "../../ApiHandle/categoryApi";
+import { addCategory } from "../../services/categoryApi";
 import { useEffect, useState } from "react";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'

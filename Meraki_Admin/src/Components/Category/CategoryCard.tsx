@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdModeEditOutline } from "react-icons/md";
-import { updateCategory } from "../../ApiHandle/categoryApi";
+import { updateCategory } from "../../services/categoryApi";
 import queryClient from "../../API/ReactQuery";
 import { enqueueSnackbar } from "notistack";
 
@@ -54,7 +54,6 @@ export const CategoryCard: FC<ICategoryCard> = (props) => {
                 id={id}
                 image={image}
             />
-
         </div>
     )
 }

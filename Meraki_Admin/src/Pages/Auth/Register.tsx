@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
-import { SignupMutation } from '../../ApiHandle/AuthApi'
+import { SignupMutation } from '../../services/AuthApi'
 
 export const Register = () => {
     const { register, handleSubmit } = useForm<{

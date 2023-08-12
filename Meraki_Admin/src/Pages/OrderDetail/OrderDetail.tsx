@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
-import { changeStatus, getOrder } from "../../ApiHandle/OrderAPi"
+import { changeStatus, getOrder } from "../../services/OrderAPi"
 import Select from 'react-select'
 import { HiLocationMarker } from "react-icons/hi"
 import { FaUserCircle } from "react-icons/fa"

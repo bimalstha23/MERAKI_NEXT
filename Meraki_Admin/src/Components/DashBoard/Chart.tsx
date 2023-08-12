@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getChartData } from "../../ApiHandle/statsAPi"
+import { getChartData } from "../../services/statsAPi"
 import { Chart } from 'react-chartjs-2'
 import { Chart as ChartJS, LineController, LineElement, PointElement, LinearScale, Title } from 'chart.js';
 ChartJS.register(LineController, LineElement, PointElement, LinearScale, Title);

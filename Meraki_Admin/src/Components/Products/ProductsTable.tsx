@@ -1,7 +1,7 @@
 import { Backdrop, Checkbox, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography, alpha, styled, tableCellClasses } from '@mui/material'
 import { FC, Fragment, MouseEvent, useEffect, useState } from 'react'
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
-import { changeStatusMutation, getProductsQuery } from '../../ApiHandle/productApi';
+import { changeStatusMutation, getProductsQuery } from '../../services/productApi';
 import { useOnScreen } from '../../Hooks/utilityHooks/useOnScreen';
 import { TableSkeleton } from './TableSkeleton';
 import { useProduct } from '../../Hooks/ProviderHooks/useProduct';

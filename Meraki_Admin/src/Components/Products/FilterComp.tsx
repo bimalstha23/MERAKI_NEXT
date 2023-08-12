@@ -5,7 +5,7 @@ import { useProduct } from '../../Hooks/ProviderHooks/useProduct'
 import { useEffect, useState } from 'react'
 import { useDebounce } from '../../Hooks/utilityHooks/useDebounce'
 import { useQuery } from '@tanstack/react-query'
-import { fetchCategories } from '../../ApiHandle/categoryApi'
+import { fetchCategories } from '../../services/categoryApi'
 import { ICategory } from './types'
 import { enqueueSnackbar } from 'notistack'
 

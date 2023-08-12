@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { fetchCategories } from "../../ApiHandle/categoryApi"
+import { fetchCategories } from "../../services/categoryApi"
 import { CategoryCard } from "./CategoryCard";
 import { Skeleton } from "@mui/material";
 
@@ -8,7 +8,6 @@ export const CategoryLists = () => {
         queryKey: ["categories"],
         queryFn: fetchCategories
     })
-
 
     return (
         <div className="w-full">

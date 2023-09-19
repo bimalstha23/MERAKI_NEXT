@@ -66,17 +66,19 @@ model orderProduct {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @default(now()) @updatedAt
-  name      String?
-  phone     String?
-  profile   String?
-  role      UserRole  @default(USER)
-  orders    Order[]
-  address   address[]
+  id                Int       @id @default(autoincrement())
+  email             String    @unique
+  password          String
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime? @default(now()) @updatedAt
+  name              String?
+  phone             String?
+  profile           String?
+  verified          Boolean   @default(false)
+  verificationToken String?
+  role              UserRole  @default(USER)
+  orders            Order[]
+  address           address[]
 }
 
 model address {

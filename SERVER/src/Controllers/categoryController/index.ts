@@ -31,7 +31,15 @@ export const addCategory = async(req: Request, res: Response) => {
 
 export const getCategories = async (req: Request, res: Response) => {
   try {
-    const categories = await prismaClient.category.findMany();
+    const {limit} = req.query
+    const filter:{
+      take?:number
+    }  = {}
+    if(limit){
+      filter['take'] = Number(limit)
+    }
+
+    const categories = await prismaClient.category.findMany({...filter , orderBy: { createdAt: "desc" }  });
     res.status(200).json({ categories });
   } catch (error: any) {
     res.status(500).json({ error: error.message });

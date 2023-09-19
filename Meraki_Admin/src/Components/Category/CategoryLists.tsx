@@ -25,7 +25,7 @@ export const CategoryLists = () => {
                 }
             </div> :
                 <div className="flex flex-row flex-wrap gap-4 w-full ">
-                    {Array(4).fill(0).map((i: number) => (
+                    {[1, 2, 3, 4].map((i: number) => (
                         <Skeleton key={i} width={350} height={150}>
                         </Skeleton>
                     ))}

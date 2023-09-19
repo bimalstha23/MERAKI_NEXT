@@ -3,7 +3,7 @@ import { Mutex } from "async-mutex";
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 const Axios: AxiosInstance = axios.create({
-  baseURL: process.env.BASEURL as string,
+  baseURL: process.env.BASEURL || 'http://localhost:8000/api/meraki/v1' as string,
   withCredentials: true,
 });
 
@@ -11,7 +11,6 @@ const mutex: Mutex = new Mutex();
 
 export const axiosInstance = async (
   config: AxiosRequestConfig,
-  logout: () => void
 ): Promise<any> => {
   await mutex.waitForUnlock();
   try {
@@ -41,12 +40,10 @@ export const axiosInstance = async (
             return response.data;
           } else {
             // Logout the user
-            logout();
             console.log("refresh token expired");
           }
         } catch {
           // Logout the user
-          logout();
           console.log("refresh token expired");
         } finally {
           release();

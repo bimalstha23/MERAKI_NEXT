@@ -223,6 +223,8 @@ if(from && to){
       };
     } else if (sortBy === 'orderId') {
       sortingOptions.id = 'asc';
+    }else {
+      sortingOptions.createdAt = 'desc';
     }
 
     const totalOrders = await prismaClient.order.count({     where: {
@@ -248,7 +250,7 @@ if(from && to){
           }
         ]
       : undefined,
-        ...filters,
+        ...filters
     }, });
 
     const orders = await prismaClient.order.findMany({

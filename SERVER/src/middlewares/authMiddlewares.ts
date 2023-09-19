@@ -12,7 +12,6 @@ export const isAdmin = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('isAdmin')
   try {
     const userID = res.locals.user.id;
     const user = await prismaClient.user.findUnique({
@@ -20,7 +19,6 @@ export const isAdmin = async (
         id: userID,
       },
     });
-    console.log('user', user)
     if (user?.role !== "ADMIN") {
       return res.status(403).send({
         success: false,
@@ -60,9 +58,6 @@ export const requireAuth = async (
   next: NextFunction
 ) => {
   try {
-    console.log(
-      'require Auth',
-    );
     const user = res.locals.user;
     if (!user) {
      return res.status(403).send({

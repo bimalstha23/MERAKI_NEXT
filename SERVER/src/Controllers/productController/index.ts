@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { Product } from "@prisma/client";
 import multer, { MulterError } from "multer";
 import prismaClient from "../../PrismaClient";
-import { ProductState } from "@prisma/client";
+import { ProductState , Product } from "@prisma/client";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 export const addProduct = async (req: Request, res: Response) => {
@@ -72,6 +71,10 @@ export const getProducts = async (
       onStock,
       outOfStock,
     } = req.query;
+
+    const user = res.locals.user;
+    console.log(user, "userfromgetuser");
+
 
     // Prepare filter options based on query parameters
     const filterOptions: {
@@ -147,9 +150,9 @@ export const getProducts = async (
 
     let productStatus = "ACTIVE";
 
-    if (status === "ARCHIVED" || status === "archived") {
+    if (status === "ARCHIVED" || status === "archived" && user.role === 'ADMIN') {
       productStatus = "ARCHIVED";
-    } else if (status === "DRAFT" || status === "DRAFT") {
+    } else if (status === "DRAFT" || status === "DRAFT" && user.role === 'ADMIN') {
       productStatus = "DRAFT";
     } else {
       productStatus = "ACTIVE";
@@ -162,7 +165,6 @@ export const getProducts = async (
       ? (parseInt(page as string, 10) - 1) * parseInt(pageSize as string, 10)
       : undefined;
     const take = pageSize ? parseInt(pageSize as string, 10) : undefined;
-
     const products = await prismaClient.product.findMany({
       include: {
         category: true,
@@ -195,8 +197,6 @@ export const getProducts = async (
         nextPage = products.length < take ? null : Number(page) + 1;
         hasNextPage = products.length < take ? false : true;
       }
-    
-
     const updatedProducts = products.map((product) => {
       if (product.quantity > 0) {
         return {
@@ -209,14 +209,30 @@ export const getProducts = async (
         instock: false,
       };
     });
-    
-    res.status(200).json({ data:updatedProducts , pagination:{
-      nextPage,
-      has_next_page:hasNextPage,
-      total:updatedProducts.length,
-      currentPage:page ? Number(page) : 1,
-      pageSize:take ? take : 10
-    } });
+
+    if(!user && user.role !== 'ADMIN'){
+      const remmoveCredidentials = updatedProducts.map((product) => {
+       const {cost_price  ,...rest} = product
+        return rest
+      })
+
+      res.status(200).json({ data:remmoveCredidentials , pagination:{
+        nextPage,
+        has_next_page:hasNextPage,
+        total:updatedProducts.length,
+        currentPage:page ? Number(page) : 1,
+        pageSize:take ? take : 10
+      } });
+    }else{
+      res.status(200).json({ data:updatedProducts , pagination:{
+        nextPage,
+        has_next_page:hasNextPage,
+        total:updatedProducts.length,
+        currentPage:page ? Number(page) : 1,
+        pageSize:take ? take : 10
+      } });
+    }
+
   } catch (error: any) {
     console.log(error)
     res.status(500).json({ message: error.message });

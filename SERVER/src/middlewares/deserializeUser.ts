@@ -19,45 +19,33 @@ export const deserializeUser = async (
       access_token = req.cookies.access_token;
     }
 
-    if (!access_token) {
-      return res.status(403).send({
-        success: false,
-        message: "You are not logged in",
+    if (access_token) {
+      // Verify the token
+      const decoded = verify(access_token, process.env.JWT_SECRET!) as JwtPayload;
+      if (!decoded) {
+        return res.status(403).send({
+          success: false,
+          message: "You are not authorized to access this route",
+        });
+      }
+      const user = await prismaClient.user.findUnique({
+        where: {
+          id: Number(decoded?.id as string),
+        },
       });
+      
+      if (!user) {
+        return res.status(403).send({
+          success: false,
+          message: "You are not authorized to access this route",
+        });
+      }
+      
+      // This is really important (Helps us know if the user is logged in from other controllers)
+      // You can do: (req.user or res.locals.user)
+      // res.locals.user = user;
+      res.locals.user = user;
     }
-
-    // Verify the token
-
-    const decoded = verify(access_token, process.env.JWT_SECRET!) as JwtPayload;
-
-    if (!decoded) {
-      return res.status(403).send({
-        success: false,
-        message: "You are not authorized to access this route",
-      });
-    }
-
-    // Check if user still exist
-    // const user = await findUserById(JSON.parse(session).id);
-
-    const user = await prismaClient.user.findUnique({
-      where: {
-        id: Number(decoded?.id as string),
-      },
-    });
-
-    console.log(user, "user");
-    if (!user) {
-      return res.status(403).send({
-        success: false,
-        message: "You are not authorized to access this route",
-      });
-    }
-
-    // This is really important (Helps us know if the user is logged in from other controllers)
-    // You can do: (req.user or res.locals.user)
-    // res.locals.user = user;
-    res.locals.user = user;
     next();
   } catch (err: any) {
     console.log(err);

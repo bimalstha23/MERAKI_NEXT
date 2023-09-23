@@ -5,6 +5,7 @@ import { Roboto } from 'next/font/google'
 import Navbar from '@/components/Navbar'
 import MobNavbar from '@/components/MobileNav'
 import Providers from '@/Providers'
+import Footer from '@/components/Footer'
 
 const inter = Roboto({
   subsets: ['latin'],
@@ -33,6 +34,7 @@ export default function RootLayout({
           <Navbar />
           <MobNavbar />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html >

@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import prismaClient from "../../PrismaClient";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-export const addCategory = async(req: Request, res: Response) => {
+export const addCategory = async (req: Request, res: Response) => {
   try {
     const { name } = req.body;
     let image = "";
-    const storage  = getStorage()
+    const storage = getStorage()
 
     if (req.file) {
       const storageRef = ref(storage, `Category/${req.file.originalname}`);
@@ -14,16 +14,16 @@ export const addCategory = async(req: Request, res: Response) => {
       image = await getDownloadURL(storageRef);
     }
 
-   const category =  prismaClient.category.create({
+    const category = prismaClient.category.create({
       data: {
         name,
         createdAt: new Date(),
         updatedAt: new Date(),
         image,
       },
-    }).then((res)=>console.log('category created ', res));
+    }).then((res) => console.log('category created ', res));
 
-    res.status(201).json({...category ,   message: "Category added successfully" });
+    res.status(201).json({ ...category, message: "Category added successfully" });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -31,17 +31,18 @@ export const addCategory = async(req: Request, res: Response) => {
 
 export const getCategories = async (req: Request, res: Response) => {
   try {
-    const {limit} = req.query
-    const filter:{
-      take?:number
-    }  = {}
-    if(limit){
+    const { limit } = req.query
+    const filter: {
+      take?: number
+    } = {}
+    if (limit) {
       filter['take'] = Number(limit)
     }
 
-    const categories = await prismaClient.category.findMany({...filter , orderBy: { createdAt: "desc" }  });
+    const categories = await prismaClient.category.findMany({ ...filter, orderBy: { createdAt: "desc" } });
     res.status(200).json({ categories });
   } catch (error: any) {
+    console.log(error)
     res.status(500).json({ error: error.message });
   }
 };
@@ -62,7 +63,7 @@ export const getCategory = async (req: Request, res: Response) => {
 
 export const updateCategory = async (req: Request, res: Response) => {
   try {
-    const { name , id } = req.body;
+    const { name, id } = req.body;
     console.log('req.body', req.body)
 
     await prismaClient.category.update({

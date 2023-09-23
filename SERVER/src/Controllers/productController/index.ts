@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import multer, { MulterError } from "multer";
 import prismaClient from "../../PrismaClient";
-import { ProductState , Product } from "@prisma/client";
+import { ProductState, Product, User } from "@prisma/client";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { JwtPayload, verify } from "jsonwebtoken";
 
 export const addProduct = async (req: Request, res: Response) => {
   try {
@@ -16,37 +17,39 @@ export const addProduct = async (req: Request, res: Response) => {
       discount,
       status,
     } = req.body;
-      const storage  = getStorage()
-      const imagesUrls  = [] as any
-      for (const file of req.files as Express.Multer.File[]) {
-        const storageRef = ref(storage, `images/${file.originalname}`);
-        await uploadBytes(storageRef, file.buffer);
-        const url = await getDownloadURL(storageRef);
-        imagesUrls.push({url:url})
-      }
 
 
-      await prismaClient.product.create({
-        data: {
-          name,
-          cost_price:Number(cost_price),
-          selling_price:Number(selling_price),
-          description,
-          quantity : Number(quantity),
-          discount: Number(discount) || 0,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          status: status as ProductState,
-          category: {
-            connect: { id: Number(categoryId) },
-          },
-          images: {
-            create: imagesUrls,
-          },
+    const storage = getStorage()
+    const imagesUrls = [] as any
+    for (const file of req.files as Express.Multer.File[]) {
+      const storageRef = ref(storage, `images/${file.originalname}`);
+      await uploadBytes(storageRef, file.buffer);
+      const url = await getDownloadURL(storageRef);
+      imagesUrls.push({ url: url })
+    }
+
+
+    await prismaClient.product.create({
+      data: {
+        name,
+        cost_price: Number(cost_price),
+        selling_price: Number(selling_price),
+        description,
+        quantity: Number(quantity),
+        discount: Number(discount) || 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        status: status as ProductState,
+        category: {
+          connect: { id: Number(categoryId) },
         },
-      });
+        images: {
+          create: imagesUrls,
+        },
+      },
+    });
 
-      res.status(201).json({ message: "Product created successfully" });
+    res.status(201).json({ message: "Product created successfully" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
     console.log(error.message, "error.message")
@@ -72,9 +75,31 @@ export const getProducts = async (
       outOfStock,
     } = req.query;
 
-    const user = res.locals.user;
-    console.log(user, "userfromgetuser");
+    let access_token;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      access_token = req.headers.authorization.split(" ")[1];
+    } else if (req?.cookies?.access_token) {
+      access_token = req.cookies.access_token;
+    }
 
+    let user: any;
+
+    if (access_token) {
+      const decoded = verify(access_token, process.env.JWT_SECRET!) as JwtPayload;
+      if (decoded) {
+        user = await prismaClient.user.findUnique({
+          where: {
+            id: decoded.id
+          },
+          select: {
+            role: true
+          }
+        })
+      }
+    }
 
     // Prepare filter options based on query parameters
     const filterOptions: {
@@ -91,41 +116,41 @@ export const getProducts = async (
         lte?: number; // Add quantity filter for outOfStock
       };
     } = {};
-    
+
     if (category) {
       filterOptions.category = {
         id: Number(category) as unknown as number,
       };
     }
-    
+
     if (minPrice || maxPrice) {
       filterOptions.price = {};
-    
+
       if (minPrice) {
         filterOptions.price.gte = parseInt(minPrice as string, 10);
       }
-    
+
       if (maxPrice) {
         filterOptions.price.lte = parseInt(maxPrice as string, 10);
       }
     }
-    
+
     if (status) {
       filterOptions.status = status as string;
     }
-    
+
     if (onStock) {
       filterOptions.quantity = {
         gte: 1, // Filter for onStock products (quantity greater than or equal to 1)
       };
     }
-    
+
     if (outOfStock) {
       filterOptions.quantity = {
         lte: 0, // Filter for outOfStock products (quantity less than or equal to 0)
       };
     }
-    
+
     if (category) {
       filterOptions.category = {
         id: Number(category) as unknown as number,
@@ -174,14 +199,14 @@ export const getProducts = async (
         ...filterOptions,
         OR: searchTerm
           ? [
-              { name: { contains: searchTerm as string, mode: "insensitive" } },
-              {
-                description: {
-                  contains: searchTerm as string,
-                  mode: "insensitive",
-                },
+            { name: { contains: searchTerm as string, mode: "insensitive" } },
+            {
+              description: {
+                contains: searchTerm as string,
+                mode: "insensitive",
               },
-            ]
+            },
+          ]
           : undefined,
         status: productStatus ? (productStatus as ProductState) : "ACTIVE",
       },
@@ -193,10 +218,10 @@ export const getProducts = async (
     });
     let nextPage = null
     let hasNextPage = false
-    if(page && take){
-        nextPage = products.length < take ? null : Number(page) + 1;
-        hasNextPage = products.length < take ? false : true;
-      }
+    if (page && take) {
+      nextPage = products.length < take ? null : Number(page) + 1;
+      hasNextPage = products.length < take ? false : true;
+    }
     const updatedProducts = products.map((product) => {
       if (product.quantity > 0) {
         return {
@@ -210,34 +235,38 @@ export const getProducts = async (
       };
     });
 
-    if(!user && user.role !== 'ADMIN'){
+    if (!user && user?.role !== 'ADMIN') {
       const remmoveCredidentials = updatedProducts.map((product) => {
-       const {cost_price  ,...rest} = product
+        const { cost_price, ...rest } = product
         return rest
       })
 
-      res.status(200).json({ data:remmoveCredidentials , pagination:{
-        nextPage,
-        has_next_page:hasNextPage,
-        total:updatedProducts.length,
-        currentPage:page ? Number(page) : 1,
-        pageSize:take ? take : 10
-      } });
-    }else{
-      res.status(200).json({ data:updatedProducts , pagination:{
-        nextPage,
-        has_next_page:hasNextPage,
-        total:updatedProducts.length,
-        currentPage:page ? Number(page) : 1,
-        pageSize:take ? take : 10
-      } });
+      res.status(200).json({
+        data: remmoveCredidentials, pagination: {
+          nextPage,
+          has_next_page: hasNextPage,
+          total: updatedProducts.length,
+          currentPage: page ? Number(page) : 1,
+          pageSize: take ? take : 10
+        }
+      });
+    } else {
+      res.status(200).json({
+        data: updatedProducts, pagination: {
+          nextPage,
+          has_next_page: hasNextPage,
+          total: updatedProducts.length,
+          currentPage: page ? Number(page) : 1,
+          pageSize: take ? take : 10
+        }
+      });
     }
 
   } catch (error: any) {
     console.log(error)
     res.status(500).json({ message: error.message });
   }
-  };
+};
 
 export const getProduct = async (
   req: Request,
@@ -255,7 +284,7 @@ export const getProduct = async (
       },
     });
     res.status(200).json({ product });
-  } catch(error) {
+  } catch (error) {
     console.log(error)
     res.status(500).json({ message: "Something went wrong" });
   }
@@ -284,20 +313,20 @@ export const updateProduct = async (
       },
       data: {
         name,
-        cost_price:Number(cost_price),
+        cost_price: Number(cost_price),
         selling_price: Number(selling_price),
         description,
-       quantity: Number(quantity),
+        quantity: Number(quantity),
         status,
-        discount:Number(discount) || 0,
+        discount: Number(discount) || 0,
         category: {
           connect: { id: Number(categoryId) },
         },
       },
     });
     res.status(200).json({ product });
-  } catch(error) {
-    console.error(error , 'updateProduct Error')
+  } catch (error) {
+    console.error(error, 'updateProduct Error')
     res.status(500).json({ message: "Something went wrong" });
   }
 };

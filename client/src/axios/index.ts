@@ -1,4 +1,5 @@
-import { userRoutesPath } from "@/config";
+
+import { userRoutesPath } from "@/constants/api.routes";
 import { Mutex } from "async-mutex";
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 

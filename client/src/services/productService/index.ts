@@ -1,5 +1,5 @@
 import axiosInstance from "@/axios"
-import { productRoutesPath } from "@/config"
+import { productRoutesPath } from "@/constants/api.routes"
 
 export const getProductsQuery = (params: any) => {
     return axiosInstance({
@@ -8,3 +8,13 @@ export const getProductsQuery = (params: any) => {
         params
     })
 }
+
+export const getProductQuery = (id: number) => {
+    return axiosInstance({
+        method: "get",
+        url: productRoutesPath.getProduct,
+        params: { id }
+    })
+}
+
+

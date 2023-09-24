@@ -4,6 +4,7 @@ import prismaClient from "../../PrismaClient";
 import { ProductState, Product, User } from "@prisma/client";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { JwtPayload, verify } from "jsonwebtoken";
+import { getUser } from "../../helper/authHelper";
 
 export const addProduct = async (req: Request, res: Response) => {
   try {
@@ -75,31 +76,8 @@ export const getProducts = async (
       outOfStock,
     } = req.query;
 
-    let access_token;
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
-    ) {
-      access_token = req.headers.authorization.split(" ")[1];
-    } else if (req?.cookies?.access_token) {
-      access_token = req.cookies.access_token;
-    }
 
-    let user: any;
-
-    if (access_token) {
-      const decoded = verify(access_token, process.env.JWT_SECRET!) as JwtPayload;
-      if (decoded) {
-        user = await prismaClient.user.findUnique({
-          where: {
-            id: decoded.id
-          },
-          select: {
-            role: true
-          }
-        })
-      }
-    }
+    const user = await getUser(req) as User | any
 
     // Prepare filter options based on query parameters
     const filterOptions: {
@@ -222,6 +200,7 @@ export const getProducts = async (
       nextPage = products.length < take ? null : Number(page) + 1;
       hasNextPage = products.length < take ? false : true;
     }
+
     const updatedProducts = products.map((product) => {
       if (product.quantity > 0) {
         return {
@@ -274,6 +253,8 @@ export const getProduct = async (
 ): Promise<void> => {
   try {
     const { id } = req.query;
+    const user = await getUser(req) as User | any;
+
     const product = await prismaClient.product.findUnique({
       where: {
         id: Number(id),
@@ -283,12 +264,32 @@ export const getProduct = async (
         images: true,
       },
     });
-    res.status(200).json({ product });
+
+    // Check if the product exists
+    if (!product) {
+      res.status(404).json({ message: "Product not found" });
+      return;
+    }
+
+    // Calculate the 'instock' property based on some criteria
+    const instock = calculateInStock(product);
+
+    if (user && user.role !== 'ADMIN') {
+      // Create a new object without the 'cost_price' property
+      const { cost_price, ...productWithoutCostPrice } = product;
+
+      // Include 'instock' in the response
+      res.status(200).json({ product: { ...productWithoutCostPrice, instock: instock } });
+    } else {
+      res.status(200).json({ product: { ...product, instock } });
+    }
   } catch (error) {
-    console.log(error)
+    console.error(error);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+
 
 export const updateProduct = async (
   req: Request,
@@ -386,3 +387,12 @@ export const changeStatusofProduct = async (
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+
+// Function to calculate the 'instock' property
+function calculateInStock(product: Product) {
+  // Implement your logic here to calculate 'instock' based on the product details
+  // For example, you can check the quantity available or any other criteria
+  // Return a boolean value indicating whether the product is in stock or not
+  return product.quantity > 0; // Example: Assuming 'quantity' is a property in the product object
+}

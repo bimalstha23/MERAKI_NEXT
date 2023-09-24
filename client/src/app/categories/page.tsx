@@ -2,12 +2,10 @@ import { fetchCategories } from '@/services/categoriesService'
 import { queryClient } from '@/services/queryClient'
 import React from 'react'
 import Categories from './components/Categories'
+import { prefetchCategories } from '@/services/prefetch'
 
 const page = async () => {
-    await queryClient.prefetchQuery({
-        queryKey: ['categories'],
-        queryFn: () => fetchCategories(undefined)
-    })
+    await prefetchCategories()
     return (
         <main>
             <title>

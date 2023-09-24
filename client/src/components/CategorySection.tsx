@@ -23,6 +23,7 @@ const CategorySection = () => {
                         image={item?.image}
                         title={item?.name}
                         key={index}
+                        id={item?.id}
                     />
                 )) :
                     loadingSkeletons(4)}

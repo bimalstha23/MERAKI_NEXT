@@ -17,7 +17,7 @@ lerna-debug.log*
 dist
 dist-ssr
 *.local
-
+node_modules
 node_modules/
 .next/
 .swc/

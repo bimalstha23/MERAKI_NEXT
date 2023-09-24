@@ -24,7 +24,7 @@ productRouter.post(
 );
 
 productRouter.get(productRoutesPath.getProducts, getProducts);
-productRouter.get(productRoutesPath.getProduct, deserializeUser, requireAuth, isAdmin, getProduct)
+productRouter.get(productRoutesPath.getProduct, getProduct)
 productRouter.put(productRoutesPath.updateProduct, deserializeUser, requireAuth, isAdmin, updateProduct)
 productRouter.patch(productRoutesPath.changeStatus, deserializeUser, requireAuth, isAdmin, changeStatusofProduct)
 

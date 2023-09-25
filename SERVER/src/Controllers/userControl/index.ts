@@ -1,4 +1,4 @@
-import { CookieOptions, NextFunction, Request, Response } from "express";
+import e, { CookieOptions, NextFunction, Request, Response } from "express";
 import prismaClient from "../../PrismaClient";
 import {
   comparePassword,
@@ -72,6 +72,7 @@ export const createUser = async (req: Request, res: Response) => {
       res.status(201).json({ user });
     }
   } catch (error: any) {
+    console.log(error)
     res.status(500).json({ error: error.message });
   }
 };

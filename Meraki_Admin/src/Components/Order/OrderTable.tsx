@@ -42,9 +42,6 @@ const StatusCell = styled(Box)<StatusCellProps>(({ theme, status }) => ({
 }));
 
 
-
-
-
 export const OrderTable: FC<OrderTableProps> = ({ status, orderFilters }) => {
 
     const [filterstatus, setfilterstatus] = useState<string>(status === 'DELIVERED' || 'CANCELLED' ? status : "all")
@@ -57,8 +54,6 @@ export const OrderTable: FC<OrderTableProps> = ({ status, orderFilters }) => {
         }
     }, [status])
 
-
-
     const { data: orderData, isLoading, isFetching, hasNextPage, fetchNextPage, } = useInfiniteQuery({
         queryKey: ['orders', status, orderFilters],
         queryFn: ({ pageParam = 1 }) => getOrders({ page: pageParam, customerName: orderFilters?.searchTerm, sortOrder: orderFilters.sortOrder, filter: orderFilters.filter, pageSize: 14, status: filterstatus }),
@@ -67,11 +62,6 @@ export const OrderTable: FC<OrderTableProps> = ({ status, orderFilters }) => {
 
     const [maxHeight, setMaxHeight] = useState<number>(0);
     const { measureRef, isIntersecting, observer } = useOnScreen();
-
-
-
-
-
 
     useEffect(() => {
         const updateMaxHeight = () => {

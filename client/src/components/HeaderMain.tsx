@@ -25,9 +25,9 @@ const HeaderMain = () => {
                 <form
                     onSubmit={(e) => {
                         e.preventDefault()
-                        if (pathname === '/products') setQueryParams({ search })
-                        else
-                            location.href = `/products?${createQueryString('search', search)}`
+                        // if (pathname === '/products') setQueryParams({ search })
+                        // else
+                        location.href = `/products?search=${search}`
                     }}
                     className="w-full sm:w-[300px] md:w-[70%] rounded-full relative bg-merakigray">
                     <input

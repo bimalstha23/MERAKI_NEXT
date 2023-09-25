@@ -23,6 +23,7 @@ model Product {
   category      Category       @relation(fields: [categoryId], references: [id])
   orderProducts orderProduct[]
   soldCount     Int            @default(0)
+  cartItems     CartItem[]
 }
 
 model Image {
@@ -78,10 +79,11 @@ model User {
   verificationToken String?
   role              UserRole  @default(USER)
   orders            Order[]
-  address           address[]
+  address           Address[]
+  carts             Cart[]
 }
 
-model address {
+model Address {
   id        Int      @id @default(autoincrement())
   address   String
   createdAt DateTime @default(now())
@@ -97,6 +99,26 @@ model Category {
   updatedAt DateTime  @default(now()) @updatedAt
   image     String?
   products  Product[]
+}
+
+model Cart {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  cartItems CartItem[]
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cartId    Int
+  productId Int
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 }
 
 enum UserRole {

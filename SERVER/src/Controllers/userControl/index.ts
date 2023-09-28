@@ -8,6 +8,8 @@ import {
 } from "../../helper/authHelper";
 import { JwtPayload, Secret, SignOptions, sign, verify } from "jsonwebtoken";
 import config from "config";
+import { getGoogleOauthToken, getGoogleUser } from "../../helper/GoogleAuthHelper";
+import { User } from "@prisma/client";
 
 const accessTokenCookieOptions: CookieOptions = {
   expires: new Date(
@@ -86,6 +88,7 @@ export const loginUser = async (req: Request, res: Response) => {
         message: "Invalid email or password",
       });
     }
+
     const user = await prismaClient.user.findUnique({
       where: {
         email,
@@ -189,6 +192,71 @@ export const logout = async (req: Request, res: Response) => {
     res.clearCookie("refresh_token");
     res.status(200).send("Logged out successfully");
   } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export const googleAuthHandler = async (req: Request, res: Response) => {
+  try {
+    const code = req.query.code as string;
+    const redirectUrl = req.query.state as string;
+    console.log(redirectUrl, 'redirectUrl')
+    if (!code) {
+      return res.status(400).send({
+        success: false,
+        message: "code is required",
+      });
+    }
+
+    const googleOauthToken = await getGoogleOauthToken({ code });
+
+    const googleUser = await getGoogleUser(googleOauthToken);
+    let user: User | null = null;
+
+    user = await prismaClient.user.findUnique({
+      where: {
+        email: googleUser.email,
+      },
+    });
+
+    if (user) {
+      user = await prismaClient.user.update({
+        where: {
+          email: googleUser.email,
+        },
+        data: {
+          profile: googleUser.picture,
+          verified: googleUser.verified_email,
+          name: googleUser.name,
+        },
+      });
+    }
+
+
+    if (!user) {
+      user = await prismaClient.user.create({
+        data: {
+          email: googleUser.email,
+          name: googleUser.name,
+          password: "google",
+          profile: googleUser.picture,
+          verified: googleUser.verified_email
+        },
+      });
+    }
+
+    if (!user) {
+      return res.status(500).json({ error: 'something went wrong' });
+    }
+
+    const newRefreshToken = generateRefreshToken(user);
+    const newAccessToken = generateAccessToken(user);
+    res.cookie("access_token", newAccessToken, accessTokenCookieOptions);
+    res.cookie("refresh_token", newRefreshToken, refreshTokenCookieOptions);
+    res.redirect(redirectUrl);
+  } catch (error: any) {
+    // handle errors
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 }

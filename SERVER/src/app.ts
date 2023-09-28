@@ -18,15 +18,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const whitelist = ["http://localhost:5173", "http://localhost:3000", "*"];
-// const corsOptions = {
-//   credentials: true, // This is important.
-
-//   origin: (origin: any, callback: any) => {
-//     if (whitelist.includes(origin)) return callback(null, true);
-
-//     callback(new Error("Not allowed by CORS"));
-//   },
-// };
 
 const corsOptions = {
   origin: whitelist,
@@ -51,3 +42,14 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`🚀 @ http://localhost:${PORT}`));
+
+
+// const corsOptions = {
+//   credentials: true, // This is important.
+
+//   origin: (origin: any, callback: any) => {
+//     if (whitelist.includes(origin)) return callback(null, true);
+
+//     callback(new Error("Not allowed by CORS"));
+//   },
+// };

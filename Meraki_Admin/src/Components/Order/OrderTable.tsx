@@ -27,7 +27,6 @@ interface OrderTableProps {
 
 }
 
-
 const StatusCell = styled(Box)<StatusCellProps>(({ theme, status }) => ({
     fontWeight: '500',
     fontSize: '18px',

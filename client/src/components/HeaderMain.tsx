@@ -1,21 +1,25 @@
 'use client';
-import React from "react";
+import React, { useEffect } from "react";
 import { BsSearch } from "react-icons/bs";
 import { BiUser } from "react-icons/bi";
-import { FiHeart } from "react-icons/fi";
 import { HiOutlineShoppingBag } from "react-icons/hi";
-import merakilogo from "../../public/merakilogo.svg"
 import Image from "next/image";
-import useSetSearchParams from "@/hooks/useSetSearchParams";
+import merakilogo from "../../public/merakilogo.svg"
 import useQueryParams from "@/hooks/useQueryParams";
-import { usePathname } from "next/navigation";
+import LoginModal from "./modals/LoginModal";
 
 const HeaderMain = () => {
     const { queryParams, setQueryParams } = useQueryParams()
     const searchquery = queryParams?.get('search') || ''
     const [search, setSearch] = React.useState(searchquery)
-    const createQueryString = useSetSearchParams()
-    const pathname = usePathname()
+
+    const [isLoginModalOpen, setisLoginModalOpen] = React.useState(false)
+
+    useEffect(() => {
+        if (searchquery !== search && search !== '')
+            setSearch(searchquery)
+    }, [])
+
     return (
         <div className="border-b border-gray-200 py-6 bg-merakiblack">
             <div className="container sm:flex justify-between items-center mx-auto">
@@ -47,14 +51,9 @@ const HeaderMain = () => {
                 </form>
 
                 <div className="hidden lg:flex gap-4 text-gray-500 text-[30px]">
-                    <BiUser />
-                    <div className="relative">
-                        <FiHeart />
-                        <div className="bg-red-600 rounded-full absolute top-0 right-0 w-[18px] h-[18px] text-[12px] text-white grid place-items-center translate-x-1 -translate-y-1">
-                            0
-                        </div>
-                    </div>
-
+                    <button onClick={() => setisLoginModalOpen(true)}>
+                        <BiUser />
+                    </button>
                     <div className="relative">
                         <HiOutlineShoppingBag />
                         <div className="bg-red-600 rounded-full absolute top-0 right-0 w-[18px] h-[18px] text-[12px] text-white grid place-items-center translate-x-1 -translate-y-1">
@@ -63,7 +62,12 @@ const HeaderMain = () => {
                     </div>
                 </div>
             </div>
-        </div >
+            {
+                isLoginModalOpen && (
+                    <LoginModal handleClose={() => setisLoginModalOpen(false)} open={isLoginModalOpen} key={1234145} />
+                )
+            }
+        </div>
     );
 };
 

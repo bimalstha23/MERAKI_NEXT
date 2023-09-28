@@ -4,7 +4,7 @@ import { Mutex } from "async-mutex";
 import axios, { AxiosRequestConfig, AxiosInstance, AxiosResponse } from "axios";
 
 const Axios: AxiosInstance = axios.create({
-  baseURL: process.env.BASEURL || 'http://localhost:8000/api/meraki/v1' as string,
+  baseURL: process.env.NEXT_PUBLIC_BASEURL as string,
   withCredentials: true,
 });
 

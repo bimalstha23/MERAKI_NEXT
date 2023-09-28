@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
 import AppRouter from "../../utils/AppRouter";
+
 import {
   createUser,
   getMe,
+  googleAuthHandler,
   loginUser,
   refreshWebToken,
 } from "../../Controllers/userControl";
@@ -16,4 +17,5 @@ userRoutes.post(userRoutesPath.createUser, createUser);
 userRoutes.post(userRoutesPath.loginUser, loginUser);
 userRoutes.get(userRoutesPath.refresh, refreshWebToken);
 userRoutes.get(userRoutesPath.getme, deserializeUser, requireAuth, getMe);
+userRoutes.get(userRoutesPath.googleAuth, googleAuthHandler);
 export default userRoutes;

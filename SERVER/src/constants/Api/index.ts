@@ -3,6 +3,7 @@ export const userRoutesPath = {
   loginUser: "/auth/login",
   refresh: "/auth/refreshToken",
   getme: "/auth/getme",
+  googleAuth: "/auth/google",
 };
 
 export const productRoutesPath = {
@@ -42,7 +43,7 @@ export const statsRoutesPath = {
   getStats: "/stats/getstats",
   getChartData: "/stats/getchartdata",
   getTopProducts: "/stats/gettopproducts",
-  
+
 };
 
 

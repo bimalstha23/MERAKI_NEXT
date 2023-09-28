@@ -7,6 +7,7 @@ import Image from "next/image";
 import merakilogo from "../../public/merakilogo.svg"
 import useQueryParams from "@/hooks/useQueryParams";
 import LoginModal from "./modals/LoginModal";
+import { useAuth } from "../Providers/AuthProvider";
 
 const HeaderMain = () => {
     const { queryParams, setQueryParams } = useQueryParams()
@@ -19,6 +20,8 @@ const HeaderMain = () => {
         if (searchquery !== search && search !== '')
             setSearch(searchquery)
     }, [])
+
+    const { currentUser, isLoading } = useAuth()
 
     return (
         <div className="border-b border-gray-200 py-6 bg-merakiblack">
@@ -51,9 +54,14 @@ const HeaderMain = () => {
                 </form>
 
                 <div className="hidden lg:flex gap-4 text-gray-500 text-[30px]">
-                    <button onClick={() => setisLoginModalOpen(true)}>
-                        <BiUser />
-                    </button>
+                    {!isLoading &&
+                        currentUser && currentUser?.profile ? (
+                        <img src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px]" />
+                    ) : (
+                        <button onClick={() => setisLoginModalOpen(true)}>
+                            <BiUser />
+                        </button>
+                    )}
                     <div className="relative">
                         <HiOutlineShoppingBag />
                         <div className="bg-red-600 rounded-full absolute top-0 right-0 w-[18px] h-[18px] text-[12px] text-white grid place-items-center translate-x-1 -translate-y-1">
@@ -67,7 +75,7 @@ const HeaderMain = () => {
                     <LoginModal handleClose={() => setisLoginModalOpen(false)} open={isLoginModalOpen} key={1234145} />
                 )
             }
-        </div>
+        </div >
     );
 };
 

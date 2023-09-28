@@ -10,10 +10,11 @@ import { Skeleton } from '@mui/material'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { AiFillThunderbolt } from 'react-icons/ai'
+import cross from '../../../../../public/cross.svg'
+import { IProduct } from '@/types'
 
 const SingleProduct = ({ id }: { id: number }) => {
-
-    const { data, isLoading } = useQuery({
+    const { data, isLoading } = useQuery<IProduct | undefined>({
         queryKey: ['product', id],
         queryFn: () => getProductQuery(id)
     })
@@ -23,16 +24,30 @@ const SingleProduct = ({ id }: { id: number }) => {
         <>
             <ProductSeo product={data?.product} />
             <main className='container mx-auto  mt-10'>
-                <section className=' flex flex-row justify-start items-start gap-20'>
-                    <div className='w-full'>
-                        <ImageSwiper Image={data?.product?.images} />
-                    </div>
+                <section className='grid lg:grid-cols-2 grid-cols-1 justify-start items-start gap-20'>
+
+                    {!isLoading ? (
+                        <div className='w-full'>
+                            <ImageSwiper Image={data?.product?.images} />
+                        </div>
+                    ) : (
+                        <div className='w-full'>
+                            <Skeleton variant='rectangular' height={500} className='w-full' />
+                        </div>
+                    )}
 
                     <div className='w-full flex flex-col justify-start items-start gap-9'>
-                        <h1 className='text-merakigreen gap-2 w-full font-bold lg:text-lg text-sm flex flex-row justify-start items-start'>
-                            <Image src={done} alt="" />
-                            On Stock
-                        </h1>
+                        {data?.product.instock ? (
+                            <h1 className='text-merakigreen gap-2 w-full font-bold lg:text-lg text-sm flex flex-row justify-start items-start'>
+                                <Image src={done} alt="" />
+                                On Stock
+                            </h1>
+                        ) : (
+                            <h1 className='text-merakired gap-2 w-full font-bold lg:text-lg text-sm flex flex-row justify-start items-start'>
+                                <Image src={cross} alt="" />
+                                On Stock
+                            </h1>
+                        )}
 
                         <h1 className='font-bold text-3xl text-black w-full'>
                             {!isLoading ? data?.product?.name : <Skeleton variant='text' className='w-full' />}
@@ -43,7 +58,6 @@ const SingleProduct = ({ id }: { id: number }) => {
                                 <Skeleton variant='text' className='w-full' />
                                 <Skeleton variant='text' className='w-full' />
                                 <Skeleton variant='text' className='w-full' />
-
                             </div>
                             }
                         </h1>
@@ -58,7 +72,7 @@ const SingleProduct = ({ id }: { id: number }) => {
                                 </h1>
                             </div>
 
-                            {data?.product?.discount &&
+                            {data?.product?.discount ?
                                 <Fragment>
                                     <div className='flex flex-col items-start justify-end w-fit'>
                                         <h1 className='text-black text-3xl font-bold'>
@@ -76,7 +90,7 @@ const SingleProduct = ({ id }: { id: number }) => {
                                             Original  Price
                                         </h1>
                                     </div>
-                                </Fragment>
+                                </Fragment> : null
                             }
                         </div>
 
@@ -103,8 +117,9 @@ const SingleProduct = ({ id }: { id: number }) => {
                         </div>
 
                     </div>
+
                 </section>
-            </main>
+            </main >
         </>
     )
 }

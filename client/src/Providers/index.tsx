@@ -3,14 +3,16 @@
 import React, { FC, PropsWithChildren } from 'react'
 import QueryProvider from './QueryProvider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import AuthProvider from './AuthProvider';
 
 const Providers: FC<PropsWithChildren> = ({ children }) => {
     return (
         <QueryProvider>
-            {children}
+            <AuthProvider>
+                {children}
+            </AuthProvider >
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryProvider>
-
     )
 }
 

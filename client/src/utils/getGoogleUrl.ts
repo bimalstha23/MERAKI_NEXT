@@ -22,3 +22,11 @@ export const getGoogleUrl = (from: string) => {
 
     return `${rootUrl}?${qs.toString()}`;
 };
+
+
+export const truncateText = (text: string, maxCharacters: number) => {
+    if (text.length > maxCharacters) {
+        return text.substring(0, maxCharacters) + '...';
+    }
+    return text;
+}

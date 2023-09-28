@@ -61,6 +61,7 @@ export const createUser = async (req: Request, res: Response) => {
         message: "user already exists",
       });
     }
+
     const hashedPassword = await hashPassword(password);
     // create a user
     if (hashedPassword) {
@@ -82,6 +83,11 @@ export const createUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+    const requestorigin = req.headers.origin;
+
+    const AdminAppOrigin = process.env.ADMIN_APP_ORIGIN;
+    const ClientAppOrigin = process.env.CLIENT_APP_ORIGIN;
+
     if (!email || !password) {
       return res.status(404).send({
         success: false,
@@ -95,7 +101,7 @@ export const loginUser = async (req: Request, res: Response) => {
       },
     });
 
-    if (!user || user.role === "USER") {
+    if (!user || user.role === "USER" && requestorigin !== ClientAppOrigin) {
       return res.status(404).send({
         success: false,
         message: "Who are you ? the sysem does not know you",

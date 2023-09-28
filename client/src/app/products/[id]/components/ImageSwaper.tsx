@@ -8,18 +8,17 @@ import 'swiper/css/thumbs';
 
 import { FreeMode, Navigation, Thumbs, Mousewheel } from 'swiper/modules';
 export const ImageSwiper = ({ Image }: { Image: any }) => {
-    console.log(Image)
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     return (
         <>
             <Swiper
                 thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
                 modules={[FreeMode, Thumbs]}
-                className="mySwiper2 rounded-lg h-[600px]"
+                className="mySwiper2 rounded-lg h-[600px] !w-full"
             >
                 {Image?.map((image: any) => (
                     <SwiperSlide key={image.id}>
-                        <img className=' w-full  object-cover' src={image.url} alt="meraki" />
+                        <img className='w-full   object-cover' src={image.url} alt="meraki" />
                     </SwiperSlide>
                 ))}
             </Swiper>

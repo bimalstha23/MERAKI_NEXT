@@ -39,6 +39,15 @@ export const paymentRoutesPath = {
   deletePayment: "/payment/deletepayment",
 };
 
+
+export const cartRoutesPath = {
+  createCart: "/cart/createcart",
+  getCart: "/cart/getcart",
+  deleteCartItem: "/cart/deletecartitem",
+  updateCartItem: "/cart/updatecartitem",
+  deleteCart: "/cart/deletecart",
+};
+
 export const statsRoutesPath = {
   getStats: "/stats/getstats",
   getChartData: "/stats/getchartdata",

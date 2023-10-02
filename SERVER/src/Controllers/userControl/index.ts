@@ -10,6 +10,8 @@ import { JwtPayload, Secret, SignOptions, sign, verify } from "jsonwebtoken";
 import config from "config";
 import { getGoogleOauthToken, getGoogleUser } from "../../helper/GoogleAuthHelper";
 import { User } from "@prisma/client";
+import GenerateAvatar from "../../helper/generateAvatar";
+
 
 const accessTokenCookieOptions: CookieOptions = {
   expires: new Date(
@@ -62,6 +64,9 @@ export const createUser = async (req: Request, res: Response) => {
       });
     }
 
+    const avatar = GenerateAvatar();
+
+
     const hashedPassword = await hashPassword(password);
     // create a user
     if (hashedPassword) {
@@ -70,6 +75,7 @@ export const createUser = async (req: Request, res: Response) => {
           name,
           email,
           password: hashedPassword,
+          profile: avatar,
         },
       });
       res.status(201).json({ user });
@@ -86,7 +92,7 @@ export const loginUser = async (req: Request, res: Response) => {
     const requestorigin = req.headers.origin;
 
     const AdminAppOrigin = process.env.ADMIN_APP_ORIGIN;
-    const ClientAppOrigin = process.env.CLIENT_APP_ORIGIN;
+    const ClientAppOrigin = process.env.USER_APP_ORIGIN;
 
     if (!email || !password) {
       return res.status(404).send({
@@ -98,13 +104,17 @@ export const loginUser = async (req: Request, res: Response) => {
     const user = await prismaClient.user.findUnique({
       where: {
         email,
+
       },
     });
+
+
+    console.log(requestorigin, 'requestorigin', ClientAppOrigin, 'ClientAppOrigin')
 
     if (!user || user.role === "USER" && requestorigin !== ClientAppOrigin) {
       return res.status(404).send({
         success: false,
-        message: "Who are you ? the sysem does not know you",
+        message: "Invalid email or password",
       });
     }
 

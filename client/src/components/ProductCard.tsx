@@ -3,13 +3,41 @@ import done from '../../public/done.svg'
 import Image from 'next/image'
 import { truncateText } from '@/utils/getGoogleUrl'
 import cross from '../../public/cross.svg'
+import { useMutation } from '@tanstack/react-query'
+import { addtoCart } from '@/services/cartService'
+import { enqueueSnackbar } from 'notistack'
+import { AxiosError } from 'axios'
+import { IErrorMessage } from '@/types'
+import { useAuth } from '@/Providers/AuthProvider'
 
 const ProductCard = ({ product }: { product: any }) => {
-
+    const { currentUser, setisLoginModalOpen } = useAuth()
+    const { mutate } = useMutation({
+        mutationKey: ['addtocart', 'cart'],
+        mutationFn: (data) => addtoCart(data as unknown as number),
+        onSuccess: (data) => {
+            enqueueSnackbar('Added to cart', {
+                variant: 'success'
+            })
+        },
+        onError: (error: AxiosError<IErrorMessage>) => {
+            enqueueSnackbar(error.response?.data.message || 'Something Went Wrong', {
+                variant: 'error'
+            })
+        }
+    })
 
     const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation(); // Stop the click event from propagating to the parent div
         // Handle your button click logic here
+        if (currentUser) {
+            mutate(product.id)
+        } else {
+            enqueueSnackbar('Please Login First', {
+                variant: 'error'
+            })
+            setisLoginModalOpen(true)
+        }
     };
 
 
@@ -37,7 +65,7 @@ const ProductCard = ({ product }: { product: any }) => {
                 ) : (
                     <h1 className='text-merakired gap-2 w-full font-bold lg:text-lg text-sm flex flex-row justify-start items-start'>
                         <Image src={cross} alt="" />
-                        On Stock
+                        Out of Stock
                     </h1>
                 )}
 
@@ -53,7 +81,7 @@ const ProductCard = ({ product }: { product: any }) => {
                     <h1 className='text-black lg:text-2xl text-lg font-semibold'>
                         Rs.{product.selling_price}
                     </h1>
-                    <button onClick={handleButtonClick} className='w-full z-50 rounded-xl text-center bg-black text-white lg:py-3 py-1 hover:bg-merakimain hover:text-black transition-all duration-400' >
+                    <button onClick={handleButtonClick} className='w-full  rounded-xl text-center bg-black text-white lg:py-3 py-1 hover:bg-merakimain hover:text-black transition-all duration-400' >
                         Add to Cart
                     </button>
                 </div>

@@ -17,18 +17,31 @@ interface Iuser {
 
 interface IAuthContext {
     currentUser: Iuser | null
-    isLoading: boolean
+    isLoading: boolean,
+    isLoginModalOpen: boolean,
+    isRegisterModalOpen: boolean
+    setisLoginModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+    setisRegisterModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+
 }
 
 const AuthContext = createContext<IAuthContext>({
     currentUser: null,
-    isLoading: false
-
+    isLoading: false,
+    isLoginModalOpen: false,
+    isRegisterModalOpen: false,
+    setisLoginModalOpen: () => { },
+    setisRegisterModalOpen: () => { }
 })
 
 export const useAuth = () => React.useContext(AuthContext)
 
 const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
+
+
+    const [isLoginModalOpen, setisLoginModalOpen] = React.useState(false)
+    const [isRegisterModalOpen, setisRegisterModalOpen] = React.useState(false)
+
     const { data: user, isLoading } = useQuery({
         queryKey: ['user', 'me'],
         queryFn: () => getMeQuery()
@@ -36,7 +49,11 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const AuthValues: IAuthContext = {
         currentUser: user?.user || null,
-        isLoading
+        isLoading,
+        isLoginModalOpen,
+        isRegisterModalOpen,
+        setisLoginModalOpen,
+        setisRegisterModalOpen
     }
 
     return (

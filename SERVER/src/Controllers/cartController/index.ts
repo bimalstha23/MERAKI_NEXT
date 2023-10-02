@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import prismaClient from "../../PrismaClient"
+import { Cart } from "@prisma/client";
 
-export const addtoCard = async (req: Request, res: Response) => {
+export const addtoCart = async (req: Request, res: Response) => {
     try {
         const user = res.locals.user;
         const { productId } = req.body;
@@ -33,7 +34,7 @@ export const addtoCard = async (req: Request, res: Response) => {
             });
         }
 
-        const existingCart = await prismaClient.cart.findFirst({
+        const existingCart = await prismaClient.cart.findMany({
             where: {
                 userId: user.id
             },
@@ -42,8 +43,10 @@ export const addtoCard = async (req: Request, res: Response) => {
             }
         })
 
+
         if (existingCart) {
-            const existingCartItem = existingCart.cartItems.find(cartItem => cartItem.productId === productId)
+            // const existingCartItem = existingCart?.[0]?.cartItems?.find((cartItem: any) => cartItem.productId === productId);
+            const existingCartItem = existingCart.map((cart) => cart.cartItems.find(cartItem => cartItem.productId === productId)).find(cartItem => cartItem !== undefined)
             if (existingCartItem) {
                 await prismaClient.cartItem.update({
                     where: {
@@ -69,7 +72,6 @@ export const addtoCard = async (req: Request, res: Response) => {
                 }
             }
         })
-
         res.status(201).json({ cart });
     } catch (error) {
         console.log(error)
@@ -83,7 +85,7 @@ export const getCart = async (req: Request, res: Response) => {
     try {
         const user = res.locals.user;
 
-        const cart = await prismaClient.cart.findFirst({
+        const cart = await prismaClient.cart.findMany({
             where: {
                 userId: user.id
             },
@@ -108,7 +110,7 @@ export const deleteCartItem = async (req: Request, res: Response) => {
     try {
         const user = res.locals.user;
         const { cartItemId } = req.body;
-        
+
         if (!cartItemId) {
             return res.status(400).send({
                 success: false,
@@ -157,6 +159,80 @@ export const deleteCartItem = async (req: Request, res: Response) => {
         await prismaClient.cartItem.delete({
             where: {
                 id: cartItemId
+            }
+        })
+
+        res.status(200).json({ cart });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: error });
+    }
+}
+
+
+export const updateCartItem = async (req: Request, res: Response) => {
+    try {
+        const user = res.locals.user;
+        const { cartItemId, quantity } = req.body;
+
+        if (!cartItemId) {
+            return res.status(400).send({
+                success: false,
+                message: "cartItemId is required",
+            });
+        }
+
+        if (!quantity) {
+            return res.status(400).send({
+                success: false,
+                message: "quantity is required",
+            });
+        }
+
+        const cartItem = await prismaClient.cartItem.findUnique({
+            where: {
+                id: cartItemId
+            }
+        })
+
+        if (!cartItem) {
+            return res.status(400).send({
+                success: false,
+                message: "cartItem not found",
+            });
+        }
+
+        const cart = await prismaClient.cart.findFirst({
+            where: {
+                userId: user.id
+            },
+            include: {
+                cartItems: true
+            }
+        })
+
+        if (!cart) {
+            return res.status(400).send({
+                success: false,
+                message: "cart not found",
+            });
+        }
+
+        const existingCartItem = cart.cartItems.find(cartItem => cartItem.id === cartItemId)
+
+        if (!existingCartItem) {
+            return res.status(400).send({
+                success: false,
+                message: "cartItem not found in cart",
+            });
+        }
+
+        await prismaClient.cartItem.update({
+            where: {
+                id: cartItemId
+            },
+            data: {
+                quantity: quantity
             }
         })
 

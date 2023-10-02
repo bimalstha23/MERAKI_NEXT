@@ -38,3 +38,9 @@ export interface Image {
     updatedAt: string
     productId: number
 }
+
+
+export interface IErrorMessage {
+    message: string
+    success: boolean
+}

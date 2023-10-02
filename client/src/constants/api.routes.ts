@@ -42,7 +42,16 @@ export const statsRoutesPath = {
 
 };
 
+export const cartRoutesPath = {
+  createCart: "/cart/createcart",
+  getCart: "/cart/getcart",
+  deleteCartItem: "/cart/deletecartitem",
+  updateCartItem: "/cart/updatecartitem",
+  deleteCart: "/cart/deletecart",
+};
+
 export const basePath = {
   version: "/v1",
   baseuri: "/api/meraki",
 };
+

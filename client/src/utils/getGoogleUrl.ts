@@ -1,7 +1,7 @@
 export const getGoogleUrl = (from: string) => {
     const rootUrl = `https://accounts.google.com/o/oauth2/v2/auth`;
 
-    const origin = location.origin;
+    const origin = location?.origin;
     const redirectUrl = `${origin + from}`;
     console.log(redirectUrl, 'redirectUrl')
     const options = {

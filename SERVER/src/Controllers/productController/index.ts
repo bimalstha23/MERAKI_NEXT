@@ -22,7 +22,7 @@ export const addProduct = async (req: Request, res: Response) => {
     if (!name || !categoryId || !quantity || !cost_price || !selling_price || !description || !status) {
       return res.status(400).json({ message: "All fields are required" })
     }
-    
+
     const storage = getStorage()
     const imagesUrls = [] as any
     for (const file of req.files as Express.Multer.File[]) {

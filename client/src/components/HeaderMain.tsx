@@ -8,13 +8,19 @@ import merakilogo from "../../public/merakilogo.svg"
 import useQueryParams from "@/hooks/useQueryParams";
 import LoginModal from "./modals/LoginModal";
 import { useAuth } from "../Providers/AuthProvider";
+import RegisterModal from "./modals/RegisterModal";
+import { useQuery } from "@tanstack/react-query";
+import { getCart } from "@/services/cartService";
 
 const HeaderMain = () => {
     const { queryParams, setQueryParams } = useQueryParams()
     const searchquery = queryParams?.get('search') || ''
     const [search, setSearch] = React.useState(searchquery)
 
-    const [isLoginModalOpen, setisLoginModalOpen] = React.useState(false)
+    const { isLoginModalOpen,
+        isRegisterModalOpen,
+        setisLoginModalOpen,
+        setisRegisterModalOpen } = useAuth()
 
     useEffect(() => {
         if (searchquery !== search && search !== '')
@@ -23,6 +29,14 @@ const HeaderMain = () => {
 
     const { currentUser, isLoading } = useAuth()
 
+    const { data, isLoading: cartLoading } = useQuery({
+        queryKey: ['cart', 'getCart'],
+        queryFn: getCart,
+    })
+
+
+    const numberofCart = data?.cart?.length || 0
+    console.log(data)
     return (
         <div className="border-b border-gray-200 py-6 bg-merakiblack">
             <div className="container sm:flex justify-between items-center mx-auto">
@@ -56,7 +70,7 @@ const HeaderMain = () => {
                 <div className="hidden lg:flex gap-4 text-gray-500 text-[30px]">
                     {!isLoading &&
                         currentUser && currentUser?.profile ? (
-                        <img src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px]" />
+                        <img src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px] h-[30px]" />
                     ) : (
                         <button onClick={() => setisLoginModalOpen(true)}>
                             <BiUser />
@@ -65,17 +79,22 @@ const HeaderMain = () => {
                     <div className="relative">
                         <HiOutlineShoppingBag />
                         <div className="bg-red-600 rounded-full absolute top-0 right-0 w-[18px] h-[18px] text-[12px] text-white grid place-items-center translate-x-1 -translate-y-1">
-                            0
+                            {numberofCart}
                         </div>
                     </div>
                 </div>
             </div>
             {
                 isLoginModalOpen && (
-                    <LoginModal handleClose={() => setisLoginModalOpen(false)} open={isLoginModalOpen} key={1234145} />
+                    <LoginModal handleClose={() => setisLoginModalOpen(false)} open={isLoginModalOpen} key={1234145} registerModal={isRegisterModalOpen} setRegisterModalOpen={setisRegisterModalOpen} />
                 )
             }
-        </div >
+            {
+                isRegisterModalOpen && (
+                    <RegisterModal open={isRegisterModalOpen} handleClose={() => setisRegisterModalOpen(false)} openLoginModal={isLoginModalOpen} setisLoginModalOpen={setisLoginModalOpen} />
+                )
+            }
+        </div>
     );
 };
 

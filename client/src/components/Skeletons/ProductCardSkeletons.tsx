@@ -1,11 +1,18 @@
-import { Skeleton } from "@mui/material";
+import { Skeleton } from "@nextui-org/react";
 
 const ProductCardSkeletons = (length: number) => Array.from({ length: length }, (_, index) => (
-    <div key={index} className='flex flex-col justify-center items-center w-full h-full'>
-        <Skeleton variant='rectangular' animation="wave" width={'100%'} height={270} className='lg:h-[270px] h-[150px]' />
-        <Skeleton animation="wave" className='w-full' variant='text' />
-        <Skeleton animation="wave" className='w-full' variant='text' />
-        <Skeleton animation="wave" className='w-full' variant='text' height={"20px"} />
+    <div key={index} className='flex flex-col gap-2 justify-center items-center w-full h-full'>
+        <Skeleton className='lg:h-[270px] h-[150px] w-full'>
+            <div className="w-full h-full  "></div>
+        </Skeleton>
+        <Skeleton className='w-full  h-[20px]' >
+            <div className="w-full h-full  "></div>
+        </Skeleton>
+        <Skeleton className='w-full h-[20px]' >
+            <div className="w-full h-full  "></div>
+        </Skeleton>
+        <Skeleton className='w-full h-[20px]' >
+            <div className="w-full h-full  "></div></Skeleton>
     </div>
 ));
 

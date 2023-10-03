@@ -5,9 +5,10 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
-
 import { FreeMode, Navigation, Thumbs, Mousewheel } from 'swiper/modules';
-export const ImageSwiper = ({ Image }: { Image: any }) => {
+import { Image } from '@nextui-org/react';
+
+export const ImageSwiper = ({ Image: img }: { Image: any }) => {
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     return (
         <>
@@ -16,9 +17,9 @@ export const ImageSwiper = ({ Image }: { Image: any }) => {
                 modules={[FreeMode, Thumbs]}
                 className="mySwiper2 rounded-lg h-[600px] !w-full"
             >
-                {Image?.map((image: any) => (
+                {img?.map((image: any) => (
                     <SwiperSlide key={image.id}>
-                        <img className='w-full   object-cover' src={image.url} alt="meraki" />
+                        <Image width={'100%'} isZoomed isBlurred className='w-full   object-cover' src={image.url} alt="meraki" />
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -32,9 +33,9 @@ export const ImageSwiper = ({ Image }: { Image: any }) => {
                 modules={[FreeMode, Navigation, Thumbs, Mousewheel]}
                 className="mySwiper rounded-lg py-2 h-24"
             >
-                {Image?.map((image: any) => (
+                {img?.map((image: any) => (
                     <SwiperSlide key={image.id}>
-                        <img className='rounded-lg object-cover' src={image.url
+                        <Image width={'100%'} isZoomed isBlurred className='rounded-lg object-cover' src={image.url
                         } alt="meraki" />
                     </SwiperSlide>
                 ))}

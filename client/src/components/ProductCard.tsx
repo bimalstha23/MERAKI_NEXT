@@ -1,6 +1,5 @@
 import React from 'react'
 import done from '../../public/done.svg'
-import Image from 'next/image'
 import { truncateText } from '@/utils/getGoogleUrl'
 import cross from '../../public/cross.svg'
 import { useMutation } from '@tanstack/react-query'
@@ -9,6 +8,7 @@ import { enqueueSnackbar } from 'notistack'
 import { AxiosError } from 'axios'
 import { IErrorMessage } from '@/types'
 import { useAuth } from '@/Providers/AuthProvider'
+import { Image } from '@nextui-org/react'
 
 const ProductCard = ({ product }: { product: any }) => {
     const { currentUser, setisLoginModalOpen } = useAuth()
@@ -46,14 +46,14 @@ const ProductCard = ({ product }: { product: any }) => {
             onClick={() => location.href = `/products/${product.id}`}
             className='relative flex flex-col justify-start items-start w-full shadow-meraki cursor-pointer'>
             {product.discount ?
-                <div className='ribbon overflow-hidden'>
+                <div className='ribbon overflow-hidden z-10'>
                     <span className='text-white font-bold text-lg'>
                         {product.discount}% OFF
                     </span>
                 </div> : null}
 
             <div className='w-full h-full'>
-                <img src={product.images[0].url} alt={product.name} width={0} height={0} className='w-full lg:h-[270px] h-[150px] object-cover' />
+                <Image src={product.images[0].url} loading='lazy' alt={product.name} isZoomed radius='none' width={'100%'} className='w-full lg:h-[270px] h-[150px] object-cover z-0' />
             </div>
 
             <div className='flex flex-col justify-start items-start lg:p-4 p-2 gap-2 w-full'>

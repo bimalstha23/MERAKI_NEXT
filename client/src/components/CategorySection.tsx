@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react'
 import CategoryCard from './CategoryCard';
 import { IoIosArrowDropdownCircle } from 'react-icons/io'
-import { Skeleton } from '@mui/material';
 import { loadingSkeletons } from './Skeletons/CategorySkeletons';
 
 const CategorySection = () => {

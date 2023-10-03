@@ -1,7 +1,7 @@
-import { Skeleton } from "@mui/material";
+import { Skeleton } from "@nextui-org/react";
 
 export const loadingSkeletons = (length: number) => Array.from({ length: length }, (_, index) => (
-    <div key={index} className='flex flex-col justify-center items-center w-full h-full'>
-        <Skeleton variant='rectangular' animation="wave" width={'100%'} height={200} className='h-[200px] lg:h-[300px]' />
-    </div>
+    <Skeleton key={index} className='h-[200px] lg:h-[300px] w-full rounded-xl' >
+        <div className="w-full h-full rounded-xl "></div>
+    </Skeleton>
 ));

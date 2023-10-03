@@ -3,15 +3,15 @@ import React, { Fragment } from 'react'
 import ProductSeo from './ProductSeo'
 import { getProductQuery } from '@/services/productService'
 import { useQuery } from '@tanstack/react-query'
-import { ImageSwiper } from './ImageSwaper'
+import { ImageSwiper } from './ImageSwiper'
 import Image from 'next/image'
 import done from '../../../../../public/done.svg'
-import { Skeleton } from '@mui/material'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { AiFillThunderbolt } from 'react-icons/ai'
 import cross from '../../../../../public/cross.svg'
 import { IProduct } from '@/types'
+import { Skeleton } from '@nextui-org/react'
 
 const SingleProduct = ({ id }: { id: number }) => {
     const { data, isLoading } = useQuery<IProduct | undefined>({
@@ -32,7 +32,7 @@ const SingleProduct = ({ id }: { id: number }) => {
                         </div>
                     ) : (
                         <div className='w-full'>
-                            <Skeleton variant='rectangular' height={500} className='w-full' />
+                            <Skeleton className='w-full h-[500px]' />
                         </div>
                     )}
 
@@ -50,14 +50,14 @@ const SingleProduct = ({ id }: { id: number }) => {
                         )}
 
                         <h1 className='font-bold text-3xl text-black w-full'>
-                            {!isLoading ? data?.product?.name : <Skeleton variant='text' className='w-full' />}
+                            {!isLoading ? data?.product?.name : <Skeleton className='w-full' />}
                         </h1>
 
                         <h1 className='text-text-black text-lg w-full'>
                             {!isLoading ? data?.product?.description : <div>
-                                <Skeleton variant='text' className='w-full' />
-                                <Skeleton variant='text' className='w-full' />
-                                <Skeleton variant='text' className='w-full' />
+                                <Skeleton className='w-full' />
+                                <Skeleton className='w-full' />
+                                <Skeleton className='w-full' />
                             </div>
                             }
                         </h1>
@@ -65,7 +65,7 @@ const SingleProduct = ({ id }: { id: number }) => {
                         <div className='flex flex-row justify-between items-center w-full'>
                             <div className='flex flex-col items-start justify-start w-fit'>
                                 <h1 className='text-black text-3xl font-bold w-full'>
-                                    {!isLoading ? 'Rs.' + data?.product?.selling_price : <Skeleton variant='text' width={100} className='w-full' />}
+                                    {!isLoading ? 'Rs.' + data?.product?.selling_price : <Skeleton className='w-full ' />}
                                 </h1>
                                 <h1 className=' text-sm'>
                                     Price
@@ -84,7 +84,7 @@ const SingleProduct = ({ id }: { id: number }) => {
                                     </div>
                                     <div className='flex flex-col items-start justify-end w-fit'>
                                         <h1 className='text-black text-3xl font-bold w-full '>
-                                            {!isLoading ? 'Rs.' + data?.product?.selling_price : <Skeleton variant='text' className='w-full' />}
+                                            {!isLoading ? 'Rs.' + data?.product?.selling_price : <Skeleton className='w-full' />}
                                         </h1>
                                         <h1 className=' text-sm'>
                                             Original  Price

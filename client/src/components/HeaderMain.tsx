@@ -11,6 +11,7 @@ import { useAuth } from "../Providers/AuthProvider";
 import RegisterModal from "./modals/RegisterModal";
 import { useQuery } from "@tanstack/react-query";
 import { getCart } from "@/services/cartService";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const HeaderMain = () => {
     const { queryParams, setQueryParams } = useQueryParams()
@@ -27,12 +28,13 @@ const HeaderMain = () => {
             setSearch(searchquery)
     }, [])
 
-    const { currentUser, isLoading } = useAuth()
 
     const { data, isLoading: cartLoading } = useQuery({
         queryKey: ['cart', 'getCart'],
         queryFn: getCart,
     })
+
+    const currentUser = useCurrentUser()
 
 
     const numberofCart = data?.cart?.length || 0
@@ -68,14 +70,14 @@ const HeaderMain = () => {
                 </form>
 
                 <div className="hidden lg:flex gap-4 text-gray-500 text-[30px]">
-                    {!isLoading &&
+                    {
                         currentUser && currentUser?.profile ? (
-                        <img src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px] h-[30px]" />
-                    ) : (
-                        <button onClick={() => setisLoginModalOpen(true)}>
-                            <BiUser />
-                        </button>
-                    )}
+                            <img src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px] h-[30px]" />
+                        ) : (
+                            <button onClick={() => setisLoginModalOpen(true)}>
+                                <BiUser />
+                            </button>
+                        )}
                     <div className="relative">
                         <HiOutlineShoppingBag />
                         <div className="bg-red-600 rounded-full absolute top-0 right-0 w-[18px] h-[18px] text-[12px] text-white grid place-items-center translate-x-1 -translate-y-1">

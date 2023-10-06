@@ -44,3 +44,16 @@ export interface IErrorMessage {
     message: string
     success: boolean
 }
+
+export interface Iuser {
+    id: number
+    email: string
+    password: string
+    createdAt: string
+    updatedAt: string
+    name: string
+    phone: any
+    profile: string
+    verified: boolean
+    role: string
+}

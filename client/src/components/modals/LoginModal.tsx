@@ -10,11 +10,13 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from "@tanstack/react-query";
+import { QueryClient, useMutation } from "@tanstack/react-query";
 import { loginMutation } from "@/services/Auth";
 import { AxiosError } from "axios";
 import { IErrorMessage } from "@/types";
 import { enqueueSnackbar } from "notistack";
+import Cookies from "js-cookie";
+import { queryClient } from "@/services/queryClient";
 
 interface LoginModalProps {
     open: boolean
@@ -49,6 +51,8 @@ const LoginModal: FC<LoginModalProps> = ({ open, handleClose, setRegisterModalOp
         mutationFn: (data: ILoginform) => loginMutation(data),
         onSuccess: (data) => {
             enqueueSnackbar("You're logged in", { variant: 'success' })
+            queryClient.invalidateQueries(['user', 'me'])
+            Cookies.set('currentUser', JSON.stringify(data.user))
             handleClose()
         },
         onError: (error: AxiosError<IErrorMessage>) => {

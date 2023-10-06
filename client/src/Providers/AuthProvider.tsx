@@ -1,22 +1,12 @@
 'use client';
 import { getMeQuery } from '@/services/Auth';
+import { Iuser } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import React, { FC, PropsWithChildren, createContext, useState } from 'react'
-interface Iuser {
-    id: number
-    email: string
-    password: string
-    createdAt: string
-    updatedAt: string
-    name: string
-    phone: any
-    profile: string
-    verified: boolean
-    role: string
-}
+import Cookies from 'js-cookie'
+import { Cookie } from 'next/font/google';
 
 interface IAuthContext {
-    currentUser: Iuser | null
     isLoading: boolean,
     isLoginModalOpen: boolean,
     isRegisterModalOpen: boolean
@@ -26,7 +16,6 @@ interface IAuthContext {
 }
 
 const AuthContext = createContext<IAuthContext>({
-    currentUser: null,
     isLoading: false,
     isLoginModalOpen: false,
     isRegisterModalOpen: false,
@@ -44,11 +33,19 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const { data: user, isLoading } = useQuery({
         queryKey: ['user', 'me'],
-        queryFn: () => getMeQuery()
+        queryFn: () => getMeQuery(),
+        onSuccess(data) {
+            if (data?.user) {
+                Cookies.set('currentUser', JSON.stringify(data.user))
+            }
+        },
+        onError(err) {
+            Cookies.remove('currentUser')
+            console.log(err)
+        }
     })
 
     const AuthValues: IAuthContext = {
-        currentUser: user?.user || null,
         isLoading,
         isLoginModalOpen,
         isRegisterModalOpen,

@@ -26,19 +26,18 @@ const HeaderMain = () => {
     useEffect(() => {
         if (searchquery !== search && search !== '')
             setSearch(searchquery)
-    }, [])
+    }, [search, searchquery])
 
+    const currentUser = useCurrentUser()
 
     const { data, isLoading: cartLoading } = useQuery({
         queryKey: ['cart', 'getCart'],
         queryFn: getCart,
     })
 
-    const currentUser = useCurrentUser()
 
 
     const numberofCart = data?.cart?.length || 0
-    console.log(data)
     return (
         <div className="border-b border-gray-200 py-6 bg-merakiblack">
             <div className="container sm:flex justify-between items-center mx-auto">
@@ -72,7 +71,7 @@ const HeaderMain = () => {
                 <div className="hidden lg:flex gap-4 text-gray-500 text-[30px]">
                     {
                         currentUser && currentUser?.profile ? (
-                            <img src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px] h-[30px]" />
+                            <Image width={30} height={30} src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px] h-[30px]" />
                         ) : (
                             <button onClick={() => setisLoginModalOpen(true)}>
                                 <BiUser />

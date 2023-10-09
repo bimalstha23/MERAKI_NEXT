@@ -97,13 +97,6 @@ export const getProducts = async (
         lte?: number; // Add quantity filter for outOfStock
       };
     } = {};
-
-    if (category) {
-      filterOptions.category = {
-        id: Number(category) as unknown as number,
-      };
-    }
-
     if (minPrice || maxPrice) {
       filterOptions.price = {};
 
@@ -197,6 +190,27 @@ export const getProducts = async (
       skip,
       take,
     });
+
+    const total = await prismaClient.product.count({
+      where: {
+        ...filterOptions,
+        OR: searchTerm
+          ? [
+            { name: { contains: searchTerm as string, mode: "insensitive" } },
+            {
+              description: {
+                contains: searchTerm as string,
+                mode: "insensitive",
+              },
+            },
+          ]
+          : undefined,
+        status: productStatus ? (productStatus as ProductState) : "ACTIVE",
+      },
+    });
+
+    console.log(total, 'total')
+
     let nextPage = null
     let hasNextPage = false
     if (page && take) {
@@ -222,14 +236,15 @@ export const getProducts = async (
         const { cost_price, ...rest } = product
         return rest
       })
-
       res.status(200).json({
         data: remmoveCredidentials, pagination: {
           nextPage,
           has_next_page: hasNextPage,
           total: updatedProducts.length,
           currentPage: page ? Number(page) : 1,
-          pageSize: take ? take : 10
+          pageSize: take ? take : 10,
+          totalNumberofProducts: total,
+          totalNumberofPages: Math.ceil(total / (take ? take : 10))
         }
       });
     } else {
@@ -239,7 +254,9 @@ export const getProducts = async (
           has_next_page: hasNextPage,
           total: updatedProducts.length,
           currentPage: page ? Number(page) : 1,
-          pageSize: take ? take : 10
+          pageSize: take ? take : 10,
+          totalNumberofProducts: total,
+          totalNumberofPages: Math.ceil(total / (take ? take : 10))
         }
       });
     }

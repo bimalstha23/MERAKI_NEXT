@@ -57,3 +57,13 @@ export interface Iuser {
     verified: boolean
     role: string
 }
+
+export interface ICartItem {
+    id: number;
+    quantity: number;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: number;
+    productId: number;
+    product: Product;
+}

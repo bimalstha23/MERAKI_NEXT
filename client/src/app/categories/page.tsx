@@ -1,5 +1,3 @@
-import { fetchCategories } from '@/services/categoriesService'
-import { queryClient } from '@/services/queryClient'
 import React from 'react'
 import Categories from './components/Categories'
 import { prefetchCategories } from '@/services/prefetch'

@@ -5,6 +5,7 @@ import React from 'react'
 import CategoryCard from './CategoryCard';
 import { IoIosArrowDropdownCircle } from 'react-icons/io'
 import { loadingSkeletons } from './Skeletons/CategorySkeletons';
+import Link from 'next/link';
 
 const CategorySection = () => {
     const { data, isLoading } = useQuery({
@@ -14,9 +15,9 @@ const CategorySection = () => {
 
 
     return (
-        <section className='container mx-auto lg:mt-24 p-2'>
-            <h1 className='text-center font-bold text-4xl'>Latest Categories</h1>
-            <div className='grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 lg:gap-10 gap-3 place-items-center justify-center mt-10 '>
+        <section className='container mx-auto lg:mt-24 mt-8  p-2'>
+            <h1 className='text-center font-bold text-4xl m-0 p-0'>Latest Categories</h1>
+            <div className='grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 lg:gap-10 gap-3 place-items-center justify-center lg:mt-10 mt-5 '>
                 {!isLoading ? data?.categories?.map((item: any, index: number) => (
                     <CategoryCard
                         image={item?.image}
@@ -28,9 +29,9 @@ const CategorySection = () => {
                     loadingSkeletons(4)}
             </div>
             <div className='flex justify-center items-center w-full mt-10'>
-                <button className='text-merakired text-lg'>
-                    See more <IoIosArrowDropdownCircle className='inline-block' />
-                </button>
+                <Link href={'/categories'} className='text-merakired text-lg'>
+                    See more <IoIosArrowDropdownCircle className='inline-block -rotate-90' />
+                </Link>
             </div>
         </section>
     )

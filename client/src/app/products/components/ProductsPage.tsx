@@ -4,12 +4,14 @@ import { IoMdFunnel } from 'react-icons/io'
 import { Dialog as HDDialog, Menu, Transition } from '@headlessui/react'
 import { BiChevronDown } from 'react-icons/bi'
 import { GiCrossMark } from 'react-icons/gi'
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { fetchCategories } from '@/services/categoriesService';
 import { getProductsQuery } from '@/services/productService';
 import ProductCard from '@/components/ProductCard';
 import useQueryParams from '@/hooks/useQueryParams';
 import ProductCardSkeletons from '@/components/Skeletons/ProductCardSkeletons';
+import { Pagination } from '@nextui-org/react';
+import { IProduct, Product } from '@/types';
 
 function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
@@ -47,10 +49,24 @@ const ProductsPage = () => {
         filter['sortOrder'] = sortOrder
     }
 
-    const { data: products, isLoading: isProductLoading } = useQuery({
-        queryKey: ['products', filter],
-        queryFn: () => getProductsQuery(filter)
+    const [page, setPage] = useState<number | undefined>(1)
+    const { data: products, isLoading: isProductLoading, isFetching, isRefetching } = useQuery<{
+        data: Product[];
+        pagination: {
+            nextPage: number | null;
+            total: number;
+            currentPage: number;
+            pageSize: number;
+            totalNumberofPages: number;
+            totalNumberofProducts: number
+        }
+    }>({
+        queryKey: ['products', filter, page],
+        queryFn: () => getProductsQuery({ ...filter, page, pageSize: 20 }),
+        keepPreviousData: true,
     })
+
+
 
     const { data: categories } = useQuery({
         queryKey: ['categories'],
@@ -64,7 +80,7 @@ const ProductsPage = () => {
             return;
         }
         setQueryParams({ sortBy: sortby, sortOrder: sortOrder })
-    }, [setQueryParams])
+    }, [setQueryParams, sortBy])
 
     const sortOptions: {
         name: string;
@@ -76,6 +92,8 @@ const ProductsPage = () => {
             { name: 'Price: Low to High', sortBy: 'price', sortOrder: 'asc', current: false, },
             { name: 'Price: High to Low', sortBy: 'price', sortOrder: 'desc', current: false, }
         ]
+
+    console.log(products?.pagination.totalNumberofPages)
 
     return (
         <div>
@@ -224,9 +242,9 @@ const ProductsPage = () => {
 
                         <div className="lg:col-span-3">
                             <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-2 lg:gap-10 gap-3 place-items-center justify-center mt-10 ">
-                                {!isProductLoading ?
+                                {!isProductLoading && !isFetching && !isRefetching ?
                                     // (data?.products.map((product: any, key: number) => (
-                                    (products?.data?.map((product: any, key: number) => (
+                                    (products?.data.map((product: Product, key: number) => (
                                         <ProductCard product={product} key={key} />
                                     )))
                                     : (
@@ -234,11 +252,26 @@ const ProductsPage = () => {
                                     )
                                 }
                             </div>
+                            {!isProductLoading && products?.pagination.nextPage && products.pagination.totalNumberofPages > 1 && <div className='flex justify-center items-center w-full mt-10'>
+                                <Pagination
+                                    total={products?.pagination.totalNumberofPages || 1}
+                                    initialPage={page}
+                                    showControls
+                                    loop
+                                    size='lg'
+                                    onChange={(page) => {
+                                        //semd to top
+                                        // window.scrollTo(0, 0)
+                                        setPage(page)
+                                    }}
+                                    about='Page navigation'
+                                />
+                            </div>}
                         </div>
                     </div>
                 </section>
             </main>
-        </div>
+        </div >
     )
 }
 

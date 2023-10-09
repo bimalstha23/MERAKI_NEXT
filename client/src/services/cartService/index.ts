@@ -19,24 +19,24 @@ export const getCart = async () => {
 }
 
 
-export const updateCartItem = async (productId: number, quantity: number) => {
+export const updateCartItem = async ({ cartItemId, quantity }: { cartItemId: number, quantity: number }) => {
     return axiosInstance({
         method: "put",
         url: cartRoutesPath.updateCartItem,
         data: {
-            productId,
+            cartItemId,
             quantity
         }
     })
 }
 
 
-export const deleteCartItem = async (productId: number) => {
+export const deleteCartItem = async (cartItemId: number) => {
     return axiosInstance({
         method: "delete",
         url: cartRoutesPath.deleteCart,
         data: {
-            productId
+            cartItemId
         }
     })
 }

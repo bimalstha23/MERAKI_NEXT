@@ -32,7 +32,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <HeaderMain />
-          <Navbar />
           <MobNavbar />
           {children}
           <Footer />

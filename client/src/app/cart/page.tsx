@@ -1,11 +1,16 @@
-import React from 'react'
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from "@nextui-org/react";
 
+import { Image } from '@nextui-org/react'
+import React from 'react'
+import CartPage from './components/CartPage'
 const page = () => {
+
+
     return (
-        <div>
-                
-        </div>
+        <section >
+            <div className="container mx-auto mt-10">
+                <CartPage />
+            </div>
+        </section>
     )
 }
 

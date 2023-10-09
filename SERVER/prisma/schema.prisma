@@ -67,20 +67,20 @@ model orderProduct {
 }
 
 model User {
-  id                Int       @id @default(autoincrement())
-  email             String    @unique
+  id                Int        @id @default(autoincrement())
+  email             String     @unique
   password          String
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime? @default(now()) @updatedAt
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime?  @default(now()) @updatedAt
   name              String?
   phone             String?
   profile           String?
-  verified          Boolean   @default(false)
+  verified          Boolean    @default(false)
   verificationToken String?
-  role              UserRole  @default(USER)
+  role              UserRole   @default(USER)
   orders            Order[]
   address           Address[]
-  carts             Cart[]
+  cartItems         CartItem[] 
 }
 
 model Address {
@@ -101,23 +101,14 @@ model Category {
   products  Product[]
 }
 
-model Cart {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  cartItems CartItem[]
-}
-
 model CartItem {
   id        Int      @id @default(autoincrement())
   quantity  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  cartId    Int
+  userId    Int
   productId Int
-  cart      Cart     @relation(fields: [cartId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
 }
 

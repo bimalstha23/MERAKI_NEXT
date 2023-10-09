@@ -6,19 +6,24 @@ import { useMutation } from '@tanstack/react-query'
 import { addtoCart } from '@/services/cartService'
 import { enqueueSnackbar } from 'notistack'
 import { AxiosError } from 'axios'
-import { IErrorMessage } from '@/types'
+import { IErrorMessage, Product } from '@/types'
 import { useAuth } from '@/Providers/AuthProvider'
 import { Image } from '@nextui-org/react'
+import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { queryClient } from '@/services/queryClient'
+import { useScreenWidth } from '@/hooks/useScreenWidth'
 
-const ProductCard = ({ product }: { product: any }) => {
-    const { currentUser, setisLoginModalOpen } = useAuth()
+const ProductCard = ({ product }: { product: Product }) => {
+    const currentUser = useCurrentUser()
+    const { setisLoginModalOpen } = useAuth()
     const { mutate } = useMutation({
         mutationKey: ['addtocart', 'cart'],
-        mutationFn: (data) => addtoCart(data as unknown as number),
+        mutationFn: (data: number) => addtoCart(data as unknown as number),
         onSuccess: (data) => {
             enqueueSnackbar('Added to cart', {
                 variant: 'success'
             })
+            queryClient.invalidateQueries(['cart', 'getCart'])
         },
         onError: (error: AxiosError<IErrorMessage>) => {
             enqueueSnackbar(error.response?.data.message || 'Something Went Wrong', {
@@ -40,6 +45,7 @@ const ProductCard = ({ product }: { product: any }) => {
         }
     };
 
+    const screenWidth = useScreenWidth()
 
     return (
         <div
@@ -71,10 +77,10 @@ const ProductCard = ({ product }: { product: any }) => {
 
                 <div>
                     <h1 className='text-merakiTextGray lg:text-lg text-sm font-bold'>
-                        {truncateText(product.name, 30)}
+                        {truncateText(product.name, screenWidth > 768 ? 30 : 20)}
                     </h1>
                     <h1 className='text-merakiTextGray text-xs p-0 m-0 font-bold w-full whitespace-nowrap text-ellipsis overflow-hidden'>
-                        {truncateText(product.description, 50)}
+                        {truncateText(product.description, screenWidth > 768 ? 50 : 30)}
                     </h1>
                 </div>
                 <div className='flex flex-col w-full'>

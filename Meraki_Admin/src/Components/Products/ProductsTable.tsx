@@ -134,7 +134,7 @@ export const ProductsTable: FC<{ Tab: TabType }> = ({ Tab }) => {
 
 
     const isSelected = (id: any) => {
-        if (Tab === 'ACTIVE' || Tab==='onstocks') {
+        if (Tab === 'ACTIVE' || Tab === 'onstocks') {
             return selectedProduct?.findIndex((item: any) => item?.id === id) !== -1;
         } else {
             return selectedtableProducts?.findIndex((item: any) => item?.id === id) !== -1;

@@ -1,5 +1,6 @@
 'use client';
 import useSetSearchParams from '@/hooks/useSetSearchParams';
+import Link from 'next/link';
 import React, { FC } from 'react'
 interface CategoryCardProps {
     title: string,
@@ -9,13 +10,8 @@ interface CategoryCardProps {
 
 const CategoryCard: FC<CategoryCardProps> = ({ title, image, id }) => {
     const createQueryString = useSetSearchParams()
-
     return (
-        <div onClick={
-            () => {
-                location.href = `/products?${createQueryString('category', id.toString())}`
-            }
-        } className='flex justify-center items-center w-full h-[200px] lg:h-[300px] group hover:scale-110 transition-all duration-500 cursor-pointer rounded-xl hover:border-4 border-white hover:shadow-meraki'
+        <Link prefetch href={`/products?${createQueryString('category', id.toString())}`} className='flex justify-center items-center w-full h-[200px] lg:h-[300px] group hover:scale-110 transition-all duration-500 cursor-pointer rounded-xl hover:border-4 border-white hover:shadow-meraki'
             style={{
                 backgroundImage: `url(${image})`,
                 backgroundSize: 'cover',
@@ -30,7 +26,7 @@ const CategoryCard: FC<CategoryCardProps> = ({ title, image, id }) => {
                     Explore
                 </button>
             </div>
-        </div>
+        </Link>
     )
 }
 

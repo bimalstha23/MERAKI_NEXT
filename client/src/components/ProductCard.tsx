@@ -12,6 +12,7 @@ import { Image } from '@nextui-org/react'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { queryClient } from '@/services/queryClient'
 import { useScreenWidth } from '@/hooks/useScreenWidth'
+import Link from 'next/link'
 
 const ProductCard = ({ product }: { product: Product }) => {
     const currentUser = useCurrentUser()
@@ -48,8 +49,7 @@ const ProductCard = ({ product }: { product: Product }) => {
     const screenWidth = useScreenWidth()
 
     return (
-        <div
-            onClick={() => location.href = `/products/${product.id}`}
+        <Link href={`/products/${product.id}`}
             className='relative flex flex-col justify-start items-start w-full shadow-meraki cursor-pointer'>
             {product.discount ?
                 <div className='ribbon overflow-hidden z-10'>
@@ -92,7 +92,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                     </button>
                 </div>
             </div>
-        </div >
+        </Link>
     )
 }
 

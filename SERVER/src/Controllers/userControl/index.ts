@@ -190,7 +190,6 @@ export const getMe = async (
 ) => {
   try {
     const user = res.locals.user;
-    console.log(res);
     res.status(200).json({
       status: "success",
       data: {

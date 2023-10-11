@@ -13,7 +13,6 @@ const CategorySection = () => {
         queryFn: () => fetchCategories(4)
     })
 
-
     return (
         <section className='container mx-auto lg:mt-24 mt-8  p-2'>
             <h1 className='text-center font-bold text-4xl m-0 p-0'>Latest Categories</h1>
@@ -29,7 +28,7 @@ const CategorySection = () => {
                     loadingSkeletons(4)}
             </div>
             <div className='flex justify-center items-center w-full mt-10'>
-                <Link href={'/categories'} className='text-merakired text-lg'>
+                <Link prefetch={true} href={'/categories'} className='text-merakired text-lg'>
                     See more <IoIosArrowDropdownCircle className='inline-block -rotate-90' />
                 </Link>
             </div>

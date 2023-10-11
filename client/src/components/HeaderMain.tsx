@@ -12,6 +12,8 @@ import RegisterModal from "./modals/RegisterModal";
 import { useQuery } from "@tanstack/react-query";
 import { getCart } from "@/services/cartService";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import Link from "next/link";
+import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
 
 const HeaderMain = () => {
     const { queryParams, setQueryParams } = useQueryParams()
@@ -71,18 +73,54 @@ const HeaderMain = () => {
                 <div className="hidden lg:flex gap-4 text-gray-500 text-[30px]">
                     {
                         currentUser && currentUser?.profile ? (
-                            <Image width={30} height={30} src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px] h-[30px]" />
+                            <Dropdown
+                                backdrop="blur"
+                            >
+                                <DropdownTrigger>
+                                    <Avatar
+                                        name={currentUser?.name}
+                                        alt={currentUser?.name}
+                                        as="button"
+                                        className="transition-transform"
+                                        src={currentUser?.profile}
+                                        size="sm"
+                                        showFallback
+                                    />
+                                </DropdownTrigger>
+                                <DropdownMenu aria-label="Profile Actions" variant="flat">
+                                    <DropdownItem key="profile" className="h-14 gap-2">
+                                        <p className="font-semibold">Signed in as</p>
+                                        <p className="font-semibold">zoey@example.com</p>
+                                    </DropdownItem>
+                                    <DropdownItem key="settings">
+                                        My Settings
+                                    </DropdownItem>
+                                    <DropdownItem key="team_settings">Team Settings</DropdownItem>
+                                    <DropdownItem key="analytics">
+                                        Analytics
+                                    </DropdownItem>
+                                    <DropdownItem key="system">System</DropdownItem>
+                                    <DropdownItem key="configurations">Configurations</DropdownItem>
+                                    <DropdownItem key="help_and_feedback">
+                                        Help & Feedback
+                                    </DropdownItem>
+                                    <DropdownItem key="logout" color="danger">
+                                        Log Out
+                                    </DropdownItem>
+                                </DropdownMenu>
+                                {/* <Image width={30} height={30} src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px] h-[30px]" /> */}
+                            </Dropdown>
                         ) : (
                             <button onClick={() => setisLoginModalOpen(true)}>
                                 <BiUser />
                             </button>
                         )}
-                    <div className="relative">
+                    <Link href={'/cart'} className="relative">
                         <HiOutlineShoppingBag />
                         <div className="bg-red-600 rounded-full absolute top-0 right-0 w-[18px] h-[18px] text-[12px] text-white grid place-items-center translate-x-1 -translate-y-1">
                             {numberofCart}
                         </div>
-                    </div>
+                    </Link>
                 </div>
             </div>
             {

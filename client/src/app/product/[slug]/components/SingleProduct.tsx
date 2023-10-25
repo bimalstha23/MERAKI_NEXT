@@ -13,12 +13,12 @@ import cross from '../../../../../public/cross.svg'
 import { IProduct } from '@/types'
 import { Skeleton } from '@nextui-org/react'
 
-const SingleProduct = ({ id }: { id: number }) => {
-    const { data, isLoading } = useQuery<IProduct | undefined>({
-        queryKey: ['product', id],
-        queryFn: () => getProductQuery(id)
-    })
+const SingleProduct = ({ slug }: { slug: string }) => {
 
+    const { data, isLoading } = useQuery<IProduct | undefined>({
+        queryKey: ['product', slug],
+        queryFn: () => getProductQuery({ slug })
+    })
 
     return (
         <>

@@ -21,6 +21,7 @@ export interface Product {
     category: Category
     images: Image[]
     instock: boolean
+    slug: string
 }
 
 export interface Category {

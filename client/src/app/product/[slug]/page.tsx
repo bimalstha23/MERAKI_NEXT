@@ -4,7 +4,6 @@ import SingleProduct from './components/SingleProduct';
 
 const Page = async ({
     params,
-    searchParams
 }: {
     params: {
         id(id: any): unknown; slug: string
@@ -14,7 +13,7 @@ const Page = async ({
     await prefetchProduct(Number(params.id))
     return (
         <>
-            <SingleProduct id={Number(params.id)} />
+            <SingleProduct slug={params.slug} />
         </>
     )
 }

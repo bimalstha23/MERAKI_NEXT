@@ -1,6 +1,11 @@
 import axiosInstance from "@/axios"
 import { productRoutesPath } from "@/constants/api.routes"
 
+interface singleProductParams {
+    id?: string
+    slug?: string
+}
+
 export const getProductsQuery = (params: any) => {
     return axiosInstance({
         method: "get",
@@ -9,11 +14,11 @@ export const getProductsQuery = (params: any) => {
     })
 }
 
-export const getProductQuery = (id: number) => {
+export const getProductQuery = (params: singleProductParams) => {
     return axiosInstance({
         method: "get",
         url: productRoutesPath.getProduct,
-        params: { id }
+        params: params
     })
 }
 

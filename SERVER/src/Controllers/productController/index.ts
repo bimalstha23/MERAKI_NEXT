@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import multer, { MulterError } from "multer";
 import prismaClient from "../../PrismaClient";
 import { ProductState, Product, User } from "@prisma/client";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { JwtPayload, verify } from "jsonwebtoken";
 import { getUser } from "../../helper/authHelper";
+import slugify from "slugify";
 
 export const addProduct = async (req: Request, res: Response) => {
   try {
@@ -50,6 +49,11 @@ export const addProduct = async (req: Request, res: Response) => {
         images: {
           create: imagesUrls,
         },
+        slug: slugify(name, {
+          lower: true,
+          replacement: "-",
+          remove: /[*+~.()'"!:@]/g,
+        }),
       },
     });
 
@@ -267,23 +271,35 @@ export const getProducts = async (
   }
 };
 
-export const getProduct = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+
+export const getProduct = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.query;
+    const { id, slug } = req.query;
     const user = await getUser(req) as User | any;
 
-    const product = await prismaClient.product.findUnique({
-      where: {
-        id: Number(id),
-      },
-      include: {
-        category: true,
-        images: true,
-      },
-    });
+    let product;
+
+    if (id) {
+      product = await prismaClient.product.findUnique({
+        where: {
+          id: Number(id),
+        },
+        include: {
+          category: true,
+          images: true,
+        },
+      });
+    } else if (slug) {
+      product = await prismaClient.product.findUnique({
+        where: {
+          slug: slug as string,
+        },
+        include: {
+          category: true,
+          images: true,
+        },
+      });
+    }
 
     // Check if the product exists
     if (!product) {
@@ -308,6 +324,7 @@ export const getProduct = async (
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
 
 
 
@@ -343,6 +360,11 @@ export const updateProduct = async (
         category: {
           connect: { id: Number(categoryId) },
         },
+        slug: slugify(name, {
+          lower: true,
+          replacement: "-",
+          remove: /[*+~.()'"!:@]/g,
+        }),
       },
     });
     res.status(200).json({ product });

@@ -8,7 +8,8 @@ datasource db {
 }
 
 model Product {
-  id            Int            @id @default(autoincrement())
+  id            Int            @id @unique @default(autoincrement())
+  slug          String         @unique
   name          String
   description   String?
   selling_price Float
@@ -80,7 +81,7 @@ model User {
   role              UserRole   @default(USER)
   orders            Order[]
   address           Address[]
-  cartItems         CartItem[] 
+  cartItems         CartItem[]
 }
 
 model Address {
@@ -93,7 +94,7 @@ model Address {
 }
 
 model Category {
-  id        Int       @id @default(autoincrement())
+  id        Int       @id @unique @default(autoincrement())
   name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt

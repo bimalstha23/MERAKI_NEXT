@@ -53,7 +53,7 @@ const ProductCard = ({ product }: { product: Product }) => {
     const router = useRouter()
 
     return (
-        <div onClick={() => router.push(`/products/${product.id}`, {
+        <div onClick={() => router.push(`/product/${product.slug}`, {
             scroll: true
         })}
             className='relative flex flex-col justify-start items-start w-full shadow-meraki cursor-pointer' >
@@ -66,7 +66,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                     </div> : null
             }
 
-            < div className='w-full h-full' >
+            <div className='w-full h-full' >
                 <Image src={product.images[0].url} loading='lazy' alt={product.name} isZoomed radius='none' width={'100%'} className='w-full lg:h-[270px] h-[150px] object-cover z-0' />
             </div >
 

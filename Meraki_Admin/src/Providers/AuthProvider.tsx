@@ -1,5 +1,8 @@
 import { PropsWithChildren, createContext, FC, useState, Dispatch, SetStateAction } from "react";
 import { IProduct } from "../globalTypes";
+import { useQuery } from "@tanstack/react-query";
+import Cookies from "js-cookie";
+import { getMeQuery } from "../services/AuthApi";
 
 export interface IUserAuthCredintials {
     email: string;
@@ -30,6 +33,20 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         selectedProduct,
         setSelectedProduct
     };
+
+    useQuery({
+        queryKey: ['user', 'me'],
+        queryFn: () => getMeQuery(),
+        onSuccess(data) {
+            if (data?.user) {
+                Cookies.set('currentUser', JSON.stringify(data.user))
+            }
+        },
+        onError(err) {
+            Cookies.remove('currentUser')
+            console.log(err)
+        }
+    })
 
     return (
         <AuthContext.Provider value={value}>

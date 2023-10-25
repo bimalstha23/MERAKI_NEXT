@@ -5,6 +5,7 @@ import {
   getMe,
   googleAuthHandler,
   loginUser,
+  logoutHandler,
   refreshWebToken,
 } from "../../Controllers/userControl";
 import { userRoutesPath } from "../../constants/Api";
@@ -18,4 +19,6 @@ userRoutes.post(userRoutesPath.loginUser, loginUser);
 userRoutes.get(userRoutesPath.refresh, refreshWebToken);
 userRoutes.get(userRoutesPath.getme, deserializeUser, requireAuth, getMe);
 userRoutes.get(userRoutesPath.googleAuth, googleAuthHandler);
+userRoutes.get(userRoutesPath.logout, logoutHandler);
+
 export default userRoutes;

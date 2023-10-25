@@ -211,6 +211,7 @@ export const logout = async (req: Request, res: Response) => {
   }
 }
 
+
 export const googleAuthHandler = async (req: Request, res: Response) => {
   try {
     const code = req.query.code as string;
@@ -272,6 +273,17 @@ export const googleAuthHandler = async (req: Request, res: Response) => {
   } catch (error: any) {
     // handle errors
     console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+
+export const logoutHandler = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie("access_token");
+    res.clearCookie("refresh_token");
+    res.status(200).send("Logged out successfully");
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 }

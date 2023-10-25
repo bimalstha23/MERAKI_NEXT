@@ -6,8 +6,8 @@ import { isAdmin, requireAuth } from "../../middlewares/authMiddlewares";
 
 const statsRouter = AppRouter.getInstance();
 
-statsRouter.get(statsRoutesPath.getStats   ,deserializeUser ,requireAuth ,  isAdmin ,  getStats);
-statsRouter.get(statsRoutesPath.getChartData   ,deserializeUser ,requireAuth ,  isAdmin ,  getChartData)
+statsRouter.get(statsRoutesPath.getStats, deserializeUser, requireAuth, isAdmin, getStats);
+statsRouter.get(statsRoutesPath.getChartData, deserializeUser, requireAuth, isAdmin, getChartData)
 
 
 export default statsRouter;

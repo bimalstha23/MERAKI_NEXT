@@ -38,11 +38,12 @@ function App() {
       </div>
     );
   }
+
   return <div>
     {showComponent &&
       <RouterProvider router={router} />
     }
   </div>;
-
 }
+
 export default App

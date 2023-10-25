@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../Hooks/ProviderHooks/useAuth";
 import { useMutation } from "@tanstack/react-query";
 import { LoginMutation } from "../../services/AuthApi";
+import Cookies from "js-cookie";
+import { enqueueSnackbar } from "notistack";
+import queryClient from "../../API/ReactQuery";
 
 interface FormValue {
     email: string,
@@ -9,7 +11,6 @@ interface FormValue {
 }
 
 export const Login = () => {
-    const { setUser } = useAuth()
 
     const { register, handleSubmit, } = useForm<FormValue>({
         mode: "onBlur",
@@ -23,7 +24,9 @@ export const Login = () => {
         mutationFn: LoginMutation,
         mutationKey: ['login'],
         onSuccess: (data) => {
-            setUser(data)
+            enqueueSnackbar("You're logged in", { variant: 'success' })
+            queryClient.invalidateQueries(['user', 'me'])
+            Cookies.set('currentUser', JSON.stringify(data.user))
         }
     })
 

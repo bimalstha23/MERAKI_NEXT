@@ -37,6 +37,8 @@ const HeaderMain = () => {
         queryFn: getCart,
     })
 
+    console.log(currentUser)
+
 
 
     const numberofCart = data?.cart?.length || 0
@@ -90,12 +92,11 @@ const HeaderMain = () => {
                                 <DropdownMenu aria-label="Profile Actions" variant="flat">
                                     <DropdownItem key="profile" className="h-14 gap-2">
                                         <p className="font-semibold">Signed in as</p>
-                                        <p className="font-semibold">zoey@example.com</p>
+                                        <p className="font-semibold">{currentUser?.email}</p>
                                     </DropdownItem>
                                     <DropdownItem key="settings">
-                                        My Settings
+                                        My Profile
                                     </DropdownItem>
-                                    <DropdownItem key="team_settings">Team Settings</DropdownItem>
                                     <DropdownItem key="analytics">
                                         Analytics
                                     </DropdownItem>

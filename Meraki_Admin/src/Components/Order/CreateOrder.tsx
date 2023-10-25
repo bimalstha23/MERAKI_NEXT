@@ -9,6 +9,7 @@ import * as yup from 'yup'
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ErrorMessage } from "@hookform/error-message";
 import { Link } from "react-router-dom";
+import { useCurrentUser } from "../../Hooks/utilityHooks/useCurrentUser";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         background: 'linear-gradient(180deg, #373737 0%, #121212 84.9%)',
@@ -23,6 +24,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export const CreateOrder = () => {
 
+    const currentUser = useCurrentUser()
+
     const schema = yup.object().shape({
         name: yup.string().required(),
         description: yup.string().required(),
@@ -34,7 +37,7 @@ export const CreateOrder = () => {
         landmark: yup.string().required(),
     })
 
-    const { selectedProduct, setSelectedProduct, user } = useAuth()
+    const { selectedProduct, setSelectedProduct } = useAuth()
     const [discount, setDiscount] = useState<boolean>(false)
     const { handleSubmit, register, reset, watch, formState: { errors } } = useForm({
         defaultValues: {
@@ -153,7 +156,7 @@ export const CreateOrder = () => {
             discount: data.discount,
             deleviry_fee: data.deliveryCharge,
             customer_address_landmark: data.landmark,
-            userid: user?.user?.id,
+            userid: currentUser?.id,
             products,
         }
         console.log(order, 'order')

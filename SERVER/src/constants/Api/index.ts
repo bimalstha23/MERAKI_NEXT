@@ -4,6 +4,7 @@ export const userRoutesPath = {
   refresh: "/auth/refreshToken",
   getme: "/auth/getme",
   googleAuth: "/auth/google",
+  logout: "/auth/logout",
 };
 
 export const productRoutesPath = {

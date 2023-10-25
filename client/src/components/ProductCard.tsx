@@ -13,6 +13,7 @@ import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { queryClient } from '@/services/queryClient'
 import { useScreenWidth } from '@/hooks/useScreenWidth'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const ProductCard = ({ product }: { product: Product }) => {
     const currentUser = useCurrentUser()
@@ -46,21 +47,28 @@ const ProductCard = ({ product }: { product: Product }) => {
         }
     };
 
+
     const screenWidth = useScreenWidth()
 
-    return (
-        <Link href={`/products/${product.id}`}
-            className='relative flex flex-col justify-start items-start w-full shadow-meraki cursor-pointer'>
-            {product.discount ?
-                <div className='ribbon overflow-hidden z-10'>
-                    <span className='text-white font-bold text-lg'>
-                        {product.discount}% OFF
-                    </span>
-                </div> : null}
+    const router = useRouter()
 
-            <div className='w-full h-full'>
+    return (
+        <div onClick={() => router.push(`/products/${product.id}`, {
+            scroll: true
+        })}
+            className='relative flex flex-col justify-start items-start w-full shadow-meraki cursor-pointer' >
+            {
+                product.discount ?
+                    <div className='ribbon overflow-hidden z-10'>
+                        <span className='text-white font-bold text-lg'>
+                            {product.discount}% OFF
+                        </span>
+                    </div> : null
+            }
+
+            < div className='w-full h-full' >
                 <Image src={product.images[0].url} loading='lazy' alt={product.name} isZoomed radius='none' width={'100%'} className='w-full lg:h-[270px] h-[150px] object-cover z-0' />
-            </div>
+            </div >
 
             <div className='flex flex-col justify-start items-start lg:p-4 p-2 gap-2 w-full'>
                 {product.instock ? (
@@ -92,7 +100,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                     </button>
                 </div>
             </div>
-        </Link>
+        </div >
     )
 }
 

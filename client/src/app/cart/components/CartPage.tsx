@@ -20,8 +20,9 @@ const CartPage = () => {
             <div className="lg:w-3/4 w-full bg-white lg:px-10 py-10 px-2">
                 <div className="flex justify-between border-b pb-8">
                     <h1 className="font-semibold text-2xl">Shopping Cart</h1>
-                    <h2 className="font-semibold text-2xl">3 Items</h2>
+                    <h2 className="font-semibold text-2xl">{data?.cart?.length || 0} Items</h2>
                 </div>
+
                 {data?.cart?.map((item: ICartItem) => (
                     <CartItem
                         product={item.product}
@@ -29,8 +30,7 @@ const CartPage = () => {
                         key={item.id}
                         id={item.id}
                     />
-                ))
-                }
+                ))}
 
                 <a href="products" className="flex font-semibold text-merakimain cursor-pointer hover:underline text-sm mt-10">
                     <svg className="fill-current mr-2 text-merakimain w-4" viewBox="0 0 448 512"><path d="M134.059 296H436c6.627 0 12-5.373 12-12v-56c0-6.627-5.373-12-12-12H134.059v-46.059c0-21.382-25.851-32.09-40.971-16.971L7.029 239.029c-9.373 9.373-9.373 24.569 0 33.941l86.059 86.059c15.119 15.119 40.971 4.411 40.971-16.971V296z" /></svg>
@@ -61,7 +61,7 @@ const CartPage = () => {
                 <div className="border-t mt-8">
                     <div className="flex font-semibold justify-between py-6 text-sm uppercase">
                         <span>Total cost</span>
-                        <span>$600</span>
+                        <span> RS.{totalAmount}</span>
                     </div>
                     <button className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">Checkout</button>
                 </div>

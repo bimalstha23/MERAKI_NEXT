@@ -71,6 +71,7 @@ const LoginModal: FC<LoginModalProps> = ({ open, handleClose, setRegisterModalOp
         <Transition appear show={open} as={Fragment}>
             <Dialog
                 onClose={handleClose}
+                className={''}
             >
                 <Transition.Child
                     as={Fragment}
@@ -81,10 +82,10 @@ const LoginModal: FC<LoginModalProps> = ({ open, handleClose, setRegisterModalOp
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-black bg-opacity-80" />
+                    <div className=" fixed  z-40 inset-0 bg-black bg-opacity-80" />
                 </Transition.Child>
-                <div className="fixed inset-0 overflow-y-auto">
-                    <div className="flex min-h-full items-center justify-center p-4 text-center">
+                <div className="fixed inset-0 overflow-y-auto z-50 ">
+                    <div className="relative flex min-h-full items-center justify-center p-4 text-center ">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -94,8 +95,8 @@ const LoginModal: FC<LoginModalProps> = ({ open, handleClose, setRegisterModalOp
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className="w-full max-w-7xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
-                                <div className="flex flex-row justify-start items-start w-full h-full gap-5">
+                            <Dialog.Panel className="w-full  max-w-7xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
+                                <div className="flex flex-row justify-start items-start w-full h-full gap-5 ">
                                     <div className="w-full rounded-2xl">
                                         <Image src={merakilogin} className="rounded-2xl shadow-meraki" alt="meraki" />
                                     </div>

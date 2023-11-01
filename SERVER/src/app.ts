@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const whitelist = ["http://localhost:5173", "http://localhost:3000", "https://merakinext-production.up.railway.app/", "https://meraki-next-hmzc-git-main-bimalstha23.vercel.app/", "*"];
+const whitelist = ["http://localhost:5173", "http://localhost:3000", "https://meraki-next-hmzc.vercel.app", "https://meraki-next-hmzc-git-main-bimalstha23.vercel.app", "*"];
 
 const corsOptions = {
   origin: whitelist,
@@ -26,7 +26,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.get("/", async (req: Request, res: Response, next: NextFunction) => {
+app.get("/", async (_req: Request, res: Response, _next: NextFunction) => {
   res.send({ message: "You're in right place folk 🐻" });
 });
 startStorage();

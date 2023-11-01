@@ -3,7 +3,7 @@ import React from "react";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import { AiOutlineHome, AiOutlineAppstore } from "react-icons/ai";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { Image } from "@nextui-org/react";
+import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image } from "@nextui-org/react";
 import { BiUser } from "react-icons/bi";
 import { useQuery } from "@tanstack/react-query";
 import { getCart } from "@/services/cartService";
@@ -34,9 +34,45 @@ const MobNavbar = () => {
                 </Link>
                 {
                     currentUser && currentUser?.profile ? (
-                        <Image width={30} height={30} src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px] h-[30px]" />
+                        <Dropdown
+                            backdrop="blur"
+                            placement="bottom-end"
+                        >
+                            <DropdownTrigger>
+                                <Avatar
+                                    name={currentUser?.name}
+                                    alt={currentUser?.name}
+                                    as="button"
+                                    className="transition-transform"
+                                    src={currentUser?.profile}
+                                    size="sm"
+                                    showFallback
+                                />
+                            </DropdownTrigger>
+                            <DropdownMenu aria-label="Profile Actions" variant="flat">
+                                <DropdownItem key="profile" className="h-14 gap-2">
+                                    <p className="font-semibold">Signed in as</p>
+                                    <p className="font-semibold">{currentUser?.email}</p>
+                                </DropdownItem>
+                                <DropdownItem key="settings">
+                                    My Profile
+                                </DropdownItem>
+                                <DropdownItem key="analytics">
+                                    Analytics
+                                </DropdownItem>
+                                <DropdownItem key="system">System</DropdownItem>
+                                <DropdownItem key="configurations">Configurations</DropdownItem>
+                                <DropdownItem key="help_and_feedback">
+                                    Help & Feedback
+                                </DropdownItem>
+                                <DropdownItem key="logout" color="danger">
+                                    Log Out
+                                </DropdownItem>
+                            </DropdownMenu>
+                            {/* <Image width={30} height={30} src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px] h-[30px]" /> */}
+                        </Dropdown>
                     ) : (
-                        <button onClick={() => ''}>
+                        <button>
                             <BiUser />
                         </button>
                     )}

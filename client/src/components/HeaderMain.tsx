@@ -31,7 +31,6 @@ const HeaderMain = () => {
             setSearch(searchquery)
     }, [searchquery])
 
-    
 
     const currentUser = useCurrentUser()
 

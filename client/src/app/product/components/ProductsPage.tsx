@@ -52,7 +52,7 @@ const ProductsPage = ({ data }: { data: ProductData }) => {
     const [page, setPage] = useState<number | undefined>(1)
     const { data: products, isLoading: isProductLoading, isFetching, isRefetching } = useQuery<ProductData>({
         queryKey: ['products', filter, page],
-        queryFn: () => getProductsQuery({ ...filter, page, pageSize: 20 }),
+        queryFn: () => getProductsQuery({ ...filter, page, pageSize: 21 }),
         keepPreviousData: true,
         initialData: data
     })
@@ -246,14 +246,13 @@ const ProductsPage = ({ data }: { data: ProductData }) => {
                                 <Pagination
                                     total={products?.pagination.totalNumberofPages || 1}
                                     initialPage={page}
-                                    showControls
-                                    loop
                                     size='lg'
                                     onChange={(page) => {
                                         //semd to top
-                                        // window.scrollTo(0, 0)
+                                        window.scrollTo(0, 0)
                                         setPage(page)
                                     }}
+
                                     about='Page navigation'
                                 />
                             </div>}

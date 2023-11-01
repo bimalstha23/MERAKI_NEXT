@@ -81,3 +81,10 @@ export interface ProductData {
         totalNumberofPages: number;
     };
 }
+
+
+
+
+export interface CategoryData {
+    categories: Category[];
+}

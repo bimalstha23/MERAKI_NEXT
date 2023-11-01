@@ -10,7 +10,7 @@ interface CategoryCardProps {
 const CategoryCard: FC<CategoryCardProps> = ({ name, image }) => {
     const createQueryString = useSetSearchParams()
     return (
-        <Link prefetch href={`/product?${createQueryString('category', name.toString())}`} className='flex justify-center items-center w-full h-[200px] lg:h-[300px] group hover:scale-110 transition-all duration-500 cursor-pointer rounded-xl hover:border-4 border-white hover:shadow-meraki'
+        <Link prefetch href={`/product?${createQueryString('category', name?.toString())}`} className='flex justify-center items-center w-full h-[200px] lg:h-[300px] group hover:scale-110 transition-all duration-500 cursor-pointer rounded-xl hover:border-4 border-white hover:shadow-meraki'
             style={{
                 backgroundImage: `url(${image})`,
                 backgroundSize: 'cover',

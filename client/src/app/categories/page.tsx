@@ -1,16 +1,17 @@
 import React from 'react'
 import Categories from './components/Categories'
-import { prefetchCategories } from '@/services/prefetch'
+import { fetchCategories } from '@/services/categoriesService'
+import { CategoryData } from '@/types'
 
 const page = async () => {
-    await prefetchCategories()
+    const categories: CategoryData = await fetchCategories(undefined)
     return (
         <main>
             <title>
                 Meraki | Categories
             </title>
             <section className='container mx-auto'>
-                <Categories />
+                <Categories categories={categories} />
             </section>
         </main>
     )

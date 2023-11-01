@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import done from '../../public/done.svg'
 import { truncateText } from '@/utils/getGoogleUrl'
@@ -12,8 +13,7 @@ import { Image } from '@nextui-org/react'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
 import { queryClient } from '@/services/queryClient'
 import { useScreenWidth } from '@/hooks/useScreenWidth'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouterWithProgress } from '@/hooks/useRouterWithProgress'
 
 const ProductCard = ({ product }: { product: Product }) => {
     const currentUser = useCurrentUser()
@@ -50,12 +50,19 @@ const ProductCard = ({ product }: { product: Product }) => {
 
     const screenWidth = useScreenWidth()
 
-    const router = useRouter()
+    // const router = useRouterWithProgress()
+    const router = useRouterWithProgress()
+
+
+    const handleNavigateToProduct = () => {
+        router.push(`/product/${product.slug}`, {
+            scroll: true
+        })
+    }
+
 
     return (
-        <div onClick={() => router.push(`/product/${product.slug}`, {
-            scroll: true
-        })}
+        <div onClick={handleNavigateToProduct}
             className='relative flex flex-col justify-start items-start w-full shadow-meraki cursor-pointer' >
             {
                 product.discount ?
@@ -67,7 +74,7 @@ const ProductCard = ({ product }: { product: Product }) => {
             }
 
             <div className='w-full h-full' >
-                <Image src={product.images[0].url} loading='lazy' alt={product.name} isZoomed radius='none' width={'100%'} className='w-full lg:h-[270px] h-[150px] object-cover z-0' />
+                <Image src={product.images[0]?.url} loading='lazy' alt={product.name} isZoomed radius='none' width={'100%'} className='w-full lg:h-[270px] h-[150px] object-cover z-0' />
             </div >
 
             <div className='flex flex-col justify-start items-start lg:p-4 p-2 gap-2 w-full'>

@@ -16,8 +16,6 @@ const MobNavbar = () => {
         queryFn: getCart,
     })
 
-
-
     const numberofCart = data?.cart?.length || 0
     return (
         <div className="lg:hidden fixed bottom-0 w-full bg-white left-[50%] -translate-x-[50%] z-50 max-w-full mob_navbar px-8">

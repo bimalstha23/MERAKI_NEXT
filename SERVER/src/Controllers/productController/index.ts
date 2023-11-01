@@ -89,7 +89,7 @@ export const getProducts = async (
     // Prepare filter options based on query parameters
     const filterOptions: {
       category?: {
-        id: number;
+        name: string;
       };
       price?: {
         gte?: number;
@@ -131,7 +131,7 @@ export const getProducts = async (
 
     if (category) {
       filterOptions.category = {
-        id: Number(category) as unknown as number,
+        name: String(category) as unknown as string,
       };
     }
 

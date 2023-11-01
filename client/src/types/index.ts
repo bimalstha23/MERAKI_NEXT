@@ -68,3 +68,16 @@ export interface ICartItem {
     productId: number;
     product: Product;
 }
+
+
+export interface ProductData {
+    data: Product[];
+    pagination: {
+        nextPage: number | null;
+        total: number;
+        currentPage: number;
+        pageSize: number;
+        totalNumberofProducts: number;
+        totalNumberofPages: number;
+    };
+}

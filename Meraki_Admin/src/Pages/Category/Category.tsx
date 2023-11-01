@@ -6,8 +6,6 @@ import { CategoryLists } from "../../Components/Category/CategoryLists";
 import { AddCategory } from "../../Components/Category/AddCategory";
 
 export const Category = () => {
-
-
     const TabItems = [
         {
             title: 'All Categories',
@@ -17,6 +15,7 @@ export const Category = () => {
             params: 'addcategory'
         }
     ]
+
     const [searchParams, setSearchParams] = useSearchParams();
     const [value, setValue] = useState<string>(searchParams.get('orders') || 'categories');
 

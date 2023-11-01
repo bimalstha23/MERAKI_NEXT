@@ -23,7 +23,7 @@ const NewProducts = () => {
                 )) : ProductCardSkeletons(8)}
             </div>
             <div className='flex justify-center items-center w-full mt-10'>
-                <Link href={'/products'} scroll prefetch  className='text-merakired text-lg'>
+                <Link href={'/product'} scroll prefetch className='text-merakired text-lg'>
                     See more <IoIosArrowDropdownCircle className='inline-block transform -rotate-90' />
                 </Link>
             </div>

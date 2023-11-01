@@ -2,10 +2,10 @@ import HeaderMain from '@/components/HeaderMain'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
-import Navbar from '@/components/Navbar'
 import MobNavbar from '@/components/MobileNav'
 import Providers from '@/Providers'
 import Footer from '@/components/Footer'
+import NextTopLoader from 'nextjs-toploader';
 
 const inter = Roboto({
   subsets: ['latin'],
@@ -14,7 +14,6 @@ const inter = Roboto({
   preload: true,
   adjustFontFallback: true,
 })
-
 
 export const metadata: Metadata = {
   title: 'MERAKI',
@@ -30,6 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <NextTopLoader
+          color='#FFBA98'
+          crawlSpeed={100}
+          crawl={true}
+          showSpinner={false}
+          height={5}
+        />
         <Providers>
           <HeaderMain />
           <MobNavbar />

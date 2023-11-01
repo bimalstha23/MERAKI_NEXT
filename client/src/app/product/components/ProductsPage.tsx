@@ -11,13 +11,13 @@ import ProductCard from '@/components/ProductCard';
 import useQueryParams from '@/hooks/useQueryParams';
 import ProductCardSkeletons from '@/components/Skeletons/ProductCardSkeletons';
 import { Pagination } from '@nextui-org/react';
-import { IProduct, Product } from '@/types';
+import { Product, ProductData } from '@/types';
 
 function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
 }
 
-const ProductsPage = () => {
+const ProductsPage = ({ data }: { data: ProductData }) => {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
     // sortBy
@@ -32,7 +32,7 @@ const ProductsPage = () => {
             setQueryParams({ category: undefined })
             return;
         }
-        setQueryParams({ category: category.id })
+        setQueryParams({ category: category.name })
     }, [categoryfilter, setQueryParams])
 
     const filter: any = {}
@@ -50,22 +50,12 @@ const ProductsPage = () => {
     }
 
     const [page, setPage] = useState<number | undefined>(1)
-    const { data: products, isLoading: isProductLoading, isFetching, isRefetching } = useQuery<{
-        data: Product[];
-        pagination: {
-            nextPage: number | null;
-            total: number;
-            currentPage: number;
-            pageSize: number;
-            totalNumberofPages: number;
-            totalNumberofProducts: number
-        }
-    }>({
+    const { data: products, isLoading: isProductLoading, isFetching, isRefetching } = useQuery<ProductData>({
         queryKey: ['products', filter, page],
         queryFn: () => getProductsQuery({ ...filter, page, pageSize: 20 }),
         keepPreviousData: true,
+        initialData: data
     })
-
 
 
     const { data: categories } = useQuery({
@@ -252,7 +242,7 @@ const ProductsPage = () => {
                                     )
                                 }
                             </div>
-                            {!isProductLoading && products?.pagination.nextPage && products.pagination.totalNumberofPages > 1 && <div className='flex justify-center items-center w-full mt-10'>
+                            {!isProductLoading && <div className='flex justify-center items-center w-full mt-10'>
                                 <Pagination
                                     total={products?.pagination.totalNumberofPages || 1}
                                     initialPage={page}

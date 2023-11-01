@@ -41,19 +41,21 @@ model Image {
 }
 
 model Color {
-  id        Int       @id @unique @default(autoincrement())
-  name      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  products  Product[]
+  id           Int            @id @unique @default(autoincrement())
+  name         String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  products     Product[]
+  orderProduct orderProduct[]
 }
 
 model Size {
-  id        Int       @id @unique @default(autoincrement())
-  name      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  products  Product[]
+  id           Int            @id @unique @default(autoincrement())
+  name         String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  products     Product[]
+  orderProduct orderProduct[]
 }
 
 model Order {
@@ -79,6 +81,10 @@ model Order {
 model orderProduct {
   id        Int      @id @default(autoincrement())
   quantity  Int
+  Color     Color?   @relation(fields: [colorId], references: [id])
+  colorId   Int?
+  Size      Size?    @relation(fields: [sizeId], references: [id])
+  sizeId    Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   orderId   Int
@@ -131,6 +137,17 @@ model CartItem {
   productId Int
   user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
+}
+
+model PromoCode {
+  id         Int       @id @default(autoincrement())
+  code       String    @unique
+  discount   Float
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  expiryDate DateTime?
+  maxUses    Int?
+  usageCount Int       @default(0)
 }
 
 enum UserRole {

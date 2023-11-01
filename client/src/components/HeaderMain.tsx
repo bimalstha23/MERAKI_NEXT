@@ -14,6 +14,7 @@ import { getCart } from "@/services/cartService";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import Link from "next/link";
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
+import { useRouterWithProgress } from "@/hooks/useRouterWithProgress";
 
 const HeaderMain = () => {
     const { queryParams, setQueryParams } = useQueryParams()
@@ -28,7 +29,9 @@ const HeaderMain = () => {
     useEffect(() => {
         if (searchquery !== search && search !== '')
             setSearch(searchquery)
-    }, [search, searchquery])
+    }, [searchquery])
+
+    
 
     const currentUser = useCurrentUser()
 
@@ -37,9 +40,7 @@ const HeaderMain = () => {
         queryFn: getCart,
     })
 
-    console.log(currentUser)
-
-
+    const router = useRouterWithProgress()
 
     const numberofCart = data?.cart?.length || 0
     return (
@@ -53,8 +54,9 @@ const HeaderMain = () => {
                         e.preventDefault()
                         // if (pathname === '/products') setQueryParams({ search })
                         // else
-                        location.href = `/products?search=${search}`
+                        router.push(`/product?search=${search}`)
                     }}
+
                     className="w-full sm:w-[300px] md:w-[70%] rounded-full relative bg-merakigray">
                     <input
                         onChange={(e) => setSearch(e.target.value)}

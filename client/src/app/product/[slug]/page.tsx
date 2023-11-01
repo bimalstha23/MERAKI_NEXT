@@ -1,6 +1,8 @@
 import { prefetchProduct } from '@/services/prefetch'
 import React from 'react'
 import SingleProduct from './components/SingleProduct';
+import { getProductQuery } from '@/services/productService';
+
 
 const Page = async ({
     params,
@@ -10,10 +12,10 @@ const Page = async ({
     };
     searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
-    await prefetchProduct(Number(params.id))
+    const data = await getProductQuery({ slug: params.slug })
     return (
         <>
-            <SingleProduct slug={params.slug} />
+            <SingleProduct slug={params.slug} product={data} />
         </>
     )
 }

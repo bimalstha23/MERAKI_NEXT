@@ -1,7 +1,6 @@
 import { fetchCategories } from "../categoriesService"
-import { getProductQuery, getProductsQuery } from "../productService"
+import { getProductQuery, getProductsQuery, singleProductParams } from "../productService"
 import { queryClient } from "../queryClient"
-
 
 export const prefetchCategories = async () => {
     await queryClient.prefetchQuery({
@@ -17,9 +16,9 @@ export const prefetchProducts = async (params: any) => {
     })
 }
 
-export const prefetchProduct = async (id: number) => {
+export const prefetchProduct = async (params: singleProductParams) => {
     await queryClient.prefetchQuery({
-        queryKey: ['product', id],
-        queryFn: () => getProductQuery(id)
+        queryKey: ['product', params.slug],
+        queryFn: () => getProductQuery(params)
     })
 }

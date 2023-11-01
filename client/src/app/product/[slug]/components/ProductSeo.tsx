@@ -2,7 +2,6 @@ import { NextSeo } from 'next-seo'
 import React from 'react'
 
 const ProductSeo = ({ product }: any) => {
-    console.log(product)
     return (
         <NextSeo
             title={product?.name}

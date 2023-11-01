@@ -20,9 +20,8 @@ const CategorySection = () => {
                 {!isLoading ? data?.categories?.map((item: any, index: number) => (
                     <CategoryCard
                         image={item?.image}
-                        title={item?.name}
+                        name={item?.name}
                         key={index}
-                        id={item?.id}
                     />
                 )) :
                     loadingSkeletons(4)}

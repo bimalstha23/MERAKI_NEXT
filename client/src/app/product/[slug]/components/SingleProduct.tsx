@@ -12,13 +12,17 @@ import { AiFillThunderbolt } from 'react-icons/ai'
 import cross from '../../../../../public/cross.svg'
 import { IProduct } from '@/types'
 import { Skeleton } from '@nextui-org/react'
+// http://localhost:8000/api/meraki/v1/
 
-const SingleProduct = ({ slug }: { slug: string }) => {
+
+const SingleProduct = ({ slug, product }: { slug: string, product: IProduct }) => {
+
 
     const { data, isLoading } = useQuery<IProduct | undefined>({
         queryKey: ['product', slug],
         queryFn: () => getProductQuery({ slug })
     })
+
 
     return (
         <>

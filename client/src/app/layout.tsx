@@ -6,6 +6,7 @@ import MobNavbar from '@/components/MobileNav'
 import Providers from '@/Providers'
 import Footer from '@/components/Footer'
 import NextTopLoader from 'nextjs-toploader';
+import { Analytics } from '@vercel/analytics/react';
 
 const inter = Roboto({
   subsets: ['latin'],
@@ -42,6 +43,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </Providers>
+        <Analytics />
       </body>
     </html >
   )

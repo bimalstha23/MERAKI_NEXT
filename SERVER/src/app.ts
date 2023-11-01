@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const whitelist = ["http://localhost:5173", "http://localhost:3000", "*"];
+const whitelist = ["http://localhost:5173", "http://localhost:3000", "https://merakinext-production.up.railway.app/", "https://meraki-next-hmzc-git-main-bimalstha23.vercel.app/", "*"];
 
 const corsOptions = {
   origin: whitelist,

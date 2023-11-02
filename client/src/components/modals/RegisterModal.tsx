@@ -97,18 +97,18 @@ const RegisterModal: FC<RegisterModalProps> = ({ open, handleClose, setisLoginMo
                         >
                             <Dialog.Panel className="w-full max-w-7xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
                                 <div className="flex flex-row justify-start items-start w-full h-full gap-5">
-                                    <div className="w-full h-full rounded-2xl">
+                                    <div className="w-full h-full rounded-2xl lg:block hidden">
                                         <Image src={merakilogin} className="rounded-2xl shadow-meraki object-cover" alt="meraki" />
                                     </div>
 
-                                    <div className="w-full flex flex-col justify-start  items-start px-14 pt-5">
+                                    <div className="w-full flex flex-col justify-start  items-start lg:px-14 px-2 py-5">
                                         <div className="flex flex-row w-full justify-between items-start">
-                                            <h1 className="text-5xl font-extrabold text-merakired">Create <br />
+                                            <h1 className="lg:text-5xl text-3xl font-extrabold text-merakired">Create <br />
                                                 Account!</h1>
-                                            <Image src={merakioutline} className="w-32 object-cover" alt="meraki" />
+                                            <Image src={merakioutline} className="lg:w-32 w-20 object-cover" alt="meraki" />
                                         </div>
 
-                                        <form className="flex flex-col justify-start items-start w-full gap-10 mt-5 " action=""
+                                        <form className="flex flex-col justify-start items-start w-full lg:gap-10 gap-2" action=""
                                             onSubmit={handleSubmit(submit)}
                                         >
                                             <div className="w-full">
@@ -175,7 +175,7 @@ const RegisterModal: FC<RegisterModalProps> = ({ open, handleClose, setisLoginMo
                                             <h1 className="text-merakiTextGray w-full text-center">
                                                 ----- OR -----
                                             </h1>
-                                            <a href={getGoogleUrl(pathname)} className="w-full p-3 flex gap-3 flex-row justify-center items-center hover:bg-merakiblack hover:text-white font-bold bg-merakimain text-black text-lg rounded-full transition-all duration-200">
+                                            <a href={getGoogleUrl(pathname)} className="w-full lg:p-3 p-2 flex gap-3 flex-row justify-center items-center hover:bg-merakiblack hover:text-white font-bold bg-merakimain text-black text-lg rounded-full transition-all duration-200">
                                                 <Image src={Google} alt="google" />
                                                 Log in with Google
                                             </a>

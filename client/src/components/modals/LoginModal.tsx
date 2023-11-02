@@ -82,7 +82,7 @@ const LoginModal: FC<LoginModalProps> = ({ open, handleClose, setRegisterModalOp
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className=" fixed  z-40 inset-0 bg-black bg-opacity-80" />
+                    <div className="fixed  z-40 inset-0 bg-black bg-opacity-80" />
                 </Transition.Child>
                 <div className="fixed inset-0 overflow-y-auto z-50 ">
                     <div className="relative flex min-h-full items-center justify-center p-4 text-center ">
@@ -95,19 +95,19 @@ const LoginModal: FC<LoginModalProps> = ({ open, handleClose, setRegisterModalOp
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className="w-full  max-w-7xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
+                            <Dialog.Panel className="w-full h-full max-w-7xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
                                 <div className="flex flex-row justify-start items-start w-full h-full gap-5 ">
-                                    <div className="w-full rounded-2xl">
-                                        <Image src={merakilogin} className="rounded-2xl shadow-meraki" alt="meraki" />
+                                    <div className="w-full h-full rounded-2xl lg:block hidden">
+                                        <Image src={merakilogin} className="rounded-2xl shadow-meraki object-fill" alt="meraki" />
                                     </div>
-                                    <div className="w-full flex flex-col justify-start  items-start p-14">
+                                    <div className="w-full flex flex-col justify-start  items-start lg:p-14 p-4 max-sm:p-4 ">
                                         <div className="flex flex-row w-full justify-between items-start">
-                                            <h1 className="text-5xl font-extrabold text-merakired">Start <br />
+                                            <h1 className="lg:text-5xl text-3xl font-extrabold text-merakired">Start <br />
                                                 Shoping!</h1>
-                                            <Image src={merakioutline} className="w-32 object-cover" alt="meraki" />
+                                            <Image src={merakioutline} className="lg:w-32 w-20 object-cover" alt="meraki" />
                                         </div>
 
-                                        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-start items-start w-full gap-16 mt-5 " action="">
+                                        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-start items-start w-full lg:gap-10 gap-2 mt-5 " action="">
                                             <div className="w-full">
                                                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
                                                 <div className="mt-2">
@@ -164,7 +164,7 @@ const LoginModal: FC<LoginModalProps> = ({ open, handleClose, setRegisterModalOp
                                             <h1 className="text-merakiTextGray w-full text-center">
                                                 ----- OR -----
                                             </h1>
-                                            <a href={getGoogleUrl(pathname)} className="w-full p-3 flex gap-3 flex-row justify-center items-center hover:bg-merakiblack hover:text-white font-bold bg-merakimain text-black text-lg rounded-full transition-all duration-200">
+                                            <a href={getGoogleUrl(pathname)} className="w-full lg:p-3 p-2 flex gap-3 flex-row justify-center items-center hover:bg-merakiblack hover:text-white font-bold bg-merakimain text-black text-lg rounded-full transition-all duration-200">
                                                 <Image src={Google} alt="google" />
                                                 Log in with Google
                                             </a>
@@ -175,8 +175,8 @@ const LoginModal: FC<LoginModalProps> = ({ open, handleClose, setRegisterModalOp
                         </Transition.Child>
                     </div>
                 </div>
-            </Dialog >
-        </Transition >
+            </Dialog>
+        </Transition>
     )
 }
 

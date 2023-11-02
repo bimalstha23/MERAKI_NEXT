@@ -8,6 +8,7 @@ import { BiUser } from "react-icons/bi";
 import { useQuery } from "@tanstack/react-query";
 import { getCart } from "@/services/cartService";
 import Link from "next/link";
+import { useAuth } from "@/Providers/AuthProvider";
 
 const MobNavbar = () => {
     const currentUser = useCurrentUser()
@@ -15,6 +16,8 @@ const MobNavbar = () => {
         queryKey: ['cart', 'getCart'],
         queryFn: getCart,
     })
+
+    const { setisLoginModalOpen } = useAuth()
 
     const numberofCart = data?.cart?.length || 0
     return (
@@ -36,7 +39,6 @@ const MobNavbar = () => {
                     currentUser && currentUser?.profile ? (
                         <Dropdown
                             backdrop="blur"
-                            placement="bottom-end"
                         >
                             <DropdownTrigger>
                                 <Avatar
@@ -72,7 +74,7 @@ const MobNavbar = () => {
                             {/* <Image width={30} height={30} src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px] h-[30px]" /> */}
                         </Dropdown>
                     ) : (
-                        <button>
+                        <button onClick={() => setisLoginModalOpen(true)}>
                             <BiUser />
                         </button>
                     )}

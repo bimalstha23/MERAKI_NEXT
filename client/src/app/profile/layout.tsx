@@ -1,4 +1,4 @@
-
+import DesktopNav from "./components/DesktopNav"
 
 export default function ProfileLayout({
     children,
@@ -7,7 +7,10 @@ export default function ProfileLayout({
 }) {
     return (
         <main>
+            <section className="flex flex-row container mx-auto">
+            <DesktopNav />
             {children}
+            </section>
         </main>
     )
 }

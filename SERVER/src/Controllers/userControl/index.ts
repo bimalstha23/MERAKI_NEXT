@@ -111,7 +111,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
     console.log(requestorigin, 'requestorigin', ClientAppOrigin, 'ClientAppOrigin')
 
-    if (!user || user.role === "USER" && requestorigin !== ClientAppOrigin) {
+    if (!user || user.role === "USER" || requestorigin === AdminAppOrigin) {
       return res.status(404).send({
         success: false,
         message: "Invalid email or password",

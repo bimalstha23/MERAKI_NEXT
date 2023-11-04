@@ -4,6 +4,8 @@ import { LoginMutation } from "../../services/AuthApi";
 import Cookies from "js-cookie";
 import { enqueueSnackbar } from "notistack";
 import queryClient from "../../API/ReactQuery";
+import { AxiosError } from "axios";
+import { IErrorMessage } from "../../types";
 
 interface FormValue {
     email: string,
@@ -26,7 +28,12 @@ export const Login = () => {
         onSuccess: (data) => {
             enqueueSnackbar("You're logged in", { variant: 'success' })
             queryClient.invalidateQueries(['user', 'me'])
+            console.log(data, 'logindata')
             Cookies.set('currentUser', JSON.stringify(data.user))
+        },
+        onError: (error: AxiosError<IErrorMessage>) => {
+            console.log(error, 'loginerror')
+            enqueueSnackbar(error.response?.data.message, { variant: 'error' })
         }
     })
 

@@ -59,7 +59,7 @@ export const deserializeUser = async (
       // This is really important (Helps us know if the user is logged in from other controllers)
       // You can do: (req.user or res.locals.user)
       // res.locals.user = user;
-      res.locals.user = user;
+      res.locals.user = userwithoutpassword;
       next();
     } else {
       return res.status(403).send({

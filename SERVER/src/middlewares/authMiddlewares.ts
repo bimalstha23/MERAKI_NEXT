@@ -59,7 +59,6 @@ export const requireAuth = async (
 ) => {
   try {
     const user = res.locals.user;
-    console.log(user)
     if (!user) {
       return res.status(403).send({
         success: false,

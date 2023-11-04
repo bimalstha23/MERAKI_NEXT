@@ -1,5 +1,5 @@
 import { PropsWithChildren, createContext, FC, useState, Dispatch, SetStateAction } from "react";
-import { IProduct } from "../globalTypes";
+import { IProduct } from "../types";
 import { useQuery } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { getMeQuery } from "../services/AuthApi";

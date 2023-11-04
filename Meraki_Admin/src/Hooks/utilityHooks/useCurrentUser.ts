@@ -1,7 +1,7 @@
 
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
-import { Iuser } from '../../globalTypes';
+import { Iuser } from '../../types';
 
 export const useCurrentUser = () => {
     const [currentUser, setCurrentUser] = useState<Iuser | null>(null)

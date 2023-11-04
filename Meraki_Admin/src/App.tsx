@@ -28,10 +28,10 @@ function App() {
       setShowComponent(true);
       clearTimeout(toRef);
       // it is good practice to clear the timeout (but I am not sure why)
-    }, 3000)
+    }, 1000)
   }, [user]);
 
-  if (loading && !showComponent) {
+  if (loading || !showComponent) {
     return (
       <div className="flex justify-center items-center h-screen w-screen">
         <h1>loading....</h1>

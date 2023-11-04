@@ -16,8 +16,8 @@ export const createOrder = async (req: Request, res: Response) => {
       discount,
       customer_address_landmark,
     } = req.body;
-    
-    
+
+
     let calculatedTotalAmount = 0;
     let totalDiscount = 0;
     let totalCostPrice = 0;
@@ -35,7 +35,7 @@ export const createOrder = async (req: Request, res: Response) => {
       const productSubtotal = productData.selling_price * orderedQuantity;
       // Check if the product has an individual discount
       if (productData.discount) {
-        const productDiscount = productSubtotal * (productData.discount/100);
+        const productDiscount = productSubtotal * (productData.discount / 100);
         totalDiscount += productDiscount;
       }
 
@@ -45,18 +45,18 @@ export const createOrder = async (req: Request, res: Response) => {
 
     // Apply the overall discount to the total amount
     const discountedTotalAmount = calculatedTotalAmount - totalDiscount;
-    let TotalAmount  = discountedTotalAmount
-    if(discount){
-      const extraDiscount = discountedTotalAmount * (discount/100);
+    let TotalAmount = discountedTotalAmount
+    if (discount) {
+      const extraDiscount = discountedTotalAmount * (discount / 100);
       totalDiscount += extraDiscount;
       TotalAmount = discountedTotalAmount - extraDiscount;
     }
     // Apply the delivery fee to the total amount
-    if(deleviry_fee){
+    if (deleviry_fee) {
       TotalAmount = TotalAmount + Number(deleviry_fee);
     }
 
-    
+
     // Validate that the provided total_amount matches the calculated discounted total amount
     if (total_amount !== TotalAmount) {
       return res.status(400).json({
@@ -124,12 +124,12 @@ export const createOrder = async (req: Request, res: Response) => {
       const soldCount = productData.soldCount + orderedQuantity;
       await prismaClient.product.update({
         where: { id: product.id },
-        data: { quantity: newQuantity , soldCount: soldCount },
+        data: { quantity: newQuantity, soldCount: soldCount },
       });
     }
 
     res.status(200).json({ order });
-  } catch(e) {
+  } catch (e) {
     console.log(e)
     res.status(500).json({ message: "Something went wrong" });
   }
@@ -137,64 +137,64 @@ export const createOrder = async (req: Request, res: Response) => {
 
 export const getOrders = async (req: Request, res: Response) => {
   try {
-    const { customerName, sortBy, page, pageSize , filter ,  from , to,status } = req.query;
+    const { customerName, sortBy, page, pageSize, filter, from, to, status } = req.query;
 
     // Convert page and pageSize to numbers with default values
     const pageNumber = Number(page) || 1;
-    const itemsPerPage = Number(pageSize)|| 10;
+    const itemsPerPage = Number(pageSize) || 10;
 
     // Build the filters based on the query parameters
-    let filters:{
-      createdAt?:any,
-      status?:OrderState | any,
-    } = {     } 
-      if(status && status !=="DELIVERED" && status !=="CANCELLED"){
-        filters.status = {
-          notIn: ["CANCELLED" , "DELIVERED"],
-        }
-      }else if(status){
-        filters.status = status as OrderState
+    let filters: {
+      createdAt?: any,
+      status?: OrderState | any,
+    } = {}
+    if (status && status !== "DELIVERED" && status !== "CANCELLED") {
+      filters.status = {
+        notIn: ["CANCELLED", "DELIVERED"],
+      }
+    } else if (status) {
+      filters.status = status as OrderState
+    }
+
+    if (filter) {
+      if (filter === "last7days") {
+        const currentDate = new Date();
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(currentDate.getDate() - 7);
+        filters.createdAt = {
+          gte: new Date(sevenDaysAgo).toISOString(), // Convert to ISO 8601 DateTime format
+          lte: new Date(currentDate).toISOString()
+        };
+      }
+      else if (filter === "last1month") {
+        const currentDate = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(currentDate.getDate() - 30);
+        filters.createdAt = {
+          gte: new Date(thirtyDaysAgo).toISOString(), // Convert to ISO 8601 DateTime format
+          lte: new Date(currentDate).toISOString()
+        };
+      }
+      else if (filter === "last2days") {
+        const currentDate = new Date();
+        const twoDaysAgo = new Date();
+        twoDaysAgo.setDate(currentDate.getDate() - 2);
+        filters.createdAt = {
+          gte: new Date(twoDaysAgo).toISOString(), // Convert to ISO 8601 DateTime format
+          lte: new Date(currentDate).toISOString()
+        };
       }
 
-   if(filter){
-   if(filter ==="last7days"){
-    const currentDate = new Date();
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(currentDate.getDate() - 7);
-    filters.createdAt = {
-      gte: new Date(sevenDaysAgo).toISOString(), // Convert to ISO 8601 DateTime format
-    lte: new Date(currentDate).toISOString()
-    };
-   }
-    else if(filter ==="last1month"){
-    const currentDate = new Date();
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(currentDate.getDate() - 30);
-    filters.createdAt = {
-      gte: new Date(thirtyDaysAgo).toISOString(), // Convert to ISO 8601 DateTime format
-      lte: new Date(currentDate).toISOString()
-    };
-  }
-    else if(filter ==="last2days"){
-      const currentDate = new Date();
-      const twoDaysAgo = new Date();
-      twoDaysAgo.setDate(currentDate.getDate() - 2);
-      filters.createdAt = {
-        gte: new Date(twoDaysAgo).toISOString(), // Convert to ISO 8601 DateTime format
-        lte: new Date(currentDate).toISOString()
-      };
-    }
-    
-    else if(filter ==="last6month"){
-      const currentDate = new Date();
-      const sixMonthAgo = new Date();
-      sixMonthAgo.setDate(currentDate.getDate() - 180);
-      filters.createdAt = {
-        gte: new Date(sixMonthAgo).toISOString(), // Convert to ISO 8601 DateTime format
-    lte: new Date(currentDate).toISOString()
-      };
-    }
-    else if(filter ==="last1year"){
+      else if (filter === "last6month") {
+        const currentDate = new Date();
+        const sixMonthAgo = new Date();
+        sixMonthAgo.setDate(currentDate.getDate() - 180);
+        filters.createdAt = {
+          gte: new Date(sixMonthAgo).toISOString(), // Convert to ISO 8601 DateTime format
+          lte: new Date(currentDate).toISOString()
+        };
+      }
+      else if (filter === "last1year") {
         const currentDate = new Date();
         const oneYearAgo = new Date();
         oneYearAgo.setDate(currentDate.getDate() - 365);
@@ -202,16 +202,16 @@ export const getOrders = async (req: Request, res: Response) => {
           gte: new Date(oneYearAgo).toISOString(), // Convert to ISO 8601 DateTime format
           lte: new Date(currentDate).toISOString()
         };
+      }
     }
-}
 
- console.log(filters , 'filter')
-if(from && to){
-  filters.createdAt = {
-    gte: new Date(from as string),
-    lte: new Date(to as string)
-  };
-}
+    console.log(filters, 'filter')
+    if (from && to) {
+      filters.createdAt = {
+        gte: new Date(from as string),
+        lte: new Date(to as string)
+      };
+    }
 
 
 
@@ -223,41 +223,15 @@ if(from && to){
       };
     } else if (sortBy === 'orderId') {
       sortingOptions.id = 'asc';
-    }else {
+    } else {
       sortingOptions.createdAt = 'desc';
     }
 
-    const totalOrders = await prismaClient.order.count({     where: {
-      OR: customerName
-      ? [
-          { customer_name: { contains:customerName  as string, mode: "insensitive" } },
-          {
-            customer_address: {
-              contains: customerName as string,
-              mode: "insensitive",
-            },
-          },
-          {
-            customer_phone: {
-              contains: customerName as string,
-              mode: "insensitive",
-            },
-          },
-          {
-            id:{
-              equals: parseInt(customerName as string),
-            },
-          }
-        ]
-      : undefined,
-        ...filters
-    }, });
-
-    const orders = await prismaClient.order.findMany({
+    const totalOrders = await prismaClient.order.count({
       where: {
         OR: customerName
-        ? [
-            { customer_name: { contains:customerName  as string, mode: "insensitive" } },
+          ? [
+            { customer_name: { contains: customerName as string, mode: "insensitive" } },
             {
               customer_address: {
                 contains: customerName as string,
@@ -271,13 +245,41 @@ if(from && to){
               },
             },
             {
-              id:{
+              id: {
                 equals: parseInt(customerName as string),
               },
             }
           ]
-        : undefined,
-          ...filters,
+          : undefined,
+        ...filters
+      },
+    });
+
+    const orders = await prismaClient.order.findMany({
+      where: {
+        OR: customerName
+          ? [
+            { customer_name: { contains: customerName as string, mode: "insensitive" } },
+            {
+              customer_address: {
+                contains: customerName as string,
+                mode: "insensitive",
+              },
+            },
+            {
+              customer_phone: {
+                contains: customerName as string,
+                mode: "insensitive",
+              },
+            },
+            {
+              id: {
+                equals: parseInt(customerName as string),
+              },
+            }
+          ]
+          : undefined,
+        ...filters,
       },
       include: {
         user: true,
@@ -295,7 +297,7 @@ if(from && to){
           },
         },
       },
-      orderBy:{
+      orderBy: {
         createdAt: 'desc'
       },
       skip: (pageNumber - 1) * itemsPerPage,
@@ -338,7 +340,7 @@ if(from && to){
   }
 };
 
-export const getOrder =  async (req: Request, res: Response) => {
+export const getOrder = async (req: Request, res: Response) => {
   try {
     const { id } = req.query;
 
@@ -369,7 +371,7 @@ export const getOrder =  async (req: Request, res: Response) => {
 
     // Function to filter out unnecessary product fields
     const filterProductFields = (product: any) => {
-      const { cost_price, quantity ,  ...filteredProduct } = product;
+      const { cost_price, quantity, ...filteredProduct } = product;
       return filteredProduct;
     };
 
@@ -387,7 +389,7 @@ export const getOrder =  async (req: Request, res: Response) => {
     // remove profit and discount from the response
     delete filteredOrder.profit;
 
-    
+
     res.status(200).json({ order: filteredOrder });
   } catch (e) {
     console.log(e)
@@ -398,13 +400,13 @@ export const getOrder =  async (req: Request, res: Response) => {
 export const ChangeOrderStatus = async (req: Request, res: Response) => {
   try {
     const { id, status } = req.body;
-    
+
     const order = await prismaClient.order.findUnique({
       where: { id: Number(id) },
-      include:{
-        orderProducts:{
-          include:{
-            product:true
+      include: {
+        orderProducts: {
+          include: {
+            product: true
           }
         }
       }
@@ -415,11 +417,11 @@ export const ChangeOrderStatus = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    if(order.status === "CANCELLED" && status === "CANCELLED"){
+    if (order.status === "CANCELLED" && status === "CANCELLED") {
       return res.status(400).json({ message: "Order is already cancelled" });
     }
 
-    if(order.status === "DELIVERED" && status === "DELIVERED"){
+    if (order.status === "DELIVERED" && status === "DELIVERED") {
       return res.status(400).json({ message: "Order is already delivered" });
     }
     await prismaClient.order.update({
@@ -427,7 +429,7 @@ export const ChangeOrderStatus = async (req: Request, res: Response) => {
       data: { status },
     });
 
-    if(status === "CANCELLED"){
+    if (status === "CANCELLED") {
       for (const orderProduct of order.orderProducts) {
         const productData = await prismaClient.product.findUnique({ where: { id: orderProduct.product.id } });
         if (!productData) {
@@ -439,7 +441,7 @@ export const ChangeOrderStatus = async (req: Request, res: Response) => {
         const soldCount = productData.soldCount - orderProduct.quantity;
         await prismaClient.product.update({
           where: { id: orderProduct.product.id },
-          data: { quantity: newQuantity , soldCount: soldCount },
+          data: { quantity: newQuantity, soldCount: soldCount },
         });
       }
     }

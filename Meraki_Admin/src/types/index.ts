@@ -45,3 +45,9 @@ export interface Iuser {
   role: string
 }
 
+export interface IErrorMessage {
+  message: string
+  success: boolean
+}
+
+

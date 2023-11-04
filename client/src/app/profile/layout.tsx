@@ -7,9 +7,9 @@ export default function ProfileLayout({
 }) {
     return (
         <main>
-            <section className="flex flex-row container mx-auto">
-            <DesktopNav />
-            {children}
+            <section className="flex flex-row container mx-auto mt-40 gap-24">
+                <DesktopNav />
+                {children}
             </section>
         </main>
     )

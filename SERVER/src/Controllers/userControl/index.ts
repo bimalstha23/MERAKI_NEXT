@@ -110,12 +110,22 @@ export const loginUser = async (req: Request, res: Response) => {
 
 
     console.log(requestorigin, 'requestorigin', ClientAppOrigin, 'ClientAppOrigin')
-
-    if (!user || user.role === "USER" || requestorigin === AdminAppOrigin) {
+    console.log(AdminAppOrigin === requestorigin, 'AdminAppOrigin')
+    if (!user) {
       return res.status(404).send({
         success: false,
-        message: "Invalid email or password",
+        message: "invalid email or password",
       });
+    }
+
+
+    if (AdminAppOrigin === requestorigin) {
+      if (user.role !== 'ADMIN') {
+        return res.status(404).send({
+          success: false,
+          message: "invalid email or password",
+        });
+      }
     }
 
     const match = await comparePassword(password, user.password);

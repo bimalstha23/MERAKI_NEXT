@@ -28,7 +28,6 @@ export const Login = () => {
         onSuccess: (data) => {
             enqueueSnackbar("You're logged in", { variant: 'success' })
             queryClient.invalidateQueries(['user', 'me'])
-            console.log(data, 'logindata')
             Cookies.set('currentUser', JSON.stringify(data.user))
         },
         onError: (error: AxiosError<IErrorMessage>) => {

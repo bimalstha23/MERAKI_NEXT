@@ -49,5 +49,3 @@ export interface IErrorMessage {
   message: string
   success: boolean
 }
-
-

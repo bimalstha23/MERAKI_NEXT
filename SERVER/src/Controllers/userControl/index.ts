@@ -36,7 +36,6 @@ if (process.env.NODE_ENV === "production")
   accessTokenCookieOptions.secure = true;
 
 export const createUser = async (req: Request, res: Response) => {
-  console.log("we are here");
   try {
     // get name, email, and password from request body
     const { name, email, password } = req.body;
@@ -221,7 +220,6 @@ export const logout = async (req: Request, res: Response) => {
   }
 }
 
-
 export const googleAuthHandler = async (req: Request, res: Response) => {
   try {
     const code = req.query.code as string;
@@ -287,13 +285,54 @@ export const googleAuthHandler = async (req: Request, res: Response) => {
   }
 }
 
-
 export const logoutHandler = async (req: Request, res: Response) => {
   try {
     res.clearCookie("access_token");
     res.clearCookie("refresh_token");
     res.status(200).send("Logged out successfully");
   } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { name, phone } = req.body;
+    const user = res.locals.user;
+
+    if (!name) {
+      return res.status(404).send({
+        success: false,
+        message: "name is required",
+      });
+    }
+
+    if (!phone) {
+      return res.status(404).send({
+        success: false,
+        message: "phone is required",
+      });
+    }
+
+    const updatedUser = await prismaClient.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        name,
+        phone,
+      },
+    });
+
+    if (!updatedUser) {
+      return res.status(500).json({ error: 'something went wrong' });
+    }
+
+    res.status(200).json({ message: 'user updated successfully' });
+  }
+  catch (error: any) {
+    // handle errors
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 }

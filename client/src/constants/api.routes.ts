@@ -3,6 +3,7 @@ export const userRoutesPath = {
   loginUser: "/auth/login",
   refresh: "/auth/refreshToken",
   getme: "/auth/getme",
+  updateUser: "/auth/updateuser",
 };
 
 export const productRoutesPath = {

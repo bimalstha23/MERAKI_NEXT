@@ -5,6 +5,7 @@ export const userRoutesPath = {
   getme: "/auth/getme",
   googleAuth: "/auth/google",
   logout: "/auth/logout",
+  updateUser: "/auth/updateuser",
 };
 
 export const productRoutesPath = {

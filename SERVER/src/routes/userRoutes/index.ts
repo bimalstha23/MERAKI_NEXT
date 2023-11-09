@@ -7,6 +7,7 @@ import {
   loginUser,
   logoutHandler,
   refreshWebToken,
+  updateUser,
 } from "../../Controllers/userControl";
 import { userRoutesPath } from "../../constants/Api";
 import { deserializeUser } from "../../middlewares/deserializeUser";
@@ -20,5 +21,6 @@ userRoutes.get(userRoutesPath.refresh, refreshWebToken);
 userRoutes.get(userRoutesPath.getme, deserializeUser, requireAuth, getMe);
 userRoutes.get(userRoutesPath.googleAuth, googleAuthHandler);
 userRoutes.get(userRoutesPath.logout, logoutHandler);
+userRoutes.put(userRoutesPath.updateUser, deserializeUser, requireAuth, updateUser);
 
 export default userRoutes;

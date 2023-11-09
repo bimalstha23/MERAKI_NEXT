@@ -6,10 +6,9 @@ import React from 'react'
 const DesktopNav = () => {
     const pathname = usePathname()
     const [_, parentpathname, childPathname] = pathname.split('/')
-    console.log(childPathname, 'childPathname')
 
     return (
-        <div className='flex flex-col gap-8'>
+        <div className='flex flex-col gap-8 w-fit'>
             <div className='flex flex-col gap-2'>
                 <h1 className='font-bold text-2xl'>Manage my Profile</h1>
                 <Link className={

@@ -3,12 +3,18 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 
 export const useCurrentUser = () => {
-    const [currentUser, setCurrentUser] = useState<Iuser | null>(null)
-    const user = Cookies.get('currentUser');
+    const [currentUser, setCurrentUser] = useState<Iuser | null>(null);
+
     useEffect(() => {
-        if (user) {
-            setCurrentUser(JSON.parse(user))
-        }
-    }, [user])
-    return currentUser
-}
+        const fetchData = async () => {
+            const user = Cookies.get('currentUser');
+            if (user) {
+                setCurrentUser(JSON.parse(user));
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    return currentUser;
+};

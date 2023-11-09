@@ -96,13 +96,12 @@ const HeaderMain = () => {
                                         <p className="font-semibold">{currentUser?.email}</p>
                                     </DropdownItem>
                                     <DropdownItem key="settings">
-                                        My Profile
+                                        <Link href={'/profile'}>
+                                            My Profile
+                                        </Link>
                                     </DropdownItem>
-                                    <DropdownItem key="analytics">
-                                        Analytics
-                                    </DropdownItem>
-                                    <DropdownItem key="system">System</DropdownItem>
-                                    <DropdownItem key="configurations">Configurations</DropdownItem>
+                                    <DropdownItem key="system">My Orders</DropdownItem>
+                                    <DropdownItem key="configurations">Address Book</DropdownItem>
                                     <DropdownItem key="help_and_feedback">
                                         Help & Feedback
                                     </DropdownItem>
@@ -110,7 +109,6 @@ const HeaderMain = () => {
                                         Log Out
                                     </DropdownItem>
                                 </DropdownMenu>
-                                {/* <Image width={30} height={30} src={currentUser?.profile} alt={currentUser?.name} className="rounded-full w-[30px] h-[30px]" /> */}
                             </Dropdown>
                         ) : (
                             <button onClick={() => setisLoginModalOpen(true)}>

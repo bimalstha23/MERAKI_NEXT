@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { loginMutation } from "@/services/Auth";
 import { AxiosError } from "axios";
 import { IErrorMessage } from "@/types";
@@ -154,7 +154,9 @@ const LoginModal: FC<LoginModalProps> = ({ open, handleClose, setRegisterModalOp
                                         </form>
                                         <div className="flex flex-col w-full justify-center items-center gap-3">
                                             <h1 className="text-lg font-bold text-center w-full">
-                                                New to Meraki ?  <button onClick={() => {
+                                                New to Meraki ?  <button onClick={(e) => {
+                                                    e.preventDefault()
+                                                    e.stopPropagation()
                                                     handleClose()
                                                     setRegisterModalOpen(true)
                                                 }} className="font-semibold text-merakired   hover:underline transition-all duration-200">

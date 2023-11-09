@@ -33,3 +33,14 @@ export const loginMutation = async (data: {
     data: data
   })
 }
+
+export const updateUserMutation = async (data: {
+  name: string,
+  phone: string,
+}) => {
+  return axiosInstance({
+    method: 'put',
+    url: userRoutesPath.updateUser,
+    data: data
+  })
+}

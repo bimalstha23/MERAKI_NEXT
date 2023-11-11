@@ -10,7 +10,7 @@ const page = () => {
                     <ProfileForm />
                 </Suspense>
             </div>
-        </div >
+        </div>
     )
 }
 

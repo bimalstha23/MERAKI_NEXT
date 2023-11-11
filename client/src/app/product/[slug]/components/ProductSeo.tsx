@@ -4,8 +4,9 @@ import React from 'react'
 const ProductSeo = ({ product }: any) => {
     return (
         <NextSeo
-            title={product?.name}
+            title={'asfawf a'}
             description={product?.description}
+            // defaultTitle='MERAKI'
             twitter={{
                 handle: '@handle',
                 site: '@site',

@@ -49,6 +49,15 @@ export const cartRoutesPath = {
   updateCartItem: "/cart/updatecartitem",
   deleteCart: "/cart/deletecart",
 };
+export const addressRoutesPath = {
+  createAddress: "/address/createaddress",
+  getAddress: "/address/getaddress",
+  deleteAddress: "/address/deleteaddress",
+  updateAddress: "/address/updateaddress",
+  getAddresses: "/address/getaddresses",
+};
+
+
 
 export const statsRoutesPath = {
   getStats: "/stats/getstats",

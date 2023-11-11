@@ -56,3 +56,11 @@ export const basePath = {
   baseuri: "/api/meraki",
 };
 
+
+export const addressRoutesPath = {
+  createAddress: "/address/createaddress",
+  getAddress: "/address/getaddress",
+  deleteAddress: "/address/deleteaddress",
+  updateAddress: "/address/updateaddress",
+  getAddresses: "/address/getaddresses",
+};

@@ -30,3 +30,17 @@ export const AddAddress = async (data: any) => {
         data,
     })
 }
+
+export const GetAddresses = async () => {
+    return axiosInstance({
+        url: addressRoutesPath.getAddresses,
+        method: 'GET',
+    })
+}
+
+export const deleteAddress = async (id: number) => {
+    return axiosInstance({
+        url: addressRoutesPath.deleteAddress + `/${id}`,
+        method: 'DELETE',
+    })
+}

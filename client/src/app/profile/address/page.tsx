@@ -1,7 +1,9 @@
 import React, { Suspense } from 'react'
 import AddressPage from './components/AddressPage'
+import { prefetchAddresses } from '@/services/prefetch'
 
-const page = () => {
+const page = async () => {
+    await prefetchAddresses()
     return (
         <div className='flex flex-col w-full'>
             <h1 className='text-2xl font-semibold'>Address Book</h1>

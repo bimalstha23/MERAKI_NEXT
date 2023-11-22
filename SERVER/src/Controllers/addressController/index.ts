@@ -37,7 +37,7 @@ export const getAddresses = async (req: Request, res: Response) => {
                 userId: user.id,
             },
         });
-        res.status(200).json({ message: "addresses fetched successfully", addresses });
+        res.status(200).json({ addresses });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
@@ -53,7 +53,7 @@ export const getAddress = async (req: Request, res: Response) => {
                 userId: user.id,
             },
         });
-        res.status(200).json({ message: "address fetched successfully", address });
+        res.status(200).json({ address });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }

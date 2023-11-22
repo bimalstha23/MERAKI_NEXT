@@ -14,7 +14,7 @@ const DesktopNav = () => {
                 <Link className={
                     (pathname === '/profile') ? 'text-merakigreen' : 'text-gray-500'
                 } href={'/profile'}>Profile</Link>
-                <Link href={'/profile'}>Address</Link>
+                <Link href={'/profile/address'}>Address</Link>
             </div>
 
             <div className='flex flex-col gap-2'>

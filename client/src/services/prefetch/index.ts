@@ -1,3 +1,4 @@
+import { GetAddresses } from "../address"
 import { fetchCategories } from "../categoriesService"
 import { getProductQuery, getProductsQuery, singleProductParams } from "../productService"
 import { queryClient } from "../queryClient"
@@ -20,5 +21,11 @@ export const prefetchProduct = async (params: singleProductParams) => {
     await queryClient.prefetchQuery({
         queryKey: ['product', params.slug],
         queryFn: () => getProductQuery(params)
+    })
+}
+export const prefetchAddresses = async () => {
+    await queryClient.prefetchQuery({
+        queryKey: ['addresses'],
+        queryFn: () => GetAddresses()
     })
 }

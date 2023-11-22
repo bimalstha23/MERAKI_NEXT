@@ -41,13 +41,13 @@ const AddNewAddress = () => {
         queryKey: ['address', 'getProvince', 'province']
     })
 
-    const { data: district, isLoading: isDistrictLoading, refetch } = useQuery({
+    const { data: district, isLoading: isDistrictLoading, isFetching: isDistrictFetching } = useQuery({
         queryFn: () => getDistrict(provincefield),
         queryKey: ['district', provincefield],
         enabled: !!provincefield
     })
 
-    const { data: municipal, isLoading: isMunicipalLoading, refetch: refetchMunicipals } = useQuery({
+    const { data: municipal, isLoading: isMunicipalLoading, isFetching: isMunicipalFetching } = useQuery({
         queryFn: () => getMunicipals(districtfield),
         queryKey: ['district', districtfield],
         enabled: !!districtfield
@@ -120,15 +120,22 @@ const AddNewAddress = () => {
                         id="province"
                         className="block w-full rounded-lg border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:border-none focus:outline-none focus:ring-merakimain sm:text-sm sm:leading-6"
                     >
-                        <option value="" className="text-gray-900 bg-white">
-                            Select Province
-                        </option>
+                        {isProvinceLoading ? <option value="" className="text-gray-900 bg-white">
+                            Loading...
+                        </option> :
+                            <Fragment>
 
-                        {province?.data.provinces.map((item: any) => (
-                            <option key={item.name} value={item} className="text-gray-900 bg-white">
-                                {item}
-                            </option>
-                        ))}
+                                <option value="" className="text-gray-900 bg-white">
+                                    Select Province
+                                </option>
+
+                                {province?.data.provinces.map((item: any) => (
+                                    <option key={item.name} value={item} className="text-gray-900 bg-white">
+                                        {item}
+                                    </option>
+                                ))}
+                            </Fragment>
+                        }
                     </select>
                     <ErrorMessage
                         errors={errors}
@@ -142,18 +149,21 @@ const AddNewAddress = () => {
                         {...register('district')}
                         name="district"
                         id="district"
-                        disabled={isDistrictLoading || !provincefield}
+                        disabled={isDistrictLoading || !provincefield || isDistrictFetching}
                         className="block w-full rounded-lg border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:border-none focus:outline-none focus:ring-merakimain sm:text-sm sm:leading-6"
                     >
-                        <option value="" className="text-gray-900 bg-white">
-                            Select District
-                        </option>
-
-                        {district?.data?.districts?.map((item: any) => (
-                            <option key={item.name} value={item} className="text-gray-900 bg-white">
-                                {item}
+                        {isDistrictLoading && isDistrictFetching ? <option value="" className="text-gray-900 bg-white">
+                            Loading...
+                        </option> : <Fragment>
+                            <option value="" className="text-gray-900 bg-white">
+                                Select District
                             </option>
-                        ))}
+                            {district?.data?.districts?.map((item: any) => (
+                                <option key={item.name} value={item} className="text-gray-900 bg-white">
+                                    {item}
+                                </option>
+                            ))}
+                        </Fragment>}
                     </select>
                     <ErrorMessage
                         errors={errors}
@@ -173,15 +183,20 @@ const AddNewAddress = () => {
                         disabled={isMunicipalLoading || !districtfield}
                         className="block w-full rounded-lg border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:border-none focus:outline-none focus:ring-merakimain sm:text-sm sm:leading-6"
                     >
-                        <option value="" className="text-gray-900 bg-white">
-                            Select municipal
-                        </option>
-
-                        {municipal?.data?.municipals?.map((item: any) => (
-                            <option key={item.name} value={item} className="text-gray-900 bg-white">
-                                {item}
+                        {isMunicipalLoading && isMunicipalFetching ?
+                            <option value="" className="text-gray-900 bg-white">
+                                Loading...
                             </option>
-                        ))}
+                            : <Fragment>
+                                <option value="" className="text-gray-900 bg-white">
+                                    Select municipal
+                                </option>
+                                {municipal?.data?.municipals?.map((item: any) => (
+                                    <option key={item.name} value={item} className="text-gray-900 bg-white">
+                                        {item}
+                                    </option>
+                                ))}
+                            </Fragment>}
                     </select>
                     <ErrorMessage
                         errors={errors}

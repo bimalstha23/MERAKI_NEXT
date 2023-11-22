@@ -12,21 +12,30 @@ import { AiFillThunderbolt } from 'react-icons/ai'
 import cross from '../../../../../public/cross.svg'
 import { IProduct } from '@/types'
 import { Skeleton } from '@nextui-org/react'
-// http://localhost:8000/api/meraki/v1/
+import { NextSeo } from 'next-seo'
 
 
 const SingleProduct = ({ slug, product }: { slug: string, product: IProduct }) => {
 
-
     const { data, isLoading } = useQuery<IProduct | undefined>({
         queryKey: ['product', slug],
-        queryFn: () => getProductQuery({ slug })
+        queryFn: () => getProductQuery({ slug }),
+        initialData: product
     })
 
 
     return (
         <>
-            <ProductSeo product={data?.product} />
+            <NextSeo
+                title={'asfawf a'}
+                // description={product?.description}
+                // defaultTitle='MERAKI'
+                twitter={{
+                    handle: '@handle',
+                    site: '@site',
+                    cardType: 'summary_large_image',
+                }}
+            />
             <main className='container mx-auto  mt-10'>
                 <section className='grid lg:grid-cols-2 grid-cols-1 justify-start items-start gap-20'>
 

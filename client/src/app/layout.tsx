@@ -19,6 +19,9 @@ const inter = Roboto({
 export const metadata: Metadata = {
   title: 'MERAKI',
   description: 'Home of the best products in the world',
+  icons: {
+    icon: '/favicon.ico',
+  }
 }
 
 export default function RootLayout({

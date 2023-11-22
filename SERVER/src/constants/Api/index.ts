@@ -33,6 +33,7 @@ export const orderRoutesPath = {
   changeStatus: "/order/changestatus",
   deleteOrder: "/order/deleteorder",
 };
+
 export const paymentRoutesPath = {
   createPayment: "/payment/createpayment",
   getPayments: "/payment/getpayments",
@@ -49,6 +50,15 @@ export const cartRoutesPath = {
   updateCartItem: "/cart/updatecartitem",
   deleteCart: "/cart/deletecart",
 };
+export const addressRoutesPath = {
+  createAddress: "/address/createaddress",
+  getAddress: "/address/getaddress",
+  deleteAddress: "/address/deleteaddress/:id",
+  updateAddress: "/address/updateaddress",
+  getAddresses: "/address/getaddresses",
+};
+
+
 
 export const statsRoutesPath = {
   getStats: "/stats/getstats",

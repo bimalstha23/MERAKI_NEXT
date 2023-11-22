@@ -112,7 +112,13 @@ model User {
 
 model Address {
   id        Int      @id @default(autoincrement())
-  address   String
+  name    String
+  phone    String
+  province String
+  district String
+  municipal String
+  ward String
+  landmark String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId    Int

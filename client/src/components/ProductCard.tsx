@@ -55,6 +55,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 
 
     const handleNavigateToProduct = () => {
+        console.log('clicked', product.slug)
         router.push(`/product/${product.slug}`, {
             scroll: true
         })

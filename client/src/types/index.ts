@@ -83,6 +83,22 @@ export interface ProductData {
 }
 
 
+export interface Addresses {
+    addresses: Address[];
+}
+export interface Address {
+    id: number;
+    name: string;
+    phone: string;
+    province: string;
+    district: string;
+    municipal: string;
+    ward: string;
+    landmark: string;
+    createdAt: string;
+    updatedAt: string;
+    userId: number;
+}
 
 
 export interface CategoryData {

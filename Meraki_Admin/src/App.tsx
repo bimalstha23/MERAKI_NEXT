@@ -5,18 +5,20 @@ import { publicRoutes } from './Routes/public/PublicRoutes';
 import { privateRoutes } from './Routes/private/PrivateRoutes';
 import { useQuery } from '@tanstack/react-query';
 import { getMeQuery } from './services/AuthApi';
-import { useAuth } from './Hooks/ProviderHooks/useAuth';
+import { useCurrentUser } from './Hooks/utilityHooks/useCurrentUser';
+import Cookies from "js-cookie";
 
 function App() {
-  const { setUser, user } = useAuth();
+  const user = useCurrentUser();
   const [showComponent, setShowComponent] = useState(false)
 
   const { isLoading: loading } = useQuery({
     queryKey: ['user'],
     queryFn: getMeQuery,
     onSuccess(data) {
-      console.log(data, 'data');
-      setUser(data);
+      if (data?.user) {
+        Cookies.set('currentUser', JSON.stringify(data.user))
+      }
     },
   });
 

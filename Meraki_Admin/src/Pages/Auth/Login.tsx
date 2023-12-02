@@ -13,7 +13,6 @@ interface FormValue {
 }
 
 export const Login = () => {
-
     const { register, handleSubmit, } = useForm<FormValue>({
         mode: "onBlur",
         defaultValues: {
@@ -66,7 +65,6 @@ export const Login = () => {
                                 {...register("password")}
                             />
                         </div>
-
                         <div className='mt-8 flex flex-col gap-y-4'>
                             <button disabled={isLoading} type="submit"
                                 className='active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01]  ease-in-out transform py-4 bg-primary rounded-xl text-black font-bold text-lg'>Sign in</button>

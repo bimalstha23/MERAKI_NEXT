@@ -60,13 +60,19 @@ export const addressRoutesPath = {
 
 
 
+export const couponRoutesPath = {
+  createCoupon: "/coupon/createcoupon",
+  getCoupons: "/coupon/getcoupons",
+  updateCoupon: "/coupon/updatecoupon",
+  deleteCoupon: "/coupon/deletecoupon/:id",
+  applyCoupon: "/coupon/applycoupon",
+};
+
 export const statsRoutesPath = {
   getStats: "/stats/getstats",
   getChartData: "/stats/getchartdata",
   getTopProducts: "/stats/gettopproducts",
-
 };
-
 
 export const basePath = {
   version: "/v1",

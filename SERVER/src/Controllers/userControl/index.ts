@@ -119,7 +119,9 @@ export const loginUser = async (req: Request, res: Response) => {
 
 
     if (AdminAppOrigin === requestorigin) {
+      console.log('here')
       if (user.role !== 'ADMIN') {
+        console.log('not admin here')
         return res.status(404).send({
           success: false,
           message: "invalid email or password",

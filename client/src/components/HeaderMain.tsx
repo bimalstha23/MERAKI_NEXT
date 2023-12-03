@@ -32,7 +32,7 @@ const HeaderMain = () => {
     }, [searchquery])
 
 
-    const currentUser = useCurrentUser()
+    const { currentUser } = useCurrentUser()
 
     const { data, isLoading: cartLoading } = useQuery({
         queryKey: ['cart', 'getCart'],

@@ -24,7 +24,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 export const CreateOrder = () => {
 
-    const currentUser = useCurrentUser()
+    const { currentUser } = useCurrentUser()
 
     const schema = yup.object().shape({
         name: yup.string().required(),

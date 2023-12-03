@@ -6,6 +6,7 @@ import { enqueueSnackbar } from "notistack";
 import queryClient from "../../API/ReactQuery";
 import { AxiosError } from "axios";
 import { IErrorMessage } from "../../types";
+import { useCurrentUser } from "../../Hooks/utilityHooks/useCurrentUser";
 
 interface FormValue {
     email: string,
@@ -21,6 +22,8 @@ export const Login = () => {
         }
     });
 
+    const { setCurrentUser } = useCurrentUser()
+
     const { isLoading, mutate, } = useMutation({
         mutationFn: LoginMutation,
         mutationKey: ['login'],
@@ -28,6 +31,7 @@ export const Login = () => {
             enqueueSnackbar("You're logged in", { variant: 'success' })
             queryClient.invalidateQueries(['user', 'me'])
             Cookies.set('currentUser', JSON.stringify(data.user))
+            setCurrentUser(data.user)
         },
         onError: (error: AxiosError<IErrorMessage>) => {
             console.log(error, 'loginerror')

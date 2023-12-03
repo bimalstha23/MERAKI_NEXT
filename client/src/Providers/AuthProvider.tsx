@@ -1,10 +1,9 @@
 'use client';
 import { getMeQuery } from '@/services/Auth';
-import { Iuser } from '@/types';
 import { useQuery } from '@tanstack/react-query';
-import React, { FC, PropsWithChildren, createContext, useState } from 'react'
+import React, { FC, PropsWithChildren, createContext } from 'react'
 import Cookies from 'js-cookie'
-import { Cookie } from 'next/font/google';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 
 interface IAuthContext {
     isLoading: boolean,
@@ -30,7 +29,6 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const [isLoginModalOpen, setisLoginModalOpen] = React.useState(false)
     const [isRegisterModalOpen, setisRegisterModalOpen] = React.useState(false)
-
     const { data: user, isLoading } = useQuery({
         queryKey: ['user', 'me'],
         queryFn: () => getMeQuery(),

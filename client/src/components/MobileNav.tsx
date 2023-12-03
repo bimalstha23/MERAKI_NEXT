@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useAuth } from "@/Providers/AuthProvider";
 
 const MobNavbar = () => {
-    const currentUser = useCurrentUser()
+    const { currentUser } = useCurrentUser()
     const { data, isLoading: cartLoading } = useQuery({
         queryKey: ['cart', 'getCart'],
         queryFn: getCart,

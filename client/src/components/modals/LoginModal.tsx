@@ -17,6 +17,7 @@ import { IErrorMessage } from "@/types";
 import { enqueueSnackbar } from "notistack";
 import Cookies from "js-cookie";
 import { queryClient } from "@/services/queryClient";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 interface LoginModalProps {
     open: boolean

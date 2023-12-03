@@ -25,7 +25,7 @@ const schema = yup.object().shape({
 })
 
 const ProfileForm = () => {
-    const currentUser = useCurrentUser()
+    const { currentUser } = useCurrentUser()
     const [isEditClicked, setIsEditClicked] = useState<boolean>(false)
 
     const { register, handleSubmit, formState: { errors, }, reset } = useForm<FormValue>({

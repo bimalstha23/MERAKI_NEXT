@@ -16,7 +16,7 @@ import { useScreenWidth } from '@/hooks/useScreenWidth'
 import { useRouterWithProgress } from '@/hooks/useRouterWithProgress'
 
 const ProductCard = ({ product }: { product: Product }) => {
-    const currentUser = useCurrentUser()
+    const {currentUser} = useCurrentUser()
     const { setisLoginModalOpen } = useAuth()
     const { mutate } = useMutation({
         mutationKey: ['addtocart', 'cart'],

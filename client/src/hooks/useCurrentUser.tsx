@@ -3,18 +3,17 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 
 export const useCurrentUser = () => {
-    const [currentUser, setCurrentUser] = useState<Iuser | null>(null);
+    const [currentUser, setCurrentUser] = useState<Iuser | null>(() => {
+        const userString = Cookies.get('currentUser');
+        return userString ? JSON.parse(userString) : null;
+    });
 
+    const user = Cookies.get('currentUser');
     useEffect(() => {
-        const fetchData = async () => {
-            const user = Cookies.get('currentUser');
-            if (user) {
-                setCurrentUser(JSON.parse(user));
-            }
-        };
+        if (user) {
+            setCurrentUser(JSON.parse(user));
+        }
+    }, [user, setCurrentUser]); // Run this effect only once when the component mounts
 
-        fetchData();
-    }, []);
-
-    return currentUser;
+    return { currentUser, setCurrentUser };
 };

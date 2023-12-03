@@ -9,7 +9,7 @@ import { useCurrentUser } from './Hooks/utilityHooks/useCurrentUser';
 import Cookies from "js-cookie";
 
 function App() {
-  const user = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const [showComponent, setShowComponent] = useState(false)
 
   const { isLoading: loading } = useQuery({
@@ -23,7 +23,7 @@ function App() {
   });
 
 
-  const router = createBrowserRouter(!user ? privateRoutes : publicRoutes);
+  const router = createBrowserRouter(!currentUser ? privateRoutes : publicRoutes);
 
   useEffect(() => {
     const toRef = setTimeout(() => {
@@ -31,7 +31,7 @@ function App() {
       clearTimeout(toRef);
       // it is good practice to clear the timeout (but I am not sure why)
     }, 1000)
-  }, [user]);
+  }, [currentUser]);
 
   if (loading || !showComponent) {
     return (

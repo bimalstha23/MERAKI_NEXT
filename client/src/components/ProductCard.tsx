@@ -80,8 +80,8 @@ const ProductCard = ({ product }: { product: Product }) => {
 
             <div className='flex flex-col justify-start items-start lg:p-4 p-2 gap-2 w-full'>
                 {product.instock ? (
-                    <h1 className='text-merakigreen gap-2 w-full  lg:text-lg text-sm flex flex-row justify-start items-start'>
-                        <Image src={done.src} alt="on Stock" />
+                    <h1 className='text-merakigreen gap-2 w-full  lg:text-lg text-sm flex flex-row justify-start items-center'>
+                        <Image src={done.src} className='w-4' alt="on Stock" />
                         On Stock
                     </h1>
                 ) : (
@@ -96,7 +96,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                         {truncateText(product.name, screenWidth > 768 ? 30 : 20)}
                     </h1>
                     <h1 className='text-merakiTextGray text-xs p-0 m-0  w-full whitespace-nowrap text-ellipsis overflow-hidden'>
-                        {truncateText(product.description, screenWidth > 768 ? 50 : 30)}
+                        {truncateText(product.description, screenWidth > 768 ? 50 : 20)}
                     </h1>
                 </div>
                 <div className='flex flex-col w-full'>

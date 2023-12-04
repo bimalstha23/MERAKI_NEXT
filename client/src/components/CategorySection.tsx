@@ -26,7 +26,7 @@ const CategorySection = () => {
                 )) :
                     loadingSkeletons(4)}
             </div>
-            <div className='flex justify-center items-center w-full mt-10'>
+            <div className='flex justify-center items-center w-full mt-3'>
                 <Link prefetch={true} href={'/categories'} className='text-merakiblack flex flex-row justify-center gap-2 items-center font-semibold text-lg'>
                     See more <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
                         <path d="M10.5 0C16.299 -2.53482e-07 21 4.70101 21 10.5C21 16.299 16.299 21 10.5 21C4.70101 21 2.53482e-07 16.299 0 10.5C-2.53482e-07 4.70101 4.70101 2.53482e-07 10.5 0Z" fill="#323232" />

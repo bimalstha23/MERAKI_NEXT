@@ -12,7 +12,7 @@ const SiteDescription = () => {
                 </div>
                 <div className='flex flex-col gap-3 justify-start items-start w-full font-normal lg:text-2xl text-base'>
                     <div>
-                        <h1 className='text-4xl font-bold lg:text-start text-center'>Homemade Products</h1>
+                        <h1 className='lg:text-4xl text-xl font-bold lg:text-start text-center'>Homemade Products</h1>
                         <p className='lg:text-start text-center text-sm mt-4'>
                             Hey there! At Meraki, we love creating one-of-a-kind jewelry just for you! Whether it&apos;s a special occasion or you want something unique for yourself, our custom-made accessories are crafted from scratch.
                         </p>

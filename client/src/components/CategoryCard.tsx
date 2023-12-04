@@ -18,7 +18,7 @@ const CategoryCard: FC<CategoryCardProps> = ({ name, image }) => {
             }}
         >
             <div className='flex justify-center flex-col items-center gap-3 w-full h-full backdrop-brightness-90 transition-all duration-500 bg-black/40 group-hover:bg-black/60 rounded-xl'>
-                <h1 className='text-white font-bold text-2xl'>
+                <h1 className='text-white font-bold lg:text-2xl text-lg'>
                     {name}
                 </h1>
                 <button className='bg-white text-black shadow-meraki lg:py-2 py-1 lg:text-lg text-sm w-1/2 group-hover:bg-merakimain transition-all duration-500'>

@@ -16,7 +16,7 @@ import { useScreenWidth } from '@/hooks/useScreenWidth'
 import { useRouterWithProgress } from '@/hooks/useRouterWithProgress'
 
 const ProductCard = ({ product }: { product: Product }) => {
-    const {currentUser} = useCurrentUser()
+    const { currentUser } = useCurrentUser()
     const { setisLoginModalOpen } = useAuth()
     const { mutate } = useMutation({
         mutationKey: ['addtocart', 'cart'],
@@ -80,12 +80,12 @@ const ProductCard = ({ product }: { product: Product }) => {
 
             <div className='flex flex-col justify-start items-start lg:p-4 p-2 gap-2 w-full'>
                 {product.instock ? (
-                    <h1 className='text-merakigreen gap-2 w-full font-bold lg:text-lg text-sm flex flex-row justify-start items-start'>
-                        <Image src={done} alt="" />
+                    <h1 className='text-merakigreen gap-2 w-full  lg:text-lg text-sm flex flex-row justify-start items-start'>
+                        <Image src={done.src} alt="on Stock" />
                         On Stock
                     </h1>
                 ) : (
-                    <h1 className='text-merakired gap-2 w-full font-bold lg:text-lg text-sm flex flex-row justify-start items-start'>
+                    <h1 className='text-merakired gap-2 w-full  lg:text-lg text-sm flex flex-row justify-start items-start'>
                         <Image src={cross} alt="" />
                         Out of Stock
                     </h1>
@@ -95,15 +95,22 @@ const ProductCard = ({ product }: { product: Product }) => {
                     <h1 className='text-merakiTextGray lg:text-lg text-sm font-bold'>
                         {truncateText(product.name, screenWidth > 768 ? 30 : 20)}
                     </h1>
-                    <h1 className='text-merakiTextGray text-xs p-0 m-0 font-bold w-full whitespace-nowrap text-ellipsis overflow-hidden'>
+                    <h1 className='text-merakiTextGray text-xs p-0 m-0  w-full whitespace-nowrap text-ellipsis overflow-hidden'>
                         {truncateText(product.description, screenWidth > 768 ? 50 : 30)}
                     </h1>
                 </div>
                 <div className='flex flex-col w-full'>
-                    <h1 className='text-black lg:text-2xl text-lg font-semibold'>
+                    {product.discount ? <div className='w-full flex flex-row justify-between items-center'>
+                        {<h1 className='text-black lg:text-2xl text-lg font-semibold'>
+                            Rs.{product.selling_price - (product.selling_price * product.discount / 100)}
+                        </h1>}
+                        <h1 className='text-merakired  lg:text-2xl  line-through decoration-4 text-lg font-semibold'>
+                            Rs.{product.selling_price}
+                        </h1>
+                    </div> : <h1 className='text-black lg:text-2xl text-lg font-semibold'>
                         Rs.{product.selling_price}
-                    </h1>
-                    <button onClick={handleButtonClick} className='w-full  rounded-xl text-center bg-black text-white lg:py-3 py-1 hover:bg-merakimain hover:text-black transition-all duration-400' >
+                    </h1>}
+                    <button onClick={handleButtonClick} className='w-full  rounded-xl text-center bg-merakiblack text-white lg:py-3 py-1 hover:bg-merakimain hover:text-merakiblack transition-all duration-400 font-semibold' >
                         Add to Cart
                     </button>
                 </div>

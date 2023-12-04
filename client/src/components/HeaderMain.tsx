@@ -39,39 +39,30 @@ const HeaderMain = () => {
         queryFn: getCart,
     })
 
-    const router = useRouterWithProgress()
-
     const numberofCart = data?.cart?.length || 0
-    return (
-        <div className="border-b border-gray-200 py-6 bg-merakiblack">
-            <div className="container sm:flex justify-between items-center mx-auto">
-                <a href='/' className="font-bold text-4xl text-center pb-4 sm:pb-0 text-blackish">
-                    <Image src={merakilogo} alt="" />
-                </a>
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault()
-                        // if (pathname === '/products') setQueryParams({ search })
-                        // else
-                        router.push(`/product?search=${search}`)
-                    }}
 
-                    className="w-full sm:w-[300px] md:w-[70%] rounded-full relative bg-merakigray">
-                    <input
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="border-gray-200 bg-merakigray border focus:outline-none p-2 px-4 rounded-full w-full"
-                        type="text"
-                        placeholder="Enter any product name..."
-                    />
-                    <button
-                        type="submit"
-                        className="absolute flex justify-center items-center right-0 top-0  text-black bg-white   h-full rounded-full p-4 cursor-pointer"
-                    >
-                        <BsSearch
-                            size={15}
-                        />
+    return (
+        <div className="border-b border-gray-200 py-6 bg-merakiblack px-2">
+            <div className="container flex flex-row lg:justify-between justify-center gap-3 items-center mx-auto">
+                <Link href='/' className="font-bold text-4xl text-center text-black">
+                    <Image src={merakilogo} alt="" />
+                </Link>
+                <div className=" relative mx-auto text-gray-600 w-full lg:w-1/2">
+                    <input className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-full w-full text-sm focus:outline-none shadow-innershadow"
+                        type="search" name="search" placeholder="Search" />
+                    <button type="submit" className="absolute right-0 top-0 m-3 mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
+                            <g clip-path="url(#clip0_1449_3291)">
+                                <path d="M17.6985 16.5367L14.0475 12.8947C15.2544 11.3184 15.8174 9.34253 15.6227 7.36685C15.4281 5.39118 14.4902 3.56321 12.9989 2.2528C11.5076 0.942388 9.57417 0.247378 7.58986 0.30839C5.60556 0.369402 3.71851 1.18188 2.31052 2.58144C0.902534 3.98099 0.0787371 5.86313 0.00580856 7.84703C-0.0671199 9.83094 0.616265 11.7685 1.9177 13.2676C3.21913 14.7668 5.04143 15.7156 7.0159 15.9222C8.99037 16.1287 10.9696 15.5775 12.5531 14.3801L16.213 18.0132C16.3091 18.1132 16.4245 18.1925 16.5522 18.2463C16.6799 18.3002 16.8172 18.3274 16.9558 18.3264C17.0957 18.3276 17.2344 18.3004 17.3636 18.2466C17.4928 18.1928 17.6097 18.1134 17.7074 18.0132C17.8971 17.8137 18.0021 17.5485 18.0004 17.2732C17.9988 16.9979 17.8905 16.734 17.6985 16.5367ZM7.85509 13.8522C6.35357 13.8498 4.91442 13.2513 3.85394 12.1884C2.79346 11.1254 2.19843 9.68479 2.19961 8.18327C2.2008 6.68175 2.79811 5.24213 3.86027 4.18081C4.92243 3.11949 6.36252 2.52331 7.86404 2.52331C9.36557 2.52331 10.8057 3.11949 11.8678 4.18081C12.93 5.24213 13.5273 6.68175 13.5285 8.18327C13.5297 9.68479 12.9346 11.1254 11.8741 12.1884C10.8137 13.2513 9.37451 13.8498 7.87299 13.8522H7.85509Z" fill="#121212" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_1449_3291">
+                                    <rect width="18" height="18.0215" fill="white" transform="translate(0 0.304932)" />
+                                </clipPath>
+                            </defs>
+                        </svg>
                     </button>
-                </form>
+                </div>
 
                 <div className="hidden lg:flex gap-4 text-gray-500 text-[30px]">
                     {

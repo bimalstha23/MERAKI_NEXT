@@ -7,7 +7,7 @@ import { FaLongArrowAltRight } from 'react-icons/fa'
 
 const HeroSection = () => {
     return (
-        <div className="container mx-auto  flex flex-col  lg:p-44"
+        <div className="container mx-auto  flex flex-col justify-end  lg:p-44"
             style={{
                 backgroundImage: `url(${heroimage.src})`,
                 backgroundRepeat: 'no-repeat',
